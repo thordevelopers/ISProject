@@ -1,7 +1,33 @@
-﻿
+﻿@using ISProject.Models
+@model UserCLS
 @{
     ViewBag.Title = "Login";
 }
+<br />
+<h2 align="center">Login</h2>
+<br/>
 
-<h2>Login</h2>
+<div class="row">
+    <div class=""> 
+        <div class=" col-md-12" align="center">
+            @using (Html.BeginForm("Login", "Login", FormMethod.Get))
+            {
+                <div>
+                    @Html.LabelFor(p => p.Email)
+                    @Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
+                    @Html.ValidationMessage("Email",new { @class = "text-danger"})
+                </div>
+                <div style="margin-top:10px">
+                    @Html.LabelFor(p => p.Password)
+                    @Html.PasswordFor(p => p.Password, new { @class = "form-control" })
+                    @Html.ValidationMessage("Password", new { @class = "text-danger" })
+                </div>
+                <br/>
+                <div class="col-lg-8" style="text-align:right">
+                    <input type="submit" class="btn btn-primary" value="Login" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
