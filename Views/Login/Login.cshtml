@@ -1,0 +1,44 @@
+﻿@using ISProject.Models
+@model UserCLS
+@{ Layout = "";}
+@{
+    ViewBag.Title = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <nav>
+        <img src="~/assets/logo_uabc.gif" style="width:70px; height:100px;" class="centerImage">
+        <p class="center p-blanco">UNIVERSIDAD AUTONOMA DE BAJA CALIFORNIA</p><br>
+        <p class="center p-blanco">Sistema de Administracion para la propuesta PAAD</p> <br>
+
+    </nav>
+    <div class="bodyLogin">
+        <div class="renglon">
+            <div class="cuadro" style="margin-top:26px">
+                <p class="lbl"> Iniciar Sesion</p> <br><br>
+                @using (Html.BeginForm("Login", "Login", FormMethod.Get))
+                {
+                    
+                    @Html.TextBoxFor(p => p.Email, new { placeholder = "Usuario", value = "", @class = "tb-dato", })
+                    <br /><br />
+                    @Html.PasswordFor(p => p.Password, new { placeholder = "Contraseña", value = "", @class = "tb-dato" })
+                    <br /><br />
+                    <input type="submit" style="margin-top:10px" class="btn btn-amarillo" value="Iniciar Sesión" />
+                }
+            </div>
+        </div>
+    </div>
+    <footer class="footerLogin">Todos los derechos reservados &copy;</footer>
+</body>
+</html>

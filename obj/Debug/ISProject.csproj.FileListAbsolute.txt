@@ -83,3 +83,7 @@ C:\Users\riveralap\repos\ASP-NET\ISProject\obj\Debug\ISProject.csprojAssemblyRef
 C:\Users\riveralap\repos\ASP-NET\ISProject\obj\Debug\ISProject.csproj.CopyComplete
 C:\Users\riveralap\repos\ASP-NET\ISProject\obj\Debug\ISProject.dll
 C:\Users\riveralap\repos\ASP-NET\ISProject\obj\Debug\ISProject.pdb
+C:\Users\riveralap\repos\ASP-NET\ISProject\bin\EntityFramework.dll
+C:\Users\riveralap\repos\ASP-NET\ISProject\bin\EntityFramework.SqlServer.dll
+C:\Users\riveralap\repos\ASP-NET\ISProject\bin\EntityFramework.xml
+C:\Users\riveralap\repos\ASP-NET\ISProject\bin\EntityFramework.SqlServer.xml
