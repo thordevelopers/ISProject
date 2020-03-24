@@ -134,24 +134,57 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DB_PAAD_IAAD.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DB_PAAD_IAAD.Context.tt</DependentUpon>
+    <Compile Include="Models\Actividades.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DB_PAAD_IAAD.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DB_PAAD_IAAD.tt</DependentUpon>
+    <Compile Include="Models\Cargos.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DB_PAAD_IAAD.Designer.cs">
+    <Compile Include="Models\Carreras.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Categorias.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DB_PAAD_IAD.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DB_PAAD_IAAD.edmx</DependentUpon>
+      <DependentUpon>DB_PAAD_IAD.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DB_PAAD_IAD.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DB_PAAD_IAD.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Docentes.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Estados.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Fechas.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IADs.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PAADs.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Periodos.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserCLS.cs" />
     <Compile Include="Models\USERS.cs">
-      <DependentUpon>DB_PAAD_IAAD.tt</DependentUpon>
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -164,24 +197,24 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\DB_PAAD_IAAD.Context.tt">
+    <Content Include="Models\DB_PAAD_IAD.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DB_PAAD_IAAD.Context.cs</LastGenOutput>
-      <DependentUpon>DB_PAAD_IAAD.edmx</DependentUpon>
+      <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
+      <LastGenOutput>DB_PAAD_IAD.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\DB_PAAD_IAAD.tt">
+    <Content Include="Models\DB_PAAD_IAD.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DB_PAAD_IAAD.edmx</DependentUpon>
-      <LastGenOutput>DB_PAAD_IAAD.cs</LastGenOutput>
+      <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
+      <LastGenOutput>DB_PAAD_IAD.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\DB_PAAD_IAAD.edmx">
+    <EntityDeploy Include="Models\DB_PAAD_IAD.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DB_PAAD_IAAD.Designer.cs</LastGenOutput>
+      <LastGenOutput>DB_PAAD_IAD.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\DB_PAAD_IAAD.edmx.diagram">
-      <DependentUpon>DB_PAAD_IAAD.edmx</DependentUpon>
+    <Content Include="Models\DB_PAAD_IAD.edmx.diagram">
+      <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

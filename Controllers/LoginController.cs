@@ -29,7 +29,7 @@ namespace ISProject.Controllers
             else
             {
                 USERS user_db;
-                using (var db= new DB_PAAD_IAADEntities())
+                using (var db= new DB_PAAD_IADEntities())
                 {
                     user_db = db.USERS.Where(p => p.EMAIL==user.Email && p.PASSWORD==user.Password).FirstOrDefault();
                 }
