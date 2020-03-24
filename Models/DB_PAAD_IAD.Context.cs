@@ -13,10 +13,10 @@ namespace ISProject.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DB_PAAD_IAADEntities : DbContext
+    public partial class DB_PAAD_IADEntities : DbContext
     {
-        public DB_PAAD_IAADEntities()
-            : base("name=DB_PAAD_IAADEntities")
+        public DB_PAAD_IADEntities()
+            : base("name=DB_PAAD_IADEntities")
         {
         }
     
@@ -25,6 +25,17 @@ namespace ISProject.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Actividades> Actividades { get; set; }
+        public virtual DbSet<Cargos> Cargos { get; set; }
+        public virtual DbSet<Carreras> Carreras { get; set; }
+        public virtual DbSet<Categorias> Categorias { get; set; }
+        public virtual DbSet<Docentes> Docentes { get; set; }
+        public virtual DbSet<Estados> Estados { get; set; }
+        public virtual DbSet<Fechas> Fechas { get; set; }
+        public virtual DbSet<IADs> IADs { get; set; }
+        public virtual DbSet<PAADs> PAADs { get; set; }
+        public virtual DbSet<Periodos> Periodos { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<USERS> USERS { get; set; }
     }
 }
