@@ -1,263 +1,231 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
+﻿/* Reset */
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-/* Reset */
-
-html, body, div, span, applet, object, iframe, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-	display: block;
+    display: block;
 }
 
 body {
-	line-height: 1;
+    line-height: 1;
 }
 
 ol, ul {
-	list-style: none;
+    list-style: none;
 }
 
 blockquote, q {
-	quotes: none;
+    quotes: none;
 }
 
-blockquote:before, blockquote:after, q:before, q:after {
-	content: '';
-	content: none;
-}
+    blockquote:before, blockquote:after, q:before, q:after {
+        content: '';
+        content: none;
+    }
 
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 body {
-	-webkit-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
 }
 /* Box Model */
 
 *, *:before, *:after {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
+
 @font-face {
-	font-family: letra;
-	src: url(Quicksand-Regular.ttf);
+    font-family: letra;
+    src: url(Quicksand-Regular.ttf);
 }
 
 p, input, button, a, td, th, label {
-	font-family: letra;
+    font-family: letra;
 }
 
-.bodyLogin {
-    padding-top: 200px;
+nav {
+    width: 100%;
+    background-color: #1A7743;
+    position: static;
+    z-index: 100;
+    min-height: 5vh;
+    box-shadow: 0px 0px 20px rgb(32,32,32);
+    margin-bottom:25px;
 }
 
-nav{
-	width: 100%;
-	background-color: #1A7743;
-	position: fixed;
-	z-index: 100;
-	min-height: 5vh;
-}
+    nav ul {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
 
-nav ul{
-	overflow: hidden;
-	margin: 0;
-	padding: 0;
-}
+        nav ul li {
+            float: left;
+            width: 12%;
+        }
 
-nav ul li {
-	float: left;
-	width: 12%;
-}
-nav ul li a, .dropbtn{
+            nav ul li a {
+                color: #F9EBEA;
+                display: block;
+                text-align: center;
+                text-decoration: none;
+                padding: 10px;
+                font-size: 20px;
+                /*border: 1px solid white;  borde de las letritas*/
+            }
 
-	color: #F9EBEA;
-	display: block;
-	text-align: center;
-	text-decoration: none;
-	padding: 10px;
-	font-size: 20px;
-	/*border: 1px solid white;  borde de las letritas*/
+                nav ul li a:hover {
+                    background-color: rgba(46,46,46,0.5);
+                }
 
-}
-
-nav ul li a:hover, .DropDown:hover .dropbtn{
-	background-color: rgba(46,46,46,0.5);
-}
-
-.DropDown-content{
-	display: none;
-	position: absolute;
-	background-color: #F08080;
-	z-index: 1;
-	width: 12%;
-}
-
-.DropDown-content a{
-	color: black;
-	padding: 12px 12px;
-	text-decoration: none;
-	display: block;
-	font-size: 15px;
-	text-align: left;
-}
-
-.DropDown:hover .DropDown-content{
-	display: block;
-}
-main{
+main {
     padding-top: 7vh;
 }
 
-.footerLogin{
+footer {
     width: 100%;
     padding: 10px;
     background-color: #1A7743;
     position: fixed;
     bottom: 0px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-act {
+    margin-left: 30%;
+    width: 22%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #C3C2C1;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+th {
+    background-color: #FFA734;
     color: black;
 }
 
-table{
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 100%;
-}
-
-th, td{
-    padding: 8px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-}
-tr:hover{
-    background-color: #FFCCCC;
-}
-
-.border-botton{
+.border-botton {
     border-bottom: 3px solid #FF007F;
-
 }
-.cuadro{
+
+.cuadro {
     border-radius: 15px;
     padding: 3vh 2vw;
     text-align: center;
-    box-shadow: 10px 10px 30px rgb(32,32,32);
+    box-shadow: 0px 10px 15px rgb(32,32,32);
     margin: 1vh 1vw;
 }
 
-.renglon{
+.renglon {
     display: flex;
     justify-content: space-around;
 }
 
-.renglon-2{
+.renglon-2 {
     display: flex;
-    justify-content:flex-end;
+    justify-content: center;
 }
 
-.btn{
+.renglon-3 {
+    display: flex;
+    justify-content: left;
+}
+
+.btn {
     display: inline-block;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     vertical-align: middle;
-    border-radius: 8px;
+    border-radius: 9px;
     padding: 0.2em 0.5em;
 }
-.btn-blanco {
-	color: #000000;
-    border: 1px solid #F08080;
-    background-color: #F08080;
-}
-.btn-blanco:hover {
-	color: #F08080;
-    background-color: rgb(46,46,46);
-    border: 1px solid rgb(46,46,46);
+
+.btn-margin {
+    margin-left: 14%;
 }
 
-.btn-morado{
-	color: #CBB2DC;
-    border: 1px solid #A168D8;
-    background-color: #4B3779;
+.btn-margin-left {
+    margin-left: 65%;
 }
 
-.btn-morado:hover{
-	color: #9474DF;
-	background-color: rgb(46,46,46);
-    border: 1px solid #A168D8;
-}
-.btn-verde{
-    border: 1px solid rgb(0,153,0);
-    background-color: white;
-}
-
-.btn-verde:hover{
-    background-color: rgb(0,153,0);
+.btn-verde {
+    border: 1px solid #1A7743;
+    background-color: #1A7743;
     color: white;
 }
 
-.btn-azul{
+    .btn-verde:hover {
+        background-color: #FFA734;
+        color: white;
+    }
+
+.btn-verde-light {
+    border: 1px solid #20A100;
+    background-color: #20A100;
+    color: white;
+}
+
+    .btn-verde-light:hover {
+        background-color: #21790A;
+        color: white;
+    }
+
+.btn-azul {
     border: 1px solid rgb(0,102,204);
     background-color: white;
 }
 
-.btn-azul:hover{
-    background-color: rgb(0,102,204);
-    color: white;
-}
+    .btn-azul:hover {
+        background-color: rgb(0,102,204);
+        color: white;
+    }
 
-.btn-rojo{
+.btn-rojo {
     border: 1px solid rgb(204,0,0);
-    background-color: white;
-}
-
-.btn-rojo:hover{
     background-color: rgb(204,0,0);
     color: white;
 }
 
-.btn-amarillo{
-    border: 1px solid #ffffff;
-    background-color: #CD9656;
+    .btn-rojo:hover {
+        background-color: #940404;
+        color: white;
+    }
+
+.btn-amarillo {
+    border: 1px solid #FFA734;
+    background-color: #FFA734;
     color: white;
 }
 
-.btn-amarillo:hover{
-    background-color: #E39336;
-    color: white;
-}
+    .btn-amarillo:hover {
+        background-color: #C57A19;
+        color: white;
+    }
 
-.tb-dato{
+.tb-dato {
     border: 1px solid black;
     border-radius: 8px;
     font-size: 20px;
@@ -265,50 +233,123 @@ tr:hover{
     padding: 0.2em 0.5em;
 }
 
-.lbl{
+.lbl {
     font-size: 20px;
 }
-.lbl-40{
-    font-size: 40px;
+
+.lbl-30 {
+    font-size: 30px;
 }
 
 .left {
     text-align: left;
 }
 
-.lbl-bold{
+.lbl-bold {
     font-weight: bold;
     font-size: 18px;
 }
-.center{
+
+.center {
     text-align: center;
 }
-.p-blanco{
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.p-blanco {
     color: white;
-    font-size:18px;
+    font-size: 24px;
 }
 
-.centerImage{
-	display:block;
-  margin-left: auto;
-  margin-right: auto;
+.p-blanco-min {
+    color: white;
+    font-size: 20px;
 }
 
-.colorMenu{
+.centerImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rightImage {
+    display: block;
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+.colorMenu {
     background-color: rgba(32,32,32,0.5);
 }
-.time{
-    font-size:14px;
+
+.time {
+    font-size: 14px;
 }
-.mg{
+
+.mg {
     margin-left: 5px;
     margin-right: 5px;
 }
 
-.field-validation-valid {
-    display: none;
+
+.dropbtn {
+    background-color: #1A7743;
+    color: white;
+    padding: 8px;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
 }
 
-.validation-summary-valid {
-    display: none;
+.dropdown {
+    position: relative;
+    display: inline-block;
 }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1A7743;
+    min-width: 140px;
+    border-radius: 2px;
+    box-shadow: 0px 8px 12px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+
+    .dropdown-content a {
+        color: white;
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 2px;
+        display: block;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #FFA734
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #FFA734;
+}
+
+.div-estado {
+    border: 10px solid #3EC483;
+    background: #5DEAA8;
+    height: 100px;
+    width: 200px;
+    padding: 10px;
+    margin: 10px;
+}
+
