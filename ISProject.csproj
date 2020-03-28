@@ -131,6 +131,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PAADController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -242,7 +243,13 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\PAAD\PAAD.cshtml" />
+=======
+    <Content Include="Views\PAAD\Index.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Shared\View.cshtml" />
+>>>>>>> 228d126675b658a7ca18e935bfa3da15a582f884
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
