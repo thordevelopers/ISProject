@@ -42,7 +42,7 @@ namespace ISProject.Controllers
                     System.Diagnostics.Debug.WriteLine(user_db.ID);
                     Session["id"] = user_db.ID;
                     user = null;
-                    return RedirectToAction("Index", "PAAD");
+                    return RedirectToAction("Index", "Home");
                 }
                 
             }
