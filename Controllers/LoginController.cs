@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ISProject.Models;
+
 namespace ISProject.Controllers
 {
     public class LoginController : Controller
@@ -41,6 +42,7 @@ namespace ISProject.Controllers
                 {
                     System.Diagnostics.Debug.WriteLine(user_db.ID);
                     Session["id"] = user_db.ID;
+                    Session["email"] = user_db.EMAIL;
                     user = null;
                     return RedirectToAction("Index", "Home");
                 }
