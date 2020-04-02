@@ -1,0 +1,78 @@
+﻿@using ISProject.Models
+@model ActivityCLS
+@{ Layout = "~/Views/Shared/_Layout.cshtml";}
+
+@{
+    ViewBag.Title = "PAAD";
+}
+
+<div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Añadir Actividad</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!-- Inicio del cuerpo del Modal-->
+            @using (Html.BeginForm("PostActivity", "PAAD", FormMethod.Post))
+            {
+                <div class="renglon" style="padding-bottom:13px">
+                    <div class="" style="width :95%">
+                        <div class="renglon-3" >
+                            <label class="mdllab">Actividad </label>
+                            @Html.TextAreaFor(p => p.actividad, new { placeholder = "Escribe aquí tu actividad...", value = "", @rows = 6, @class="mdltxta"})
+                        </div><br>
+                        <div class="renglon-3">
+                            <label class="mdllab">Producción </label>
+                            @Html.TextAreaFor(p => p.produccion, new { @rows =1,@class="mdltxta"})
+                        </div><br>
+                        <div class="renglon-3">
+                            <label class="mdllab text-right">Lugar </label>
+                            @Html.TextAreaFor(p => p.lugar, new { @rows = 1, @class="mdltxta" })
+                        </div><br>
+                        <div class="renglon-3">
+                            <label class="text-right" style="width:88px;padding-right:9px">%Avance</label>
+                            @Html.DropDownListFor(p => p.porcentaje_inicial,
+                            new SelectListItem[]{
+                                new SelectListItem() {Text = "0%", Value="0"},
+                                new SelectListItem() {Text = "25%", Value="25"},
+                                new SelectListItem() {Text = "50%", Value="50"},
+                                new SelectListItem() {Text = "75%", Value="75"},
+                                new SelectListItem() {Text = "100%", Value="100"}
+                             })
+                        </div><br>
+                        <div class="renglon-center">
+                            <div class="mdlchkbox">
+                                <label>CACEI</label>
+                                @Html.CheckBoxFor(p => p.cacei)
+
+                            </div><br>
+                            <div class="mdlchkbox">
+                                <label> Cuerpo Academico</label>
+                                @Html.CheckBoxFor(p => p.cuerpo_academico)
+
+                            </div><br>
+                            <div class="mdlchkbox">
+                                <label>ISO 9000</label>
+                                @Html.CheckBoxFor(p => p.iso)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-verde-light " name="button">Añadir</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-amarillo" style="margin-top: 80px">TEST</button>
+    </div>
+</div>
+

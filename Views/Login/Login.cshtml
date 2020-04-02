@@ -1,5 +1,6 @@
 ﻿@using ISProject.Models
 @model UserCLS
+@{Layout = "~/Views/Shared/View.cshtml";}
 @{
     ViewBag.Title = "Login";
 }
@@ -10,7 +11,7 @@
             <p class="lbl"> Iniciar Sesion</p> <br><br>
             @using (Html.BeginForm("Login", "Login", FormMethod.Get))
             {
-                    
+
                 @Html.TextBoxFor(p => p.Email, new { placeholder = "Usuario", value = "", @class = "tb-dato", })
                 <br /><br />
                 @Html.PasswordFor(p => p.Password, new { placeholder = "Contraseña", value = "", @class = "tb-dato" })

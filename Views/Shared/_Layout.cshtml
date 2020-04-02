@@ -28,7 +28,9 @@
                     <p class="center p-blanco-min">Sistema de Administraci&oacute;n PAAD/IAD</p> <br>
                     <div>
                         <div class="dropdown">
-                            <button class="dropbtn">Inicio</button>
+                            <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
+                               <input type="button" class="dropbtn" value="Inicio" />
+                            </a>
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn">Mi informacion</button>
@@ -40,7 +42,8 @@
                         <div class="dropdown">
                             <button class="dropbtn">Formatos</button>
                             <div class="dropdown-content">
-                                <a href="#">Llenar PAAD</a>
+                                <a href="@Url.Action("Index", "PAAD", Request.Url.Scheme)">Llenar PAAD</a>
+
                                 <a href="#">Llenar IAD</a>
                             </div>
                         </div>
@@ -62,7 +65,6 @@
     <div class="container body-content"> <!-- Aqui comienza el body-->
         @RenderBody() <!-- Esto invoca el codigo html de cada vista-->
         <hr />
-
     </div>
     <footer>Todos los derechos reservados &copy;</footer> <!-- Efectivamente, es el footer-->
     @Scripts.Render("~/bundles/jquery")
@@ -70,3 +72,5 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+
