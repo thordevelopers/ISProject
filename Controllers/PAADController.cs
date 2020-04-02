@@ -20,29 +20,26 @@ namespace ISProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(act);
+                return View("~/Views/PAAD/PAAD.cshtml");
             }
             else
             {
                 using (var db = new DB_PAAD_IADEntities())
                 {
                     db.Actividades.Add(new Actividades {
-                        id_actividad = act.Id,
                         actividad = act.actividad,
                         produccion = act.produccion,
                         lugar = act.lugar,
                         porcentaje_inicial = act.porcentaje_inicial,
-                        porcentaje_final = act.porcentaje_final,
                         cacei = act.cacei,
                         cuerpo_academico = act.cuerpo_academico,
                         iso = act.iso,
-                        id_paad = act.id_paad,
-                        id_iad = act.id_iad
+                        id_paad = 1
                     });
                     db.SaveChanges();
                 }
             }
-            return View(act);
+            return View("~/Views/PAAD/PAAD.cshtml");
         }
 
         public ActionResult SelectPercentage()
