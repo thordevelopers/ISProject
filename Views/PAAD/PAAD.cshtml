@@ -6,11 +6,11 @@
     ViewBag.Title = "PAAD";
 }
 
-<div id="myModal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+<div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label class="lbl-30">Añadir Actividad</label>
+        <div class="modal-content ">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Añadir Actividad</label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -18,48 +18,47 @@
             <!-- Inicio del cuerpo del Modal-->
             @using (Html.BeginForm("PostActivity", "PAAD", FormMethod.Post))
             {
-                <div class="renglon ">
-                    <div class="cuadro">
-                        <div class="renglon-3">
-                            <label class="">Actividad &nbsp; &nbsp;</label>
-                            @Html.TextAreaFor(p => p.actividad, new { placeholder = "Escribe aquí tu actividad...", value = "", @rows = 6, @cols = 70 })
+                <div class="renglon" style="padding-bottom:13px">
+                    <div class="" style="width :95%">
+                        <div class="renglon-3" >
+                            <label class="mdllab">Actividad </label>
+                            @Html.TextAreaFor(p => p.actividad, new { placeholder = "Escribe aquí tu actividad...", value = "", @rows = 6, @class="mdltxta"})
                         </div><br>
                         <div class="renglon-3">
-                            <label>Producción &nbsp; &nbsp;</label>
-                            @Html.TextAreaFor(p => p.produccion, new { @rows = 10, @cols = 70 })
+                            <label class="mdllab">Producción </label>
+                            @Html.TextAreaFor(p => p.produccion, new { @rows =1,@class="mdltxta"})
                         </div><br>
                         <div class="renglon-3">
-                            <label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Lugar &nbsp;</label>
-                            @Html.TextAreaFor(p => p.lugar, new { @rows = 1, @cols = 20 })
+                            <label class="mdllab text-right">Lugar </label>
+                            @Html.TextAreaFor(p => p.lugar, new { @rows = 1, @class="mdltxta" })
                         </div><br>
                         <div class="renglon-3">
-                            <label>&nbsp; &nbsp; %Avance &nbsp;</label>
+                            <label class="text-right" style="width:88px;padding-right:9px">%Avance</label>
                             @Html.DropDownListFor(p => p.porcentaje_inicial,
                             new SelectListItem[]{
-                                                    new SelectListItem() {Text = "25%", Value="25"},
-                                                    new SelectListItem() {Text = "50%", Value="50"},
-                                                    new SelectListItem() {Text = "75%", Value="75"},
-                                                    new SelectListItem() {Text = "100%", Value="100"}
+                                new SelectListItem() {Text = "0%", Value="0"},
+                                new SelectListItem() {Text = "25%", Value="25"},
+                                new SelectListItem() {Text = "50%", Value="50"},
+                                new SelectListItem() {Text = "75%", Value="75"},
+                                new SelectListItem() {Text = "100%", Value="100"}
                              })
                         </div><br>
-                        <div class="renglon-3">
-                            <label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; CACEI &nbsp;</label>
-                            @Html.LabelFor(p => p.cacei, "Si ")
-                            @Html.CheckBoxFor(p => p.cacei, new { @checked = "checked" })
+                        <div class="renglon-center">
+                            <div class="mdlchkbox">
+                                <label>CACEI</label>
+                                @Html.CheckBoxFor(p => p.cacei)
 
-                        </div><br>
-                        <div class="renglon-3">
-                            <label> Cuerpo Academico &nbsp;</label>
-                            @Html.LabelFor(p => p.cuerpo_academico, "Si ")
-                            @Html.CheckBoxFor(p => p.cuerpo_academico, new { @checked = "checked" })
+                            </div><br>
+                            <div class="mdlchkbox">
+                                <label> Cuerpo Academico</label>
+                                @Html.CheckBoxFor(p => p.cuerpo_academico)
 
-                        </div><br>
-                              <div class="renglon-3">
-                                  <label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISO 9000 &nbsp;</label>
-                                  @Html.LabelFor(p => p.iso, "Si ")
-                                  @Html.CheckBoxFor(p => p.iso, new { @checked = "checked" })
-
-                              </div>
+                            </div><br>
+                            <div class="mdlchkbox">
+                                <label>ISO 9000</label>
+                                @Html.CheckBoxFor(p => p.iso)
+                            </div>
+                        </div>
                     </div>
                 </div>
 
