@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ISProject.Models.PAADs>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.horas_clase)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.horas_investigacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.horas_gestion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.horas_tutorias)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.firma_docente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.firma_director)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cargos.cargo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Carreras.carrera)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Categorias.categoria)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Docentes.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estados.estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Periodos.periodo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_clase)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_investigacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_gestion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_tutorias)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.firma_docente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.firma_director)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cargos.cargo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Carreras.carrera)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Categorias.categoria)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Docentes.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estados.estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Periodos.periodo)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id_paad }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id_paad }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id_paad })
+        </td>
+    </tr>
+}
+
+</table>

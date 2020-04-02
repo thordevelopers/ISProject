@@ -1,0 +1,173 @@
+﻿@using ISProject.Models
+@model IEnumerable<ISProject.Models.PAADs>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<p>
+
+</p>
+<h1 align="right">PAAD-03</h1>
+<h2 align ="right"> PROPUESTA ACADEMICA DE ACTIVIDADES Y DOCENCIA</h2>
+<br />
+
+
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_clase)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_investigacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_gestion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horas_tutorias)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.firma_docente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.firma_director)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cargos.cargo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Carreras.carrera)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Categorias.categoria)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Docentes.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estados.estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Periodos.periodo)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.id_paad }) |
+            @Html.ActionLink("Details", "Details", new { id = item.id_paad }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.id_paad })
+        </td>
+    </tr>
+}
+
+</table>
+
+<table class="table">
+    <caption>PROPUESTA ACADEMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: </caption>
+    <tr>
+        <td> Nombre del Academico </td>
+        <td colspan="3"> @Html.DisplayNameFor(model => model.Docentes.nombre) </td>
+        <td>Numero de empleado </td>
+        <td> @Session["Id"].ToString()           </td>
+    </tr>
+    <tr>
+        <td>  Categoria:   </td>
+        <td>  @Html.DisplayNameFor(model => model.Categorias.categoria)  </td>
+        <td>Horas de clase </td>
+        <td>  @Html.DisplayNameFor(model => model.horas_clase)   </td>
+        <td>Horas de gestion </td>
+        <td> </td>
+    </tr>
+    <tr>
+        <td> Cargo </td>
+        <td>  @Html.DisplayNameFor(model => model.Cargos.cargo) </td>
+        <td>  Horas de investigacion </td>
+        <td>  @Html.DisplayNameFor(model => model.horas_gestion) </td>
+        <td>  Horas de tutorias   </td>
+        <td>  @Html.DisplayNameFor(model => model.horas_tutorias)  </td>
+
+    </tr>
+    <tr> </tr>
+
+</table>
+<br />
+<br />
+<br />
+<br />
+<table>
+
+    <tr>
+        <td>Actividades</td>
+        <td>Produccion</td>
+        <td> Lugar</td>
+        <td> %Avance</td>
+        <td>CACEI</td>
+        <td> CUERPO ACADEMICO</td>
+        <td>ISO 9000</td>
+        <td> Opciones</td>
+    </tr>
+
+
+</table>
+<p>
+
+
+    <br />
+    <br />
+    <br />
+    <br />
+</p>
+
+
+<p>
+    <button class="btn btn-verde-light " onclick="location.href = '@Url.Action("Index", "PAAD")'; return false;">Agregar Actividad</button>
+</p>
+<p></p>
+
+<br />
+<br />
+<br />
+<br />
+  <table>
+
+        <tbody>
+            <tr>
+                <td colspan="2" rowspan="2">
+                    Firma
+                    firma_docente
+                </td>
+                <td rowspan="2">
+                </td>
+                <td colspan="2" rowspan="2">
+                    Firma
+                    firma_director
+                </td>
+
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td align="center" colspan="2">DOCENTE </td>
+                <td align="center"> SELLO </td>
+                <td align="center" colspan="2">DIRECTOR</td>
+
+            </tr>
+
+
+
+
+
+    </table>
+
+<br />
+<br />
+<br />
+<br />
+<button class="btn btn-verde-light " align="right" onclick="location.href = '@Url.Action("Index", "PAAD")'; return false;">Guardar</button>
+<button class="btn btn-amarillo " align="rigth" onclick="location.href = '@Url.Action("Index", "PAAD")'; return false;">Enviar</button>

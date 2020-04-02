@@ -1,0 +1,122 @@
+﻿@model ISProject.Models.PAADs
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PAADs</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horas_clase)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horas_clase)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horas_investigacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horas_investigacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horas_gestion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horas_gestion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horas_tutorias)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horas_tutorias)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.firma_docente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.firma_docente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.firma_director)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.firma_director)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cargos.cargo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cargos.cargo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Carreras.carrera)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Carreras.carrera)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Categorias.categoria)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categorias.categoria)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Docentes.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Docentes.nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estados.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estados.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Periodos.periodo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Periodos.periodo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_paad }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
