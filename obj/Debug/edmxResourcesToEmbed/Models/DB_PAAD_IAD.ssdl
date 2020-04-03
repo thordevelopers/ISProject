@@ -286,13 +286,13 @@
   </Association>
   <Association Name="FK_PAADs_Estados">
     <End Role="Estados" Type="Self.Estados" Multiplicity="1" />
-    <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
+    <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Estados">
         <PropertyRef Name="id_estado" />
       </Principal>
       <Dependent Role="PAADs">
-        <PropertyRef Name="id_paad" />
+        <PropertyRef Name="estado" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

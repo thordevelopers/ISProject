@@ -15,38 +15,7 @@ namespace ISProject.Controllers
         {
             if (Session["user"] != null)
             {
-                LlenarPAADCLS model = new LlenarPAADCLS();
-                using (var db = new DB_PAAD_IADEntities())
-                {
-                    Docentes doc = ((Docentes)Session["user"]);
-                    PAADs paad = db.PAADs.Where(p => p.docente == doc.id_docentes).First();
-                    model.id_paad = paad.id_paad;
-                    model.estado = db.Estados.Where(p => p.id_estado == paad.estado).First().estado;
-                    model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).First().periodo;
-                    model.carrera = db.Carreras.Where(p => p.id_carrera == paad.carrera).First().carrera;
-                    model.numero_empleado = doc.numero_empleado;
-                    model.nombre_docente = doc.nombre;
-                    model.categoria_docente = db.Categorias.Where(p => p.id_categoria == paad.categoria_docente).First().categoria;
-                    model.horas_clase = paad.horas_clase;
-                    model.horas_investigacion = paad.horas_investigacion;
-                    model.horas_gestion = paad.horas_gestion;
-                    model.horas_tutorias = paad.horas_tutorias;
-                    model.cargo = db.Cargos.Where(p => p.id_cargo == paad.cargo).First().cargo;
-                    model.firma_director = paad.firma_director;
-                    model.firma_docente = paad.firma_docente;
-                    model.modal_open = true;
-                    model.activities = db.Actividades.Where(p => p.id_paad == paad.id_paad).Select(x => new ActivityCLS {
-                        Id = x.id_actividad,
-                        actividad = x.actividad,
-                        produccion = x.produccion,
-                        lugar = x.lugar,
-                        porcentaje_inicial= x.porcentaje_inicial,
-                        porcentaje_final=x.porcentaje_final,
-                        cacei=x.cacei,
-                        cuerpo_academico=x.cuerpo_academico,
-                        iso=x.iso
-                    }).ToList();
-                }
+                LlenarPAADCLS model = FillPAAD();
                 return View("~/Views/PAAD/PAAD.cshtml",model);
             }
             else
@@ -98,17 +67,89 @@ namespace ISProject.Controllers
                     }
                 }
             }
-            return View("~/Views/PAAD/PAAD.cshtml",model);
+            return RedirectToAction("Index", "LlenarPAAD");
         }
-        public ActionResult SelectPercentage()
+        public ActionResult DeleteActivity(int id)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "75", Value = "75" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            ViewBag.PAAD = items;
-            return View();
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Actividades act_db = db.Actividades.Single(p => p.id_actividad == id);
+                db.Actividades.Remove(act_db);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "LlenarPAAD");
+        }
+
+        public ActionResult DeleteAllActivitys(int id)
+        {
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                List<Actividades> act_db = db.Actividades.Where(p => p.id_paad == id).ToList();
+                foreach(var item in act_db){
+                    db.Actividades.Remove(item);
+                }
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "LlenarPAAD");
+        }
+
+        public LlenarPAADCLS FillPAAD()
+        {
+
+            LlenarPAADCLS model = new LlenarPAADCLS();
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Docentes doc = ((Docentes)Session["user"]);
+                PAADs paad = db.PAADs.Where(p => p.docente == doc.id_docentes).FirstOrDefault();
+                if (paad == null)
+                {
+                    db.PAADs.Add(new PAADs
+                    {
+                        id_paad = 0,
+                        estado = 1,
+                        periodo = 1,
+                        carrera = 1,
+                        docente = doc.id_docentes,
+                        categoria_docente = 1,
+                        horas_clase = 10,
+                        horas_investigacion = 10,
+                        horas_gestion = 10,
+                        horas_tutorias = 10,
+                        cargo = 1
+                    });
+                    db.SaveChanges();
+                }
+                paad = db.PAADs.Where(p => p.docente == doc.id_docentes).FirstOrDefault();
+                model.id_paad = paad.id_paad;
+                model.estado = db.Estados.Where(p => p.id_estado == paad.estado).FirstOrDefault().estado;
+                model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).FirstOrDefault().periodo;
+                model.carrera = db.Carreras.Where(p => p.id_carrera == paad.carrera).FirstOrDefault().carrera;
+                model.numero_empleado = doc.numero_empleado;
+                model.nombre_docente = doc.nombre;
+                model.categoria_docente = db.Categorias.Where(p => p.id_categoria == paad.categoria_docente).FirstOrDefault().categoria;
+                model.horas_clase = paad.horas_clase;
+                model.horas_investigacion = paad.horas_investigacion;
+                model.horas_gestion = paad.horas_gestion;
+                model.horas_tutorias = paad.horas_tutorias;
+                model.cargo = db.Cargos.Where(p => p.id_cargo == paad.cargo).FirstOrDefault().cargo;
+                model.firma_director = paad.firma_director;
+                model.firma_docente = paad.firma_docente;
+                model.modal_open = true;
+                model.activities = db.Actividades.Where(p => p.id_paad == paad.id_paad).Select(x => new ActivityCLS
+                {
+                    Id = x.id_actividad,
+                    actividad = x.actividad,
+                    produccion = x.produccion,
+                    lugar = x.lugar,
+                    porcentaje_inicial = x.porcentaje_inicial,
+                    porcentaje_final = x.porcentaje_final,
+                    cacei = x.cacei,
+                    cuerpo_academico = x.cuerpo_academico,
+                    iso = x.iso
+                }).ToList();
+
+            }
+            return model;
         }
 
     }
