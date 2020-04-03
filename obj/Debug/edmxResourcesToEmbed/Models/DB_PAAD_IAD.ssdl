@@ -42,9 +42,10 @@
   </EntityType>
   <EntityType Name="Docentes">
     <Key>
-      <PropertyRef Name="numero_empleado" />
+      <PropertyRef Name="id_docentes" />
     </Key>
-    <Property Name="numero_empleado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_docentes" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="numero_empleado" Type="int" Nullable="false" />
     <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
   </EntityType>
@@ -72,7 +73,7 @@
     <Property Name="estado" Type="int" Nullable="false" />
     <Property Name="periodo" Type="int" Nullable="false" />
     <Property Name="carrera" Type="int" Nullable="false" />
-    <Property Name="numero_empleado" Type="int" Nullable="false" />
+    <Property Name="docente" Type="int" Nullable="false" />
     <Property Name="categoria_docente" Type="int" Nullable="false" />
     <Property Name="horas_clase" Type="int" Nullable="false" />
     <Property Name="horas_investigacion" Type="int" Nullable="false" />
@@ -91,7 +92,7 @@
     <Property Name="estado" Type="int" Nullable="false" />
     <Property Name="periodo" Type="int" Nullable="false" />
     <Property Name="carrera" Type="int" Nullable="false" />
-    <Property Name="numero_empleado" Type="int" Nullable="false" />
+    <Property Name="docente" Type="int" Nullable="false" />
     <Property Name="categoria_docente" Type="int" Nullable="false" />
     <Property Name="horas_clase" Type="int" Nullable="false" />
     <Property Name="horas_investigacion" Type="int" Nullable="false" />
@@ -204,10 +205,10 @@
     <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Docentes">
-        <PropertyRef Name="numero_empleado" />
+        <PropertyRef Name="id_docentes" />
       </Principal>
       <Dependent Role="IADs">
-        <PropertyRef Name="numero_empleado" />
+        <PropertyRef Name="docente" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -276,22 +277,22 @@
     <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Docentes">
-        <PropertyRef Name="numero_empleado" />
+        <PropertyRef Name="id_docentes" />
       </Principal>
       <Dependent Role="PAADs">
-        <PropertyRef Name="numero_empleado" />
+        <PropertyRef Name="docente" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_PAADs_Estados">
     <End Role="Estados" Type="Self.Estados" Multiplicity="1" />
-    <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
+    <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Estados">
         <PropertyRef Name="id_estado" />
       </Principal>
       <Dependent Role="PAADs">
-        <PropertyRef Name="id_paad" />
+        <PropertyRef Name="estado" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

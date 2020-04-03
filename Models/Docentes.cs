@@ -21,6 +21,7 @@ namespace ISProject.Models
             this.PAADs = new HashSet<PAADs>();
         }
     
+        public int id_docentes { get; set; }
         public int numero_empleado { get; set; }
         public string nombre { get; set; }
         public string correo { get; set; }

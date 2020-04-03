@@ -24,7 +24,7 @@ namespace ISProject.Models
         public int estado { get; set; }
         public int periodo { get; set; }
         public int carrera { get; set; }
-        public int numero_empleado { get; set; }
+        public int docente { get; set; }
         public int categoria_docente { get; set; }
         public int horas_clase { get; set; }
         public int horas_investigacion { get; set; }

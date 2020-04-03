@@ -1,11 +1,12 @@
 ﻿@using ISProject.Models
-@model ActivityCLS
+@model LlenarPAADCLS
 @{ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 @{
     ViewBag.Title = "PAAD";
 }
 
+<!--Modal de actividades-->
 <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content ">
@@ -16,52 +17,53 @@
                 </button>
             </div>
             <!-- Inicio del cuerpo del Modal-->
-            @using (Html.BeginForm("PostActivity", "PAAD", FormMethod.Post))
+            @using (Html.BeginForm("PostActivity", "LlenarPAAD", FormMethod.Post))
             {
                 <div class="renglon" style="padding-bottom:13px">
                     <div class="" style="width :95%">
-                        <div class="renglon-3" >
+                        <div class="renglon-3">
                             <label class="mdllab">Actividad </label>
-                            @Html.TextAreaFor(p => p.actividad, new { placeholder = "Escribe aquí tu actividad...", value = "", @rows = 6, @class="mdltxta"})
+                            @Html.TextAreaFor(p => p.activity.actividad, new { placeholder = "Escribe aquí tu actividad...", @id = "mdl_activity", @rows = 6, @class = "mdltxta" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab">Producción </label>
-                            @Html.TextAreaFor(p => p.produccion, new { @rows =1,@class="mdltxta"})
+                            @Html.TextAreaFor(p => p.activity.produccion, new { @rows = 1, @id = "mdl_produccion", @class = "mdltxta" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab text-right">Lugar </label>
-                            @Html.TextAreaFor(p => p.lugar, new { @rows = 1, @class="mdltxta" })
+                            @Html.TextAreaFor(p => p.activity.lugar, new { @rows = 1, @id = "mdl_lugar", @class = "mdltxta" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="text-right" style="width:88px;padding-right:9px">%Avance</label>
-                            @Html.DropDownListFor(p => p.porcentaje_inicial,
+                            @Html.DropDownListFor(p => p.activity.porcentaje_inicial,
                             new SelectListItem[]{
                                 new SelectListItem() {Text = "0%", Value="0"},
                                 new SelectListItem() {Text = "25%", Value="25"},
                                 new SelectListItem() {Text = "50%", Value="50"},
                                 new SelectListItem() {Text = "75%", Value="75"},
                                 new SelectListItem() {Text = "100%", Value="100"}
-                             })
+                             }, new { @id = "mdl_porcentaje" })
                         </div><br>
                         <div class="renglon-center">
                             <div class="mdlchkbox">
                                 <label>CACEI</label>
-                                @Html.CheckBoxFor(p => p.cacei)
+                                @Html.CheckBoxFor(p => p.activity.cacei, new { @id = "mdl_cacei" })
 
                             </div><br>
                             <div class="mdlchkbox">
                                 <label> Cuerpo Academico</label>
-                                @Html.CheckBoxFor(p => p.cuerpo_academico)
+                                @Html.CheckBoxFor(p => p.activity.cuerpo_academico, new { @id = "mdl_academico" })
 
                             </div><br>
                             <div class="mdlchkbox">
                                 <label>ISO 9000</label>
-                                @Html.CheckBoxFor(p => p.iso)
+                                @Html.CheckBoxFor(p => p.activity.iso, new { @id = "mdl_iso" })
                             </div>
                         </div>
                     </div>
                 </div>
-
+                @Html.HiddenFor(p => p.activity.Id, new { @id = "mdl_id" })
+                @Html.HiddenFor(p => p.activity.id_paad, new { @id = "mdl_paad" })
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-verde-light " name="button">Añadir</button>
@@ -70,9 +72,114 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-amarillo" style="margin-top: 80px">TEST</button>
+<!--Vista de llenado PAAD-->
+<main style="margin-top:0;padding-top:0">
+    <div class="container">
+        <h1 class="right">PAAD-03</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
+        <br><br>
+        <table>
+            <tr>
+                <td> Nombre del academico:</td>
+                <td colspan="3"> @Model.nombre_docente</td>
+                <td> No. de Empleado</td>
+                <td> @Model.numero_empleado</td>
+            </tr>
+            <tr>
+                <td> Categoría:</td>
+                <td> @Model.categoria_docente</td>
+                <td> Horas de clase:</td>
+                <td> @Model.horas_clase horas</td>
+                <td> Horas de gestión:</td>
+                <td> @Model.horas_gestion horas</td>
+            </tr>
+            <tr>
+                <td> Cargo:</td>
+                <td> @Model.cargo</td>
+                <td>Horas de investigación:</td>
+                <td style="width:80px;"> @Model.horas_investigacion horas</td>
+                <td>Horas de tutorías o dirección de trabajos:</td>
+                <td style="width:80px;"> @Model.horas_tutorias horas</td>
+            </tr>
+        </table> <br><br>
+        <table>
+            <thead>
+                <tr>
+                    <td width="30%"> Actividad</td>
+                    <td width="20%"> Producción</td>
+                    <td width="10%"> Lugar</td>
+                    <td width="5%"> %Avance</td>
+                    <td width="5%"> CACEI</td>
+                    <td width="5%"> Cuerpo academico</td>
+                    <td width="5%"> ISO 9000</td>
+                    <td width="8%"> Opciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.activities)
+                {
+                    <tr>
+                        <td>@item.actividad</td>
+                        <td>@item.produccion</td>
+                        <td>@item.lugar</td>
+                        <td>@item.porcentaje_inicial</td>
+                        <td>@item.cacei</td>
+                        <td>@item.cuerpo_academico</td>
+                        <td>@item.iso</td>
+                        <td>
+                            <button data-id="@item.Id" data-paad="@item.id_paad" data-actividad="@item.actividad" data-produccion="@item.produccion" data-lugar="@item.lugar" data-porcentaje="@item.porcentaje_inicial" data-cacei="@item.cacei"
+                                data-academico="@item.cuerpo_academico" data-iso="@item.iso" id="myBtn" type="button" class="glyphicon glyphicon-pencil btn btn-verde-light btnEditAct" data-toggle="modal" data-target="#myModal"></button>
+                            @Html.ActionLink(" ", "DeleteActivity", "LlenarPAAD", new { id=item.Id }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="button" data-paad="@Model.id_paad" data-toggle="modal" data-target="#myModal" class="btn btn-verde-light btn-add-act btnAddAct" style="margin-top:10px;width:30%">Agregar Actividad</button>
     </div>
-</div>
+    <div class="" style="width:100%;text-align:right">
+        @Html.ActionLink("Limpiar", "DeleteAllActivitys", "LlenarPAAD", new { id = @Model.id_paad }, new { @class = "btn btn-rojo" })
+        <button type="button" class="btn btn-amarillo " name="button">Entregar PAAD</button>
+    </div>
+</main>
+<!--Scripts-->
+<script>
+$(document).ready(function(){
+  $(".btnEditAct").click(function () {
+        var id = $(this).data('id');
+        var paad = $(this).data('paad');
+        var activity = $(this).data('actividad');
+        var produccion = $(this).data('produccion');
+        var lugar = $(this).data('lugar');
+        var porcentaje = $(this).data('porcentaje');
+        var cacei = $(this).data('cacei');
+        var academico = $(this).data('academico');
+        var iso = $(this).data('iso');
+        $('#mdl_id').val(id);
+        $('#mdl_paad').val(paad);
+        $('#mdl_activity').val(activity);
+        $('#mdl_produccion').val(produccion);
+        $('#mdl_lugar').val(lugar);
+        $('#mdl_porcentaje').val(porcentaje);
+        (cacei==='True') ? $("#mdl_cacei").prop("checked", true) : $("#mdl_cacei").prop("checked", false); 
+        (academico==='True') ? $("#mdl_academico").prop("checked", true) : $("#mdl_academico").prop("checked", false); 
+        (iso==='True') ? $("#mdl_iso").prop("checked", true) : $("#mdl_iso").prop("checked", false); 
+    });
+  $(".btnAddAct").click(function () {
+        var paad = $(this).data('paad');
+        $('#mdl_id').val(0);
+        $('#mdl_paad').val(paad);
+        $('#mdl_activity').val("");
+        $('#mdl_produccion').val("");
+        $('#mdl_lugar').val("");
+        $('#mdl_porcentaje').val(0);
+        $("#mdl_cacei").prop("checked", false); 
+        $("#mdl_academico").prop("checked", false); 
+        $("#mdl_iso").prop("checked", false); 
+    });
+
+});
+</script>
+
 

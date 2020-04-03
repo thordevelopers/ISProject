@@ -18,6 +18,7 @@ namespace ISProject.Models
         public Estados()
         {
             this.IADs = new HashSet<IADs>();
+            this.PAADs = new HashSet<PAADs>();
         }
     
         public int id_estado { get; set; }
@@ -25,6 +26,7 @@ namespace ISProject.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IADs> IADs { get; set; }
-        public virtual PAADs PAADs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PAADs> PAADs { get; set; }
     }
 }

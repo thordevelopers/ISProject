@@ -5,19 +5,22 @@
     ViewBag.Title = "Login";
 }
 
-<div class="bodyLogin" style="margin-top:20px">
-    <div class="renglon">
-        <div class="cuadro" style="margin-top:26px">
-            <p class="lbl"> Iniciar Sesion</p> <br><br>
-            @using (Html.BeginForm("Login", "Login", FormMethod.Get))
-            {
+    <div class="bodyLogin" style="margin-top:20px">
+        <div class="renglon">
+            <div class="cuadro" style="margin-top:26px">
+                <p class="lbl"> Iniciar Sesion</p> <br><br>
+                @using (Html.BeginForm("Login", "Login", FormMethod.Get))
+                {
 
-                @Html.TextBoxFor(p => p.Email, new { placeholder = "Usuario", value = "", @class = "tb-dato", })
-                <br /><br />
-                @Html.PasswordFor(p => p.Password, new { placeholder = "Contraseña", value = "", @class = "tb-dato" })
-                <br /><br />
-                <input type="submit" style="margin-top:10px" class="btn btn-amarillo" value="Iniciar Sesión" />
-            }
+                    @Html.TextBoxFor(p => p.Email, new { placeholder = "Usuario", value = "", @class = "tb-dato", })
+                    <br /><br />
+                    @Html.PasswordFor(p => p.Password, new { placeholder = "Contraseña", value = "", @class = "tb-dato" })
+                    <br /><br />
+                    <input type="submit" style="margin-top:10px" class="btn btn-amarillo" value="Iniciar Sesión" />
+                }
+            </div>
+        </div>
+        <div id="demo">
+
         </div>
     </div>
-</div>

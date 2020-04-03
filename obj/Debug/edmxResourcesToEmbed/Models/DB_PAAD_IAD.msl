@@ -48,6 +48,7 @@
     <EntitySetMapping Name="Docentes">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
         <MappingFragment StoreEntitySet="Docentes">
+          <ScalarProperty Name="id_docentes" ColumnName="id_docentes" />
           <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
           <ScalarProperty Name="correo" ColumnName="correo" />
@@ -79,7 +80,7 @@
           <ScalarProperty Name="estado" ColumnName="estado" />
           <ScalarProperty Name="periodo" ColumnName="periodo" />
           <ScalarProperty Name="carrera" ColumnName="carrera" />
-          <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
+          <ScalarProperty Name="docente" ColumnName="docente" />
           <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
           <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
           <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
@@ -99,7 +100,7 @@
           <ScalarProperty Name="estado" ColumnName="estado" />
           <ScalarProperty Name="periodo" ColumnName="periodo" />
           <ScalarProperty Name="carrera" ColumnName="carrera" />
-          <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
+          <ScalarProperty Name="docente" ColumnName="docente" />
           <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
           <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
           <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
