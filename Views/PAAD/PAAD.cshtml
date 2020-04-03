@@ -1,11 +1,12 @@
 ﻿@using ISProject.Models
-@model ActivityCLS
+@model LlenarPAADCLS
 @{ Layout = "~/Views/Shared/_Layout.cshtml";}
 
 @{
     ViewBag.Title = "PAAD";
 }
 
+<!--Modal de actividades-->
 <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content ">
@@ -16,47 +17,47 @@
                 </button>
             </div>
             <!-- Inicio del cuerpo del Modal-->
-            @using (Html.BeginForm("PostActivity", "PAAD", FormMethod.Post))
+            @using (Html.BeginForm("PostActivity", "LlenarPAAD", FormMethod.Post))
             {
                 <div class="renglon" style="padding-bottom:13px">
                     <div class="" style="width :95%">
-                        <div class="renglon-3" >
+                        <div class="renglon-3">
                             <label class="mdllab">Actividad </label>
-                            @Html.TextAreaFor(p => p.actividad, new { placeholder = "Escribe aquí tu actividad...", value = "", @rows = 6, @class="mdltxta"})
+                            @Html.TextAreaFor(p => p.activity.actividad, new { placeholder = "Escribe aquí tu actividad...", @id="mdl_activity", @rows = 6, @class = "mdltxta" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab">Producción </label>
-                            @Html.TextAreaFor(p => p.produccion, new { @rows =1,@class="mdltxta"})
+                            @Html.TextAreaFor(p => p.activity.produccion, new { @rows = 1, @id="mdl_produccion",@class = "mdltxta" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab text-right">Lugar </label>
-                            @Html.TextAreaFor(p => p.lugar, new { @rows = 1, @class="mdltxta" })
+                            @Html.TextAreaFor(p => p.activity.lugar, new { @rows = 1, @id="mdl_lugar",@class = "mdltxta" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="text-right" style="width:88px;padding-right:9px">%Avance</label>
-                            @Html.DropDownListFor(p => p.porcentaje_inicial,
+                            @Html.DropDownListFor(p => p.activity.porcentaje_inicial,
                             new SelectListItem[]{
                                 new SelectListItem() {Text = "0%", Value="0"},
                                 new SelectListItem() {Text = "25%", Value="25"},
                                 new SelectListItem() {Text = "50%", Value="50"},
                                 new SelectListItem() {Text = "75%", Value="75"},
                                 new SelectListItem() {Text = "100%", Value="100"}
-                             })
+                             },new { @id="mdl_porcentaje"})
                         </div><br>
                         <div class="renglon-center">
                             <div class="mdlchkbox">
                                 <label>CACEI</label>
-                                @Html.CheckBoxFor(p => p.cacei)
+                                @Html.CheckBoxFor(p => p.activity.cacei,new { @id="mdl_cacei"})
 
                             </div><br>
                             <div class="mdlchkbox">
                                 <label> Cuerpo Academico</label>
-                                @Html.CheckBoxFor(p => p.cuerpo_academico)
+                                @Html.CheckBoxFor(p => p.activity.cuerpo_academico,new { @id="mdl_academico"})
 
                             </div><br>
                             <div class="mdlchkbox">
                                 <label>ISO 9000</label>
-                                @Html.CheckBoxFor(p => p.iso)
+                                @Html.CheckBoxFor(p => p.activity.iso,new { @id="mdl_iso"})
                             </div>
                         </div>
                     </div>
@@ -70,69 +71,71 @@
         </div>
     </div>
 </div>
+<!--Vista de llenado PAAD-->
 <main style="margin-top:0;padding-top:0">
     <div class="container">
         <h1 class="right">PAAD-03</h1>
         <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
-        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE______</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
         <br><br>
         <table>
             <tr>
                 <td> Nombre del academico:</td>
-                <td colspan="3"> Christian Xavier Navarro Cota</td>
+                <td colspan="3"> @Model.nombre_docente</td>
                 <td> No. de Empleado</td>
-                <td> 3568</td>
+                <td> @Model.numero_empleado</td>
             </tr>
-
             <tr>
                 <td> Categoría:</td>
-                <td> Definitivo</td>
+                <td> @Model.categoria_docente</td>
                 <td> Horas de clase:</td>
-                <td> 8 horas</td>
+                <td> @Model.horas_clase horas</td>
                 <td> Horas de gestión:</td>
-                <td> 5 horas</td>
+                <td> @Model.horas_gestion horas</td>
             </tr>
-
             <tr>
                 <td> Cargo:</td>
-                <td> Responsable de Practicas Profesionales FIAD</td>
+                <td> @Model.cargo</td>
                 <td>Horas de investigación:</td>
-                <td style="width:80px;"> 4 horas</td>
+                <td style="width:80px;"> @Model.horas_investigacion horas</td>
                 <td>Horas de tutorías o dirección de trabajos:</td>
-                <td style="width:80px;"> 5 horas</td>
+                <td style="width:80px;"> @Model.horas_tutorias horas</td>
             </tr>
         </table> <br><br>
         <table>
-            <tr>
-                <td width="40%"> Actividad</td>
-                <td width="10%"> Producción</td>
-                <td width="5%"> Lugar</td>
-                <td width="5%"> %Avance</td>
-                <td width="5%"> CACEI</td>
-                <td width="5%"> Cuerpo academico</td>
-                <td width="5%"> ISO 9000</td>
-                <td width="8%"> Opciones</td>
-            </tr>
-            <tr >
-                <td style="padding-top:0;margin-top:0">
-                    Es un hecho establecido hace demasiado tiempo que un lector se distraerá
-                    con el contenido del texto de un sitio mientras que mira su diseño. El punto
-                    de usar Lorem Ipsum es que tiene una  más o menos normal de las letras,
-                    al contrario de usar textos como por ejemplo "Contenido aquí, contenido
-                    aquí".
-                </td>
-                <td> Reporte técnico</td>
-                <td> Cubículo</td>
-                <td> 80%</td>
-                <td> Si</td>
-                <td> No</td>
-                <td> Si</td>
-                <td>
-                    @Html.ActionLink(" ", "EditActivity", "PAAD", new { }, new { @class = "glyphicon glyphicon-pencil btn btn-verde-light"})
-                    @Html.ActionLink(" ", "DeleteActivity", "PAAD", new { }, new { @class = "glyphicon glyphicon-trash btn btn-danger"})
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <td width="30%"> Actividad</td>
+                    <td width="20%"> Producción</td>
+                    <td width="10%"> Lugar</td>
+                    <td width="5%"> %Avance</td>
+                    <td width="5%"> CACEI</td>
+                    <td width="5%"> Cuerpo academico</td>
+                    <td width="5%"> ISO 9000</td>
+                    <td width="8%"> Opciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.activities)
+                {
+                    <tr>
+                        <td>@item.actividad</td>
+                        <td>@item.produccion</td>
+                        <td>@item.lugar</td>
+                        <td>@item.porcentaje_inicial</td>
+                        <td>@item.cacei</td>
+                        <td>@item.cuerpo_academico</td>
+                        <td>@item.iso</td>
+                        <td>
+                            <button data-id_paad="@item.id_paad" data-actividad="@item.actividad" data-produccion="@item.produccion" data-lugar="@item.lugar" data-porcentaje="@item.porcentaje_inicial" data-cacei="@item.cacei"
+                                data-academico="@item.cuerpo_academico" data-iso="@item.iso" id="myBtn" type="button" class="glyphicon glyphicon-pencil btn btn-verde-light btnEditAct" data-toggle="modal" data-target="#myModal"></button>
+                            @Html.ActionLink(" ", "DeleteActivity", "PAAD", new { }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
+        <button id="myBtn" type="button" class="btn btn-primary"></button>
         <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-verde-light btn-add-act" style="margin-top:10px;width:30%">Agregar Actividad</button>
     </div>
     <div class="" style="width:100%;text-align:right">
@@ -141,4 +144,27 @@
         <button type="button" class="btn btn-amarillo " name="button">Entregar PAAD</button>
     </div>
 </main>
+<script>
+$(document).ready(function(){
+  $(".btnEditAct").click(function () {
+        var id_paad = $(this).data('id_paad');
+        var activity = $(this).data('actividad');
+        var produccion = $(this).data('produccion');
+        var lugar = $(this).data('lugar');
+        var porcentaje = $(this).data('porcentaje');
+        var cacei = $(this).data('cacei');
+        var academico = $(this).data('academico');
+        var iso = $(this).data('iso');
+        $('#mdl_id_paad').val(id_paad);
+        $('#mdl_activity').val(activity);
+        $('#mdl_produccion').val(produccion);
+        $('#mdl_lugar').val(lugar);
+        $('#mdl_porcentaje').val(porcentaje);
+        (cacei==='True') ? $("#mdl_cacei").prop("checked", true) : $("#mdl_cacei").prop("checked", false); 
+        (academico==='True') ? $("#mdl_academico").prop("checked", true) : $("#mdl_academico").prop("checked", false); 
+        (iso==='True') ? $("#mdl_iso").prop("checked", true) : $("#mdl_iso").prop("checked", false); 
+    });
+});
+</script>
+
 

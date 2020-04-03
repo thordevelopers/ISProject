@@ -40,9 +40,11 @@ namespace ISProject.Controllers
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine(user_db.ID);
-                    Session["id"] = user_db.ID;
-                    Session["email"] = user_db.EMAIL;
+                    using (var db = new DB_PAAD_IADEntities())
+                    {
+                        Session["user"] = db.Docentes.Where(p => p.correo == user_db.EMAIL).FirstOrDefault();
+                    }
+                    Console.WriteLine(Session["user"]);
                     user = null;
                     return RedirectToAction("Index", "Home");
                 }
