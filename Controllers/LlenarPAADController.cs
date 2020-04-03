@@ -7,12 +7,22 @@ using ISProject.Models;
 
 namespace ISProject.Controllers
 {
-    public class PAADController : Controller
+    public class LlenarPAADController : Controller
     {
         // GET: PAAD
         public ActionResult Index()
         {
-            return View("~/Views/PAAD/PAAD.cshtml");
+            if (Session["email"] != null)
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    
+                }
+
+                    return View("~/Views/PAAD/PAAD.cshtml");
+            }
+            else
+                return View("~/Views/Login/Login");
         }
 
         [HttpPost]

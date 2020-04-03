@@ -175,6 +175,7 @@
     <Compile Include="Models\IADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LlenarPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
