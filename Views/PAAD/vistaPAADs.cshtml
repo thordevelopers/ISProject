@@ -1,0 +1,14 @@
+﻿@using ISProject.Models
+@model PAADs
+@{ Layout = "~/Views/Shared/_Layout.cshtml";}
+
+@{
+    ViewBag.Title = "PAADs";
+}
+
+@foreach (var paad in ((List<PAADs>)Session["user_paads"]))
+{
+    <div>
+        <span>@paad.cargo   @paad.carrera   @paad.estado</span>
+    </div>
+}
