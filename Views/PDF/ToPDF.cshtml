@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "ToPDF";
+    Layout = null;
+}
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <h1 class="right">PAAD-03</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: (periodo)</h1>
+        <br>
+        <br>
+        <table>
+            <tr>
+                <td> Nombre del academico:</td>
+                <td colspan="3"> (nombre_docente)</td>
+                <td> No. de Empleado</td>
+                <td> (numero_empleado)</td>
+            </tr>
+            <tr>
+                <td> Categoría:</td>
+                <td> (categoria_docente)</td>
+                <td> Horas de clase:</td>
+                <td> (horas_clase) horas</td>
+                <td> Horas de gestión:</td>
+                <td> (horas_gestion) horas</td>
+            </tr>
+            <tr>
+                <td> Cargo:</td>
+                <td> (cargo)</td>
+                <td>Horas de investigación:</td>
+                <td style="width:80px;"> (horas_investigacion) horas</td>
+                <td>Horas de tutorías o dirección de trabajos:</td>
+                <td style="width:80px;"> (horas_tutorias) horas</td>
+            </tr>
+        </table>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+    </body>
+</html>

@@ -373,3 +373,8 @@ th {
     width:30%;
     text-align:center;
 }
+
+.tborder {
+    border-style: groove;
+    border-color: lightgray;
+}
