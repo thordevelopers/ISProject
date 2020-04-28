@@ -1,0 +1,67 @@
+﻿@using ISProject.Models
+@model VisualizarPAADCLS
+@{
+    ViewBag.Title = "ViewPAAD";
+}
+
+<!--Vista de llenado PAAD-->
+<main style="margin-top:0;padding-top:0">
+    <div class="container">
+        <h1 class="right">PAAD-03</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
+        <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
+        <br><br>
+        <table>
+            <tr>
+                <td> Nombre del academico:</td>
+                <td colspan="3"> @Model.nombre_docente</td>
+                <td> No. de Empleado</td>
+                <td> @Model.numero_empleado</td>
+            </tr>
+            <tr>
+                <td> Categoría:</td>
+                <td> @Model.categoria_docente</td>
+                <td> Horas de clase:</td>
+                <td> @Model.horas_clase horas</td>
+                <td> Horas de gestión:</td>
+                <td> @Model.horas_gestion horas</td>
+            </tr>
+            <tr>
+                <td> Cargo:</td>
+                <td> @Model.cargo</td>
+                <td>Horas de investigación:</td>
+                <td style="width:80px;"> @Model.horas_investigacion horas</td>
+                <td>Horas de tutorías o dirección de trabajos:</td>
+                <td style="width:80px;"> @Model.horas_tutorias horas</td>
+            </tr>
+        </table> <br><br>
+        <table>
+            <thead>
+                <tr>
+                    <td width="30%"> Actividad</td>
+                    <td width="20%"> Producción</td>
+                    <td width="10%"> Lugar</td>
+                    <td width="5%"> %Avance</td>
+                    <td width="5%"> CACEI</td>
+                    <td width="5%"> Cuerpo academico</td>
+                    <td width="5%"> ISO 9000</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.activities)
+                {
+                    <tr>
+                        <td>@item.actividad</td>
+                        <td>@item.produccion</td>
+                        <td>@item.lugar</td>
+                        <td>@item.porcentaje_inicial</td>
+                        <td>@item.cacei</td>
+                        <td>@item.cuerpo_academico</td>
+                        <td>@item.iso</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
+<!--Scripts-->

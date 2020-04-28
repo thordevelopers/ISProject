@@ -10,5 +10,8 @@
          <div class="center">
              <h2>Bienvenido <br/> <br /> @(((Docentes)Session["user"]).nombre)</h2>
         </div>
+        <div>
+            <a href="@Url.Action("ViewPAAD", "VisualizarPAAD", new { id=1 })" > Ver PAAD </a>
+        </div>
     </div>
 </div>
