@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ISProject.Models;
+using Rotativa;
 
 namespace ISProject.Controllers
 {
@@ -14,6 +15,15 @@ namespace ISProject.Controllers
         {
             VisualizarPAADCLS paad = FillPAAD(id);
             return View(paad);
+        }
+
+        public ActionResult ViewPDF(int id)
+        {
+            VisualizarPAADCLS paad = FillPAAD(id);
+            return new ViewAsPdf(paad)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape
+            };
         }
 
         public VisualizarPAADCLS FillPAAD(int id)
