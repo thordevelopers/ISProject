@@ -21,17 +21,25 @@
     <div class="p-col">
         @foreach (var paad in ((List<PAADs>)Session["user_paads"]))
         {
-            <div style="margin-bottom: 30px">
-                <table class="table-act" onclick="location.href ='@Html.ActionLink(" ", "GenerarPDF", "vistaPAADs", new { id=paad.id_paad })'">
-                    <tr>
-                        <th>Formato: PAAD</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            Estado: @paad.estado
-                            Periodo: @paad.periodo
-                        </td>
-                    </tr>
+            <div style="margin-bottom: 50px;">
+                <table class="table-act">
+                    <tbody>
+                        <tr>
+                            <th>Formato: PAAD</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                Estado: @paad.estado
+                                Periodo: @paad.periodo
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <button type="button" class="btn-amarillo-pdf" style="align-content: center;">@Html.ActionLink("GenerarPDF", "GenerarPDF", "vistaPAAD", new { id = paad.id_paad }, new { @class = "btn-amarillo-pdf"})</button>
+                                <button type="button" class = "btn-verde-light" style="align-content: center;">@Html.ActionLink("Visualizar PAAD", "visualizarPAAD", "vistaPAAD", new { id = paad.id_paad }, new { @class = "btn-verde-light" })</button>
+                            </th>
+                        </tr>
+                    </tbody>
                 </table><br><br>
             </div>
         }

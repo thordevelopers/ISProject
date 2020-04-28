@@ -55,5 +55,10 @@ namespace ISProject.Controllers
         {
             return View();
         }
+
+        public ActionResult visualizarPDF()
+        {
+            return View();
+        }
     }
 }

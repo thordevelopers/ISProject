@@ -130,7 +130,7 @@ table {
 
 .p-col {
     column-gap: 1em;
-    columns: 2;
+    columns: 1;
     text-align: right;
 }
 
@@ -179,7 +179,7 @@ th {
 
 .renglon-3 {
     display: flex;
-    justify-content: left;
+    justify-content:  flex-end;
 }
 
 .renglon-4 {
@@ -215,6 +215,9 @@ th {
     border: 1px solid #1A7743;
     background-color: #1A7743;
     color: white;
+    width: 100px;
+    height: 20px;
+    font-size: 13px;
 }
 
     .btn-verde:hover {
@@ -226,6 +229,9 @@ th {
     border: 1px solid #20A100;
     background-color: #20A100;
     color: white;
+    width: 100px;
+    height: 20px;
+    font-size: 13px;
 }
 
     .btn-verde-light:hover {
