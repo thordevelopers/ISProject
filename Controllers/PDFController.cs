@@ -16,7 +16,7 @@ namespace ISProject.Controllers
             return View();
         }
         
-        public ActionResult ToPDF()
+        public ActionResult ToPDF(int id)
         {
             return new ViewAsPdf("ToPDF") {
                 PageOrientation = Rotativa.Options.Orientation.Landscape
