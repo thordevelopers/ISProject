@@ -1,0 +1,97 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ToPDF";
+    Layout = null;
+}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <h1 class="right">PAAD-03</h1>
+    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
+    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: (periodo)</h1>
+    <br>
+    <table>
+        <tr>
+            <td> Nombre del academico:</td>
+            <td colspan="3"> (nombre_docente)</td>
+            <td> No. de Empleado</td>
+            <td> (numero_empleado)</td>
+        </tr>
+        <tr>
+            <td> Categoría:</td>
+            <td> (categoria_docente)</td>
+            <td> Horas de clase:</td>
+            <td> (horas_clase) horas</td>
+            <td> Horas de gestión:</td>
+            <td> (horas_gestion) horas</td>
+        </tr>
+        <tr>
+            <td> Cargo:</td>
+            <td> (cargo)</td>
+            <td>Horas de investigación:</td>
+            <td style="width:80px;"> (horas_investigacion) horas</td>
+            <td>Horas de tutorías o dirección de trabajos:</td>
+            <td style="width:80px;"> (horas_tutorias) horas</td>
+        </tr>
+    </table><br><br>
+    <table>
+        <thead style="font-size:16px">
+            <tr>
+                <td width="30%"> Actividad</td>
+                <td width="20%"> Producción</td>
+                <td width="10%"> Lugar</td>
+                <td width="5%"> %Avance</td>
+                <td width="5%"> CACEI</td>
+                <td width="5%"> Cuerpo academico</td>
+                <td width="5%"> ISO 9000</td>
+            </tr>
+        </thead>
+        <tbody style="font-size:15px">
+            <tr>
+                <td>actividad</td>
+                <td>produccion</td>
+                <td>lugar</td>
+                <td>porcentaje_inicial</td>
+                <td>cacei</td>
+                <td>cuerpo_academico</td>
+                <td>iso</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="" style="width:100%;display:inline-block;margin-left:0%;margin-top:50px">
+        <div class="" style="width:48%;display:inline-block;word-break: break-all;">
+            <label style="margin-left:20px">Firma Electronica</label><br /><br />
+            <div style="width:70%;margin-left:14%;border:dotted;padding:5px;border-color:gray">
+                RNASsrBTus1zLuEHDRP8yxClyFCzCfrcy8xAOwKlVKueKb3x606oqykARLyE9ok9akVMfL1yRsQ11dKJujfWhAUBowZDF4klKE4Zqo4PTJKEP1Bh4yBleGYxJGeZXxJMKXPwcZO8JCO5YC3N6zOJS7UBSauM1GcvHODP3KhQclOBSlfFvtv33xXJfz2h8OT65cw8haVF
+            </div><br />
+            <div style="width:90%;border:groove;border-color:lightgray;border-width:thin;text-align:center;margin-left:5%">
+                <h2 style="font-size:18px">Christian Xavier Navarro Cota</h2>
+                <hr style="margin:2px;color:gray;background-color:darkgray;height:2px" />
+                <h2 style="font-size:18px">Docente</h2>
+            </div>
+        </div>
+        <div class="" style="width:48%;display:inline-block;float:right;word-break: break-all;">
+            <label style="margin-left:20px">Firma Electronica</label><br /><br />
+            <div style="width:70%;margin-left:14%;border:dotted;padding:5px;border-color:gray">
+                RNASsrBTus1zLuEHDRP8yxClyFCzCfrcy8xAOwKlVKueKb3x606oqykARLyE9ok9akVMfL1yRsQ11dKJujfWhAUBowZDF4klKE4Zqo4PTJKEP1Bh4yBleGYxJGeZXxJMKXPwcZO8JCO5YC3N6zOJS7UBSauM1GcvHODP3KhQclOBSlfFvtv33xXJfz2h8OT65cw8haVF
+            </div><br />
+            <div style="width:90%;border:groove;border-color:lightgray;border-width:thin;text-align:center;margin-left:5%">
+                <h2 style="font-size:18px">Dr. Miguel Enrique Martínez Rosas</h2>
+                <hr style="margin:2px;color:gray;background-color:darkgray;height:2px" />
+                <h2 style="font-size:18px">Director</h2>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
