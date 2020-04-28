@@ -17,6 +17,10 @@ body {
     line-height: 1;
 }
 
+bodyLogin {
+    margin-top: 120px;
+}
+
 ol, ul {
     list-style: none;
 }
@@ -58,11 +62,9 @@ p, input, button, a, td, th, label {
 nav {
     width: 100%;
     background-color: #1A7743;
-    position: static;
+    position: fixed;
     z-index: 100;
     min-height: 5vh;
-    box-shadow: 0px 0px 20px rgb(32,32,32);
-    margin-bottom:25px;
 }
 
     nav ul {
@@ -98,9 +100,8 @@ footer {
     width: 100%;
     padding: 10px;
     background-color: #1A7743;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
-    margin-top:20px;
 }
 
 table {
@@ -110,13 +111,34 @@ table {
 
 .table-act {
     margin-left: 30%;
-    width: 22%;
+    width: 40%;
+    font-size: 15px;
+}
+
+.table-firma {
+    margin-left: 25%;
+    width: 60%;
+    font-size: 15px;
+    text-align: center;
+}
+
+.table-direct {
+    margin-left: 25%;
+    width: 50%;
+    font-size: 14px;
+}
+
+.p-col {
+    column-gap: 1em;
+    columns: 2;
+    text-align: right;
 }
 
 th, td {
     text-align: left;
     padding: 8px;
     border: 1px solid #C3C2C1;
+    font-size: 13px;
 }
 
 tr:nth-child(even) {
@@ -124,7 +146,7 @@ tr:nth-child(even) {
 }
 
 th {
-    background-color: #FFA734;
+    background-color: #E2BB88;
     color: black;
 }
 
@@ -138,6 +160,11 @@ th {
     text-align: center;
     box-shadow: 10px 10px 30px rgb(32,32,32);
     margin: 1vh 1vw;
+    margin-top: 200px;
+}
+
+.site-body {
+    margin-top: 150px;
 }
 
 .renglon {
@@ -155,9 +182,16 @@ th {
     justify-content: left;
 }
 
-.renglon-center {
+.renglon-4 {
     display: flex;
-    justify-content: center;
+    margin-left: 800px;
+    margin-right: 5px;
+}
+
+.renglon-right {
+    display: flex;
+    margin-left: 180px;
+    margin-right: 5px;
 }
 
 .btn {
@@ -199,15 +233,6 @@ th {
         color: white;
     }
 
-.btn-azul {
-    border: 1px solid rgb(0,102,204);
-    background-color: white;
-}
-
-    .btn-azul:hover {
-        background-color: rgb(0,102,204);
-        color: white;
-    }
 
 .btn-rojo {
     border: 1px solid rgb(204,0,0);
@@ -226,10 +251,19 @@ th {
     color: white;
 }
 
-    .btn-amarillo:hover {
-        background-color: #C57A19;
-        color: white;
-    }
+.btn-amarillo-pdf {
+    border: 0px solid #FFA734;
+    background-color: #FFA734;
+    color: white;
+    width: 100px;
+    height: 20px;
+    font-size: 13px;
+}
+
+.btn-amarillo:hover {
+    background-color: #C57A19;
+    color: white;
+}
 
 .tb-dato {
     border: 1px solid black;
@@ -247,8 +281,17 @@ th {
     font-size: 30px;
 }
 
+.lbl-15 {
+    font-size: 15px;
+    text-indent: 200px;
+}
+
 .left {
     text-align: left;
+}
+
+.right {
+    text-align: right;
 }
 
 .lbl-bold {
@@ -264,7 +307,7 @@ th {
     text-align: left;
 }
 
-.right {
+.lbl-right {
     text-align: right;
 }
 
@@ -357,19 +400,4 @@ th {
     width: 200px;
     padding: 10px;
     margin: 10px;
-}
-
-.mdltxta {
-    resize: vertical;
-    width:100%;
-}
-
-.mdllab{
-    width:100px;
-    padding-right:9px;
-}
-
-.mdlchkbox{
-    width:30%;
-    text-align:center;
 }

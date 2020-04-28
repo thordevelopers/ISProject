@@ -6,9 +6,35 @@
     ViewBag.Title = "PAADs";
 }
 
-@foreach (var paad in ((List<PAADs>)Session["user_paads"]))
-{
-    <div>
-        <span>@paad.cargo   @paad.carrera   @paad.estado</span>
+<div class="site-body">
+    <div class="renglon-4">
+        <p style="margin-right: 10px; text-align: center;">Tipo de formato:</p>
+        <select name="select" class="">
+            <option value="value1" selected> Todos</option>
+            <option value="value2"> Periodo</option>
+            <option value="value3"> Aprobado</option>
+            <option value="value4"> Rechazado</option>
+            <option value="value5"> En espera</option>
+            <option value="value5"> Solicitud pendiente</option>
+        </select>
     </div>
-}
+    <div class="p-col">
+        @foreach (var paad in ((List<PAADs>)Session["user_paads"]))
+        {
+            <div style="margin-bottom: 30px">
+                <table class="table-act">
+                    <tr onclick="location.href ='@Html.ActionLink(" ", "GenerarPDF", "vistaPAADs", new { id=paad.id_paad })'">
+                        <th>Formato: PAAD</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Estado: @paad.estado
+                            Periodo: @paad.periodo
+                        </td>
+                    </tr>
+                </table><br><br>
+            </div>
+        }
+    </div>
+
+</div>

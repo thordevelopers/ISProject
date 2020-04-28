@@ -50,5 +50,10 @@ namespace ISProject.Controllers
             }
             return View("~/Views/PAAD/vistaPAADs.cshtml");
         }
+
+        public ActionResult GenerarPDF()
+        {
+            return View();
+        }
     }
 }

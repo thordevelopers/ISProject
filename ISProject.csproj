@@ -190,7 +190,6 @@
     <Compile Include="Models\USERS.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\vistaPAADsCLS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
