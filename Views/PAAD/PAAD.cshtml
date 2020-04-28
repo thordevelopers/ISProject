@@ -23,26 +23,19 @@
                     <div class="" style="width :95%">
                         <div class="renglon-3">
                             <label class="mdllab">Actividad </label>
-                            @Html.TextAreaFor(p => p.activity.actividad, new { placeholder = "Escribe aquí tu actividad...", @id = "mdl_activity", @rows = 6, @class = "mdltxta" })
+                            @Html.TextAreaFor(p => p.activity.actividad, new { placeholder = "Escribe aquí tu actividad...", @id = "mdl_activity", @rows = 6, @class = "mdltxta",onkeyup="validateInputs()" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab">Producción </label>
-                            @Html.TextAreaFor(p => p.activity.produccion, new { @rows = 1, @id = "mdl_produccion", @class = "mdltxta" })
+                            @Html.TextAreaFor(p => p.activity.produccion, new { @rows = 1, @id = "mdl_produccion", @class = "mdltxta", onkeyup = "validateInputs()" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab text-right">Lugar </label>
-                            @Html.TextAreaFor(p => p.activity.lugar, new { @rows = 1, @id = "mdl_lugar", @class = "mdltxta" })
+                            @Html.TextAreaFor(p => p.activity.lugar, new { @rows = 1, @id = "mdl_lugar", @class = "mdltxta", onkeyup = "validateInputs()" })
                         </div><br>
                         <div class="renglon-3">
-                            <label class="text-right" style="width:88px;padding-right:9px">%Avance</label>
-                            @Html.DropDownListFor(p => p.activity.porcentaje_inicial,
-                            new SelectListItem[]{
-                                new SelectListItem() {Text = "0%", Value="0"},
-                                new SelectListItem() {Text = "25%", Value="25"},
-                                new SelectListItem() {Text = "50%", Value="50"},
-                                new SelectListItem() {Text = "75%", Value="75"},
-                                new SelectListItem() {Text = "100%", Value="100"}
-                             }, new { @id = "mdl_porcentaje" })
+                            <label class="text-right" style="width:88px;padding-right:9px;padding-top:2px">%Avance</label>
+                            @Html.TextBoxFor(p=> p.activity.porcentaje_inicial,new { @id = "mdl_porcentaje", @type ="number",@max="99",@min="1",@style="width:45px;padding-left:3px",@onkeyup= "validateInputs()" })
                         </div><br>
                         <div class="renglon-center">
                             <div class="mdlchkbox">
@@ -66,7 +59,7 @@
                 @Html.HiddenFor(p => p.activity.id_paad, new { @id = "mdl_paad" })
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-verde-light " name="button">Añadir</button>
+                    <button type="submit" class="btn btn-verde-light" name="button" id="btnSubmit" >Añadir</button>
                 </div>
             }
         </div>
@@ -123,7 +116,7 @@
                         <td>@item.actividad</td>
                         <td>@item.produccion</td>
                         <td>@item.lugar</td>
-                        <td>@item.porcentaje_inicial</td>
+                        <td>@item.porcentaje_inicial %</td>
                         <td>@item.cacei</td>
                         <td>@item.cuerpo_academico</td>
                         <td>@item.iso</td>
@@ -146,7 +139,7 @@
 <!--Scripts-->
 <script>
 $(document).ready(function(){
-  $(".btnEditAct").click(function () {
+    $(".btnEditAct").click(function () {
         var id = $(this).data('id');
         var paad = $(this).data('paad');
         var activity = $(this).data('actividad');
@@ -166,19 +159,21 @@ $(document).ready(function(){
         (academico==='True') ? $("#mdl_academico").prop("checked", true) : $("#mdl_academico").prop("checked", false); 
         (iso==='True') ? $("#mdl_iso").prop("checked", true) : $("#mdl_iso").prop("checked", false); 
     });
-  $(".btnAddAct").click(function () {
+    $(".btnAddAct").click(function () {
         var paad = $(this).data('paad');
         $('#mdl_id').val(0);
         $('#mdl_paad').val(paad);
         $('#mdl_activity').val("");
         $('#mdl_produccion').val("");
         $('#mdl_lugar').val("");
-        $('#mdl_porcentaje').val(0);
+        $('#mdl_porcentaje').val(1);
         $("#mdl_cacei").prop("checked", false); 
         $("#mdl_academico").prop("checked", false); 
         $("#mdl_iso").prop("checked", false); 
     });
 
+    validateInputs();
+    
 });
 
     function eliminar() {
@@ -196,6 +191,26 @@ $(document).ready(function(){
             event.preventDefault();
         }
     }
+
+    function validateInputs() {
+        var activity = $.trim($('#mdl_activity').val());
+        var production = $.trim($('#mdl_produccion').val());
+        var place = $.trim($('#mdl_lugar').val());
+        var percentage = $.trim($('#mdl_porcentaje').val());
+
+        if (activity && production && place) {
+            $('#btnSubmit').attr("disabled", false);
+        } else {
+            $('#btnSubmit').attr("disabled", true);
+        }
+
+        if (percentage < 1) {
+            $('#mdl_porcentaje').val(1);
+        } else if (percentage > 99) {
+            $('#mdl_porcentaje').val(99);
+        }
+    }
+    
 </script>
 
 
