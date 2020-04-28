@@ -149,6 +149,7 @@
     <Compile Include="Controllers\LlenarPAADController.cs" />
     <Compile Include="Controllers\PDFController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\VisualizarPAADController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -206,6 +207,7 @@
     <Compile Include="Models\USERS.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VisualizarPAADCLS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +274,7 @@
     <Content Include="Views\PAAD\PAAD.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Shared\View.cshtml" />
+    <Content Include="Views\VisualizarPAAD\ViewPAAD.cshtml" />
     <Content Include="Views\PDF\ToPDF.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -356,6 +356,7 @@ C:\Users\persi\Documents\Alfredo\repos\ISProject\obj\Debug\ISProject.csproj.Core
 C:\Users\persi\Documents\Alfredo\repos\ISProject\obj\Debug\ISProject.csproj.CopyComplete
 C:\Users\persi\Documents\Alfredo\repos\ISProject\obj\Debug\ISProject.dll
 C:\Users\persi\Documents\Alfredo\repos\ISProject\obj\Debug\ISProject.pdb
+<<<<<<< HEAD
 C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\System.Net.Http.Formatting.dll
 C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\System.Web.Http.dll
 C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\System.Web.Http.WebHost.dll
@@ -366,3 +367,5 @@ C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\es\System.Net.Http.Formatti
 C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\es\System.Web.Http.resources.dll
 C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\es\System.Web.Http.WebHost.resources.dll
 C:\Users\persi\Documents\Alfredo\repos\ISProject\bin\Rotativa.dll
+=======
+>>>>>>> master
