@@ -29,7 +29,7 @@ namespace ISProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("~/Views/PAAD/PAAD.cshtml");
+                return RedirectToAction("Index", "LlenarPAAD");
             }
             else
             {
