@@ -132,11 +132,8 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LlenarPAADController.cs" />
     <Compile Include="Controllers\TestController.cs" />
-<<<<<<< HEAD
-    <Compile Include="Controllers\vistaPAADsController.cs" />
-=======
     <Compile Include="Controllers\VisualizarPAADController.cs" />
->>>>>>> master
+    <Compile Include="Controllers\vistaPAADsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
