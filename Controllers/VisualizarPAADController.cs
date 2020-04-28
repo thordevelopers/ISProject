@@ -26,6 +26,19 @@ namespace ISProject.Controllers
             };
         }
 
+        public ActionResult ListPAADs()
+        {
+            if (Session["user"] != null)
+            {
+                userPAADs(((Docentes)Session["user"]).id_docentes);
+                return View("~/Views/PAAD/vistaPAADs.cshtml");
+            }
+            else
+            {
+                return View("~/Views/Login/Login");
+            }
+        }
+
         public VisualizarPAADCLS FillPAAD(int id)
         {
 
@@ -68,6 +81,43 @@ namespace ISProject.Controllers
 
             }
             return model;
+        }
+
+        [HttpGet]
+        public ActionResult userPAADs(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+                List<PAADs> _paads;
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    _paads = db.PAADs.Where(p => p.docente == id).ToList();
+                }
+                if (_paads.Count == 0)
+                {
+                    return View();
+                }
+                else
+                {
+                    Session["user_paads"] = _paads;
+                }
+                _paads = null;
+            }
+            return View("~/Views/PAAD/vistaPAADs.cshtml");
+        }
+
+        public ActionResult GenerarPDF()
+        {
+            return View();
+        }
+
+        public ActionResult visualizarPDF()
+        {
+            return View();
         }
     }
 }

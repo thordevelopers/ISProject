@@ -1,0 +1,52 @@
+﻿@using ISProject.Models
+@model List<RegistroPAAD>
+@{
+    ViewBag.Title = "ListPAADs";
+}
+<div class="site-body">
+    <div class="renglon-4">
+        <p style="margin-right: 10px; text-align: center;">Tipo de formato:</p>
+        <select name="select" class="">
+            <option value="value1" selected> Todos</option>
+            <option value="value2"> Periodo</option>
+            <option value="value3"> Aprobado</option>
+            <option value="value4"> Rechazado</option>
+            <option value="value5"> En espera</option>
+            <option value="value5"> Solicitud pendiente</option>
+        </select>
+    </div>
+    <div class="p-col">
+        <table>
+            <thead>
+                <tr>
+                    <td > Num. Emp.</td>
+                    <td > Nombre</td>
+                    <td > Cargo</td>
+                    <td > Categoria</td>
+                    <td > Carrera</td>
+                    <td > Periodo</td>
+                    <td > Estado</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.numero_empleado</td>
+                        <td>@item.nombre_docente</td>
+                        <td>@item.cargo</td>
+                        <td>@item.categoria_docente %</td>
+                        <td>@item.carrera</td>
+                        <td>@item.periodo</td>
+                        <td>@item.estado</td>
+                        <td>
+                            @Html.ActionLink(" ", "ViewPAAD", "VisualizarPAAD", new { id = item.id_paad }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
+                            @Html.ActionLink(" ", "ViewPDF", "VisualizarPAAD", new { id = item.id_paad }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

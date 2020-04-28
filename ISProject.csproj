@@ -194,6 +194,7 @@
     <Compile Include="Models\IADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ListaPAADCLS.cs" />
     <Compile Include="Models\LlenarPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -279,6 +280,7 @@
     <Content Include="Views\PDF\ToPDF.cshtml" />
     <Content Include="Views\VisualizarPAAD\ViewPDF.cshtml" />
     <Content Include="Views\PAAD\vistaPAADs.cshtml" />
+    <Content Include="Views\VisualizarPAAD\ListPAADs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
