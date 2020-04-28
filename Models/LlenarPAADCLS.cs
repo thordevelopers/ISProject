@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -22,6 +23,7 @@ namespace ISProject.Models
         public string firma_docente { get; set; }
         public string firma_director { get; set; }
         public bool modal_open { get; set; }
+        [Required]
         public ActivityCLS activity { get; set; }
         public List<ActivityCLS> activities { get; set; }
     }
