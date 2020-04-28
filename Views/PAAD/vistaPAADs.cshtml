@@ -22,8 +22,8 @@
         @foreach (var paad in ((List<PAADs>)Session["user_paads"]))
         {
             <div style="margin-bottom: 30px">
-                <table class="table-act">
-                    <tr onclick="location.href ='@Html.ActionLink(" ", "GenerarPDF", "vistaPAADs", new { id=paad.id_paad })'">
+                <table class="table-act" onclick="location.href ='@Html.ActionLink(" ", "GenerarPDF", "vistaPAADs", new { id=paad.id_paad })'">
+                    <tr>
                         <th>Formato: PAAD</th>
                     </tr>
                     <tr>
