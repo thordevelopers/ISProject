@@ -98,9 +98,9 @@ namespace ISProject.Controllers
                 if (doc.rol == 1)
                     paads = db.PAADs.Where(p => p.docente == doc.id_docentes).ToList();
                 else if (doc.rol == 2)
-                    paads = db.PAADs.ToList();
+                    paads = db.PAADs.Where(p => p.estado != 1).ToList();
                 else if (doc.rol == 3)
-                    paads = db.PAADs.ToList();
+                    paads = db.PAADs.Where(p => p.estado != 1).ToList();
                 else
                     paads = null;
                 if (paads == null)

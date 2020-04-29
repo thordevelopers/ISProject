@@ -31,47 +31,26 @@
                     <div>
                         <div class="dropdown">
                             <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
-                               <input type="button" class="dropbtn" value="Inicio" />
+                                <input type="button" class="dropbtn" value="Inicio" />
                             </a>
-                        </div>
-                        <div class="dropdown">
-                            <button class="dropbtn">Mi informacion</button>
-                            <div class="dropdown-content">
-                                <a href="@Url.Action("ListPAADs", "VisualizarPAAD", Request.Url.Scheme)">Mis PAADs</a>
-                                <a href="#">Mis IADs</a>
-                            </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn">Formatos</button>
                             <div class="dropdown-content">
-                                <a href="@Url.Action("Index", "LlenarPAAD", Request.Url.Scheme)">Llenar PAAD</a>
+                                <a href="@Url.Action("Index", "LlenarPAAD", Request.Url.Scheme)">PAAD</a>
 
-                                <a href="#">Llenar IAD</a>
+                                <a href="#">IAD</a>
                             </div>
                         </div>
                         <div class="dropdown">
-                            <button class="dropbtn">Notificaciones</button>
+                            <button class="dropbtn">Lista de Formatos</button>
                             <div class="dropdown-content">
-                                <a href="#"></a>
-                                <a href="#"></a>
+                                <a href="@Url.Action("ListPAADs", "VisualizarPAAD", Request.Url.Scheme)">Lista PAAD</a>
+                                <a href="#">Lista IAD</a>
                             </div>
                         </div>
                         <div class="dropdown">
-                            <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
-                               <input type="button" class="dropbtn" value="Inicio" />
-                            </a>
-                        </div><div class="dropdown">
-                            <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
-                               <input type="button" class="dropbtn" value="Inicio" />
-                            </a>
-                        </div>
-                        <div class="dropdown">
-                            <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
-                               <input type="button" class="dropbtn" value="Inicio" />
-                            </a>
-                        </div>
-                        <div class="dropdown">
-                            <button class="dropbtn">Cerrar Sesion</button>
+                            <a class="dropbtn" href="@Url.Action("Login", "Login", Request.Url.Scheme)">Cerrar Sesion</a>
                         </div>
                     </div>
                 </div>
