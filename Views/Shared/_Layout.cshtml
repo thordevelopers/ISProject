@@ -37,7 +37,7 @@
                         <div class="dropdown">
                             <button class="dropbtn">Mi informacion</button>
                             <div class="dropdown-content">
-                                <a href="@Url.Action("Index", "vistaPAADs", Request.Url.Scheme)">Mis PAADs</a>
+                                <a href="@Url.Action("ListPAADs", "VisualizarPAAD", Request.Url.Scheme)">Mis PAADs</a>
                                 <a href="#">Mis IADs</a>
                             </div>
                         </div>
@@ -55,11 +55,6 @@
                                 <a href="#"></a>
                                 <a href="#"></a>
                             </div>
-                        </div>
-                        <div class="dropdown">
-                            <a href="@Url.Action("ToPDF", "PDF", Request.Url.Scheme)">
-                               <input type="button" class="dropbtn" value="PDF" />
-                            </a>
                         </div>
                         <div class="dropdown">
                             <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">

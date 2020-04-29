@@ -147,10 +147,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LlenarPAADController.cs" />
-    <Compile Include="Controllers\PDFController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\VisualizarPAADController.cs" />
-    <Compile Include="Controllers\vistaPAADsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,9 +279,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Shared\View.cshtml" />
     <Content Include="Views\VisualizarPAAD\ViewPAAD.cshtml" />
-    <Content Include="Views\PDF\ToPDF.cshtml" />
     <Content Include="Views\VisualizarPAAD\ViewPDF.cshtml" />
-    <Content Include="Views\PAAD\vistaPAADs.cshtml" />
     <Content Include="Views\VisualizarPAAD\ListPAADs.cshtml" />
   </ItemGroup>
   <ItemGroup>

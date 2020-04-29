@@ -4,9 +4,9 @@
     ViewBag.Title = "ListPAADs";
 }
 <div class="site-body">
-    <div class="renglon-4">
-        <p style="margin-right: 10px; text-align: center;">Tipo de formato:</p>
-        <select name="select" class="">
+    <div class="renglon-4" style="display:inline-flex">
+        <p style="margin-right: 10px; text-align: center;display:inline-flex">Tipo de formato:</p>
+        <select name="select" class="" style="display:inline-flex">
             <option value="value1" selected> Todos</option>
             <option value="value2"> Periodo</option>
             <option value="value3"> Aprobado</option>
@@ -14,34 +14,35 @@
             <option value="value5"> En espera</option>
             <option value="value5"> Solicitud pendiente</option>
         </select>
-    </div>
-    <div class="p-col">
+    </div><br /><br />
+    <div class="">
         <table>
             <thead>
                 <tr>
-                    <td > Num. Emp.</td>
-                    <td > Nombre</td>
-                    <td > Cargo</td>
-                    <td > Categoria</td>
-                    <td > Carrera</td>
-                    <td > Periodo</td>
-                    <td > Estado</td>
+                    <td width="80px" style="text-align:center">Emp.</td>
+                    <td> Nombre</td>
+                    <td> Cargo</td>
+                    <td> Categoria</td>
+                    <td> Carrera</td>
+                    <td> Periodo</td>
+                    <td> Estado</td>
+                    <td> Opciones</td>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.numero_empleado</td>
+                        <td style="text-align:right">@item.numero_empleado</td>
                         <td>@item.nombre_docente</td>
                         <td>@item.cargo</td>
-                        <td>@item.categoria_docente %</td>
+                        <td>@item.categoria_docente</td>
                         <td>@item.carrera</td>
                         <td>@item.periodo</td>
                         <td>@item.estado</td>
-                        <td>
-                            @Html.ActionLink(" ", "ViewPAAD", "VisualizarPAAD", new { id = item.id_paad }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
-                            @Html.ActionLink(" ", "ViewPDF", "VisualizarPAAD", new { id = item.id_paad }, new { @class = "glyphicon glyphicon-trash btn btn-danger" })
+                        <td style="text-align:center">
+                            @Html.ActionLink("Ver detalles", "ViewPAAD", "VisualizarPAAD", new { id = item.id_paad }, new { @class = "btn btn-verde-light" })
+                            @Html.ActionLink("PDF", "ViewPDF", "VisualizarPAAD", new { id = item.id_paad }, new { @class = "btn btn-amarillo", @style = "margin-left:10%",@target="_blank" })
                         </td>
                     </tr>
                 }
@@ -49,4 +50,3 @@
         </table>
     </div>
 </div>
-

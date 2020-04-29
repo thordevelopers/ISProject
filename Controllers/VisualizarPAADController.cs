@@ -30,8 +30,8 @@ namespace ISProject.Controllers
         {
             if (Session["user"] != null)
             {
-                userPAADs(((Docentes)Session["user"]).id_docentes);
-                return View("~/Views/PAAD/vistaPAADs.cshtml");
+                List<RegistroPAAD> paads= userPAADs();
+                return View(paads);
             }
             else
             {
@@ -41,23 +41,25 @@ namespace ISProject.Controllers
 
         public VisualizarPAADCLS FillPAAD(int id)
         {
-
             VisualizarPAADCLS model = new VisualizarPAADCLS();
             using (var db = new DB_PAAD_IADEntities())
             {
                 Docentes doc = ((Docentes)Session["user"]);
-                PAADs paad = db.PAADs.Where(p => p.docente == doc.id_docentes && p.id_paad == id).FirstOrDefault();
+                PAADs paad;
+                if (doc.rol>1)
+                    paad = db.PAADs.Where(p => p.id_paad == id).FirstOrDefault();
+                else
+                    paad = db.PAADs.Where(p => p.docente == doc.id_docentes && p.id_paad == id).FirstOrDefault();
                 if (paad == null)
                 {
                     return null;
                 }
-                paad = db.PAADs.Where(p => p.docente == doc.id_docentes).FirstOrDefault();
                 model.id_paad = paad.id_paad;
                 model.estado = db.Estados.Where(p => p.id_estado == paad.estado).FirstOrDefault().estado;
                 model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).FirstOrDefault().periodo;
                 model.carrera = db.Carreras.Where(p => p.id_carrera == paad.carrera).FirstOrDefault().carrera;
-                model.numero_empleado = doc.numero_empleado;
-                model.nombre_docente = doc.nombre;
+                model.numero_empleado = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().numero_empleado;
+                model.nombre_docente = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().nombre;
                 model.categoria_docente = db.Categorias.Where(p => p.id_categoria == paad.categoria_docente).FirstOrDefault().categoria;
                 model.horas_clase = paad.horas_clase;
                 model.horas_investigacion = paad.horas_investigacion;
@@ -84,40 +86,41 @@ namespace ISProject.Controllers
         }
 
         [HttpGet]
-        public ActionResult userPAADs(int id)
+        public List<RegistroPAAD> userPAADs()
         {
-            if (!ModelState.IsValid)
+            RegistroPAAD model;
+            List<RegistroPAAD> list = new List<RegistroPAAD>();
+            using (var db = new DB_PAAD_IADEntities())
             {
-                return View();
-            }
-            else
-            {
-                List<PAADs> _paads;
-                using (var db = new DB_PAAD_IADEntities())
-                {
-                    _paads = db.PAADs.Where(p => p.docente == id).ToList();
-                }
-                if (_paads.Count == 0)
-                {
-                    return View();
-                }
+                Docentes doc = ((Docentes)Session["user"]);
+                List<PAADs> paads;
+                if (doc.rol == 1)
+                    paads = db.PAADs.Where(p => p.docente == doc.id_docentes).ToList();
+                else if (doc.rol == 2)
+                    paads = db.PAADs.ToList();
+                else if (doc.rol == 3)
+                    paads = db.PAADs.ToList();
                 else
+                    paads = null;
+                if (paads == null)
                 {
-                    Session["user_paads"] = _paads;
+                    return list;
                 }
-                _paads = null;
+                foreach (var paad in paads)
+                {
+                    model = new RegistroPAAD();
+                    model.id_paad = paad.id_paad;
+                    model.estado = db.Estados.Where(p => p.id_estado == paad.estado).FirstOrDefault().estado;
+                    model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).FirstOrDefault().periodo;
+                    model.carrera = db.Carreras.Where(p => p.id_carrera == paad.carrera).FirstOrDefault().carrera;
+                    model.numero_empleado = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().numero_empleado;
+                    model.nombre_docente = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().nombre;
+                    model.categoria_docente = db.Categorias.Where(p => p.id_categoria == paad.categoria_docente).FirstOrDefault().categoria;
+                    model.cargo = db.Cargos.Where(p => p.id_cargo == paad.cargo).FirstOrDefault().cargo;
+                    list.Add(model);
+                }
             }
-            return View("~/Views/PAAD/vistaPAADs.cshtml");
-        }
-
-        public ActionResult GenerarPDF()
-        {
-            return View();
-        }
-
-        public ActionResult visualizarPDF()
-        {
-            return View();
+            return list;
         }
     }
 }
