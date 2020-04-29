@@ -16,6 +16,8 @@ namespace ISProject.Controllers
             if (Session["user"] != null)
             {
                 LlenarPAADCLS model = FillPAAD();
+                if (model.estado!="Edicion")
+                    return RedirectToAction("ViewPAAD", "VisualizarPAAD",new {id = model.id_paad });
                 return View("~/Views/PAAD/PAAD.cshtml",model);
             }
             else
@@ -153,6 +155,22 @@ namespace ISProject.Controllers
             }
             return model;
         }
-
+        [HttpPost]
+        public ActionResult submitPAAD(LlenarPAADCLS check)
+        {
+            LlenarPAADCLS model = new LlenarPAADCLS();
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Docentes doc = ((Docentes)Session["user"]);
+                if (db.USERS.Where(p => p.EMAIL == check.user.Email && p.PASSWORD == check.user.Password && p.EMAIL == doc.correo)==null)
+                    return RedirectToAction("Index", "LlenarPAAD");
+                PAADs paad = db.PAADs.Where(p => p.id_paad == check.id_paad).FirstOrDefault();
+                if (paad == null)
+                    return RedirectToAction("Index", "LlenarPAAD");
+                paad.estado = 2;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "LlenarPAAD");
+        }
     }
 }

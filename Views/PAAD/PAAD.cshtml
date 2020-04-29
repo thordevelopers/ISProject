@@ -7,6 +7,34 @@
 }
 
 <!--Modal de actividades-->
+<div id="mdlSubmit" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Confirme sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!-- Inicio del cuerpo del Modal-->
+            @using (Html.BeginForm("submitPAAD", "LlenarPAAD", FormMethod.Post))
+            {
+                <div style="text-align:center">
+                    @Html.TextBoxFor(p => p.user.Email, new { placeholder = "Usuario", value = "", @class = "tb-dato", })
+                    <br /><br />
+                    @Html.PasswordFor(p => p.user.Password, new { placeholder = "Contraseña", value = "", @class = "tb-dato" })
+                    <br /><br />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-verde-light">Entregar</button>
+                </div>
+                @Html.HiddenFor(p => p.id_paad, new { @id = "mdl_paad",@value=Model.id_paad })
+            }
+        </div>
+    </div>
+</div>
+<!--Modal de actividades-->
 <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content ">
@@ -23,7 +51,7 @@
                     <div class="" style="width :95%">
                         <div class="renglon-3">
                             <label class="mdllab">Actividad </label>
-                            @Html.TextAreaFor(p => p.activity.actividad, new { placeholder = "Escribe aquí tu actividad...", @id = "mdl_activity", @rows = 6, @class = "mdltxta",onkeyup="validateInputs()" })
+                            @Html.TextAreaFor(p => p.activity.actividad, new { placeholder = "Escribe aquí tu actividad...", @id = "mdl_activity", @rows = 6, @class = "mdltxta", onkeyup = "validateInputs()" })
                         </div><br>
                         <div class="renglon-3">
                             <label class="mdllab">Producción </label>
@@ -35,7 +63,7 @@
                         </div><br>
                         <div class="renglon-3">
                             <label class="text-right" style="width:88px;padding-right:9px;padding-top:2px">%Avance</label>
-                            @Html.TextBoxFor(p=> p.activity.porcentaje_inicial,new { @id = "mdl_porcentaje", @type ="number",@max="99",@min="1",@style="width:45px;padding-left:3px",@onkeyup= "validateInputs()" })
+                            @Html.TextBoxFor(p => p.activity.porcentaje_inicial, new { @id = "mdl_porcentaje", @type = "number", @max = "99", @min = "1", @style = "width:45px;padding-left:3px", @onkeyup = "validateInputs()" })
                         </div><br>
                         <div class="renglon-center">
                             <div class="mdlchkbox">
@@ -59,7 +87,7 @@
                 @Html.HiddenFor(p => p.activity.id_paad, new { @id = "mdl_paad" })
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-verde-light" name="button" id="btnSubmit" >Añadir</button>
+                    <button type="submit" class="btn btn-verde-light" name="button" id="btnSubmit">Añadir</button>
                 </div>
             }
         </div>
@@ -122,8 +150,8 @@
                         <td>@item.iso</td>
                         <td>
                             <button data-id="@item.Id" data-paad="@item.id_paad" data-actividad="@item.actividad" data-produccion="@item.produccion" data-lugar="@item.lugar" data-porcentaje="@item.porcentaje_inicial" data-cacei="@item.cacei"
-                                data-academico="@item.cuerpo_academico" data-iso="@item.iso" id="myBtn" type="button" class="glyphicon glyphicon-pencil btn btn-verde-light btnEditAct" data-toggle="modal" data-target="#myModal"></button>
-                            @Html.ActionLink(" ", "DeleteActivity", "LlenarPAAD", new { id=item.Id }, new { @class = "glyphicon glyphicon-trash btn btn-danger", @onclick="eliminar()"})
+                                    data-academico="@item.cuerpo_academico" data-iso="@item.iso" id="myBtn" type="button" class="glyphicon glyphicon-pencil btn btn-verde-light btnEditAct" data-toggle="modal" data-target="#myModal"></button>
+                            @Html.ActionLink(" ", "DeleteActivity", "LlenarPAAD", new { id = item.Id }, new { @class = "glyphicon glyphicon-trash btn btn-danger", @onclick = "eliminar()" })
                         </td>
                     </tr>
                 }
@@ -132,49 +160,49 @@
         <button type="button" data-paad="@Model.id_paad" data-toggle="modal" data-target="#myModal" class="btn btn-verde-light btn-add-act btnAddAct" style="margin-top:10px;width:30%">Agregar Actividad</button>
     </div>
     <div class="" style="width:100%;text-align:right">
-        @Html.ActionLink("Limpiar", "DeleteAllActivitys", "LlenarPAAD", new { id = @Model.id_paad }, new { @class = "btn btn-rojo", @onclick="limpiar()"})
-        <button type="button" class="btn btn-amarillo " name="button">Entregar PAAD</button>
+        @Html.ActionLink("Limpiar", "DeleteAllActivitys", "LlenarPAAD", new { id = @Model.id_paad }, new { @class = "btn btn-rojo", @onclick = "limpiar()" })
+        <button type="button" data-paad="@Model.id_paad" data-toggle="modal" data-target="#mdlSubmit" class="btn btn-amarillo">Entregar PAAD</button>
     </div>
 </main>
 <!--Scripts-->
 <script>
-$(document).ready(function(){
-    $(".btnEditAct").click(function () {
-        var id = $(this).data('id');
-        var paad = $(this).data('paad');
-        var activity = $(this).data('actividad');
-        var produccion = $(this).data('produccion');
-        var lugar = $(this).data('lugar');
-        var porcentaje = $(this).data('porcentaje');
-        var cacei = $(this).data('cacei');
-        var academico = $(this).data('academico');
-        var iso = $(this).data('iso');
-        $('#mdl_id').val(id);
-        $('#mdl_paad').val(paad);
-        $('#mdl_activity').val(activity);
-        $('#mdl_produccion').val(produccion);
-        $('#mdl_lugar').val(lugar);
-        $('#mdl_porcentaje').val(porcentaje);
-        (cacei==='True') ? $("#mdl_cacei").prop("checked", true) : $("#mdl_cacei").prop("checked", false); 
-        (academico==='True') ? $("#mdl_academico").prop("checked", true) : $("#mdl_academico").prop("checked", false); 
-        (iso==='True') ? $("#mdl_iso").prop("checked", true) : $("#mdl_iso").prop("checked", false); 
-    });
-    $(".btnAddAct").click(function () {
-        var paad = $(this).data('paad');
-        $('#mdl_id').val(0);
-        $('#mdl_paad').val(paad);
-        $('#mdl_activity').val("");
-        $('#mdl_produccion').val("");
-        $('#mdl_lugar').val("");
-        $('#mdl_porcentaje').val(1);
-        $("#mdl_cacei").prop("checked", false); 
-        $("#mdl_academico").prop("checked", false); 
-        $("#mdl_iso").prop("checked", false); 
-    });
+    $(document).ready(function () {
+        $(".btnEditAct").click(function () {
+            var id = $(this).data('id');
+            var paad = $(this).data('paad');
+            var activity = $(this).data('actividad');
+            var produccion = $(this).data('produccion');
+            var lugar = $(this).data('lugar');
+            var porcentaje = $(this).data('porcentaje');
+            var cacei = $(this).data('cacei');
+            var academico = $(this).data('academico');
+            var iso = $(this).data('iso');
+            $('#mdl_id').val(id);
+            $('#mdl_paad').val(paad);
+            $('#mdl_activity').val(activity);
+            $('#mdl_produccion').val(produccion);
+            $('#mdl_lugar').val(lugar);
+            $('#mdl_porcentaje').val(porcentaje);
+            (cacei === 'True') ? $("#mdl_cacei").prop("checked", true) : $("#mdl_cacei").prop("checked", false);
+            (academico === 'True') ? $("#mdl_academico").prop("checked", true) : $("#mdl_academico").prop("checked", false);
+            (iso === 'True') ? $("#mdl_iso").prop("checked", true) : $("#mdl_iso").prop("checked", false);
+        });
+        $(".btnAddAct").click(function () {
+            var paad = $(this).data('paad');
+            $('#mdl_id').val(0);
+            $('#mdl_paad').val(paad);
+            $('#mdl_activity').val("");
+            $('#mdl_produccion').val("");
+            $('#mdl_lugar').val("");
+            $('#mdl_porcentaje').val(1);
+            $("#mdl_cacei").prop("checked", false);
+            $("#mdl_academico").prop("checked", false);
+            $("#mdl_iso").prop("checked", false);
+        });
 
-    validateInputs();
-    
-});
+        validateInputs();
+
+    });
 
     function eliminar() {
         if (confirm("Desea eliminar la actividad realmente?") == 1) {
@@ -210,7 +238,7 @@ $(document).ready(function(){
             $('#mdl_porcentaje').val(99);
         }
     }
-    
+
 </script>
 
 
