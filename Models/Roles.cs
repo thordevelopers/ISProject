@@ -12,25 +12,18 @@ namespace ISProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Docentes
+    public partial class Roles
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Docentes()
+        public Roles()
         {
-            this.IADs = new HashSet<IADs>();
-            this.PAADs = new HashSet<PAADs>();
+            this.Docentes = new HashSet<Docentes>();
         }
     
-        public int id_docentes { get; set; }
-        public int numero_empleado { get; set; }
-        public string nombre { get; set; }
-        public string correo { get; set; }
-        public int rol { get; set; }
+        public int id_rol { get; set; }
+        public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IADs> IADs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PAADs> PAADs { get; set; }
-        public virtual Roles Roles { get; set; }
+        public virtual ICollection<Docentes> Docentes { get; set; }
     }
 }

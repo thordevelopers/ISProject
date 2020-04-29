@@ -5,9 +5,9 @@
     ViewBag.Title = "Login";
 }
 
-    <div class="bodyLogin" style="margin-top:20px">
+    <div class="bodyLogin">
         <div class="renglon">
-            <div class="cuadro" style="margin-top:26px">
+            <div class="cuadro">
                 <p class="lbl"> Iniciar Sesion</p> <br><br>
                 @using (Html.BeginForm("Login", "Login", FormMethod.Get))
                 {
@@ -19,8 +19,5 @@
                     <input type="submit" style="margin-top:10px" class="btn btn-amarillo" value="Iniciar Sesión" />
                 }
             </div>
-        </div>
-        <div id="demo">
-
         </div>
     </div>

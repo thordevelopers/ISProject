@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DB_PAAD_IADModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DB_PAAD_IADModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Actividades">
           <Key>
             <PropertyRef Name="id_actividad" />
@@ -53,6 +53,7 @@
           <Property Name="numero_empleado" Type="int" Nullable="false" />
           <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="rol" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Estados">
           <Key>
@@ -114,6 +115,13 @@
           <Property Name="id_periodo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="periodo" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -154,6 +162,18 @@
             </Principal>
             <Dependent Role="Actividades">
               <PropertyRef Name="id_paad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Docentes_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Docentes" Type="Self.Docentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Docentes">
+              <PropertyRef Name="rol" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -324,6 +344,7 @@
           <EntitySet Name="IADs" EntityType="Self.IADs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PAADs" EntityType="Self.PAADs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Periodos" EntityType="Self.Periodos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Actividades_IADs" Association="Self.FK_Actividades_IADs">
@@ -333,6 +354,10 @@
           <AssociationSet Name="FK_Actividades_PAADs" Association="Self.FK_Actividades_PAADs">
             <End Role="PAADs" EntitySet="PAADs" />
             <End Role="Actividades" EntitySet="Actividades" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Docentes_Roles" Association="Self.FK_Docentes_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Docentes" EntitySet="Docentes" />
           </AssociationSet>
           <AssociationSet Name="FK_Fechas_Periodos" Association="Self.FK_Fechas_Periodos">
             <End Role="Periodos" EntitySet="Periodos" />
@@ -387,8 +412,7 @@
             <End Role="PAADs" EntitySet="PAADs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_PAAD_IADModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -450,6 +474,8 @@
           <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Docentes" FromRole="Docentes" ToRole="IADs" />
           <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Docentes" FromRole="Docentes" ToRole="PAADs" />
+          <Property Name="rol" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="DB_PAAD_IADModel.FK_Docentes_Roles" FromRole="Docentes" ToRole="Roles" />
         </EntityType>
         <EntityType Name="Estados">
           <Key>
@@ -803,7 +829,32 @@
             <End Role="Periodos" EntitySet="Periodos" />
             <End Role="PAADs" EntitySet="PAADs" />
           </AssociationSet>
+          <EntitySet Name="Roles" EntityType="DB_PAAD_IADModel.Roles" />
+          <AssociationSet Name="FK_Docentes_Roles" Association="DB_PAAD_IADModel.FK_Docentes_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Docentes" EntitySet="Docentes" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_Docentes_Roles" FromRole="Roles" ToRole="Docentes" />
+        </EntityType>
+        <Association Name="FK_Docentes_Roles">
+          <End Type="DB_PAAD_IADModel.Roles" Role="Roles" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.Docentes" Role="Docentes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Docentes">
+              <PropertyRef Name="rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -857,6 +908,7 @@
           <EntitySetMapping Name="Docentes">
             <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
               <MappingFragment StoreEntitySet="Docentes">
+                <ScalarProperty Name="rol" ColumnName="rol" />
                 <ScalarProperty Name="id_docentes" ColumnName="id_docentes" />
                 <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
@@ -947,6 +999,14 @@
                 <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
                 <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
                 <ScalarProperty Name="ROL_ID" ColumnName="ROL_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

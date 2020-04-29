@@ -62,7 +62,7 @@ nav {
     z-index: 100;
     min-height: 5vh;
     box-shadow: 0px 0px 20px rgb(32,32,32);
-    margin-bottom:25px;
+    margin-bottom: 25px;
 }
 
     nav ul {
@@ -100,7 +100,7 @@ footer {
     background-color: #1A7743;
     position: absolute;
     bottom: 0px;
-    margin-top:20px;
+    margin-top: 20px;
 }
 
 table {
@@ -361,17 +361,17 @@ th {
 
 .mdltxta {
     resize: vertical;
-    width:100%;
+    width: 100%;
 }
 
-.mdllab{
-    width:100px;
-    padding-right:9px;
+.mdllab {
+    width: 100px;
+    padding-right: 9px;
 }
 
-.mdlchkbox{
-    width:30%;
-    text-align:center;
+.mdlchkbox {
+    width: 30%;
+    text-align: center;
 }
 
 .tborder {

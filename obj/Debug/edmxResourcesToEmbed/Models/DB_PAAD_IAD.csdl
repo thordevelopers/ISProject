@@ -58,6 +58,8 @@
     <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Docentes" FromRole="Docentes" ToRole="IADs" />
     <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Docentes" FromRole="Docentes" ToRole="PAADs" />
+    <Property Name="rol" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Roles" Relationship="DB_PAAD_IADModel.FK_Docentes_Roles" FromRole="Docentes" ToRole="Roles" />
   </EntityType>
   <EntityType Name="Estados">
     <Key>
@@ -411,5 +413,30 @@
       <End Role="Periodos" EntitySet="Periodos" />
       <End Role="PAADs" EntitySet="PAADs" />
     </AssociationSet>
+    <EntitySet Name="Roles" EntityType="DB_PAAD_IADModel.Roles" />
+    <AssociationSet Name="FK_Docentes_Roles" Association="DB_PAAD_IADModel.FK_Docentes_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Docentes" EntitySet="Docentes" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="id_rol" />
+    </Key>
+    <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_Docentes_Roles" FromRole="Roles" ToRole="Docentes" />
+  </EntityType>
+  <Association Name="FK_Docentes_Roles">
+    <End Type="DB_PAAD_IADModel.Roles" Role="Roles" Multiplicity="1" />
+    <End Type="DB_PAAD_IADModel.Docentes" Role="Docentes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="id_rol" />
+      </Principal>
+      <Dependent Role="Docentes">
+        <PropertyRef Name="rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

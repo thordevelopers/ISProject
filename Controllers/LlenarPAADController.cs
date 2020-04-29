@@ -19,7 +19,9 @@ namespace ISProject.Controllers
                 return View("~/Views/PAAD/PAAD.cshtml",model);
             }
             else
+            {
                 return View("~/Views/Login/Login");
+            }
         }
 
         [HttpPost]

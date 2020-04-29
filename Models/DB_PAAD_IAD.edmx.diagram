@@ -32,6 +32,8 @@
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Fechas_Periodos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Periodos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Periodos" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_PAAD_IADModel.Roles" Width="1.5" PointX="0.75" PointY="21.625" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_Docentes_Roles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
