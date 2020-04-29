@@ -26,5 +26,6 @@ namespace ISProject.Models
         [Required]
         public ActivityCLS activity { get; set; }
         public List<ActivityCLS> activities { get; set; }
+        public UserCLS user { get; set; }
     }
 }
