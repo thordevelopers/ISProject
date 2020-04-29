@@ -37,5 +37,6 @@ namespace ISProject.Models
         public virtual DbSet<Periodos> Periodos { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<USERS> USERS { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
     }
 }

@@ -202,6 +202,10 @@
     <Compile Include="Models\Periodos.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegistroPAAD.cs" />
+    <Compile Include="Models\Roles.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>

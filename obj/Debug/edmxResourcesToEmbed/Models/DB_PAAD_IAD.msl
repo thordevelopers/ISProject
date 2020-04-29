@@ -48,6 +48,7 @@
     <EntitySetMapping Name="Docentes">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
         <MappingFragment StoreEntitySet="Docentes">
+          <ScalarProperty Name="rol" ColumnName="rol" />
           <ScalarProperty Name="id_docentes" ColumnName="id_docentes" />
           <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
@@ -138,6 +139,14 @@
           <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
           <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
           <ScalarProperty Name="ROL_ID" ColumnName="ROL_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Roles">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id_rol" ColumnName="id_rol" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
