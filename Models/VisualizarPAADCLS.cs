@@ -22,5 +22,8 @@ namespace ISProject.Models
         public string firma_docente { get; set; }
         public string firma_director { get; set; }
         public List<ActivityCLS> activities { get; set; }
+        public UserCLS user { get; set; }
+        public int rol { get; set; }
+        public string action { get; set; }
     }
 }

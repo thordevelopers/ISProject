@@ -4,6 +4,35 @@
     ViewBag.Title = "ViewPAAD";
 }
 
+<!--Modal de actividades-->
+<div id="mdlSubmit" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Confirme sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!-- Inicio del cuerpo del Modal-->
+            @using (Html.BeginForm("doAction", "VisualizarPAAD", FormMethod.Post))
+            {
+                <div style="text-align:center">
+                    @Html.TextBoxFor(p => p.user.Email, new { placeholder = "Usuario", value = "", @class = "tb-dato", })
+                    <br /><br />
+                    @Html.PasswordFor(p => p.user.Password, new { placeholder = "Contraseña", value = "", @class = "tb-dato" })
+                    <br /><br />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-verde-light">Entregar</button>
+                </div>
+                @Html.HiddenFor(p => p.id_paad, new { @value = Model.id_paad })
+                @Html.HiddenFor(p => p.action, new { @id = "mdl_action", @value = Model.id_paad })
+            }
+        </div>
+    </div>
+</div>
 <!--Vista de llenado PAAD-->
 <main style="margin-top:0;padding-top:0">
     <div class="container">
@@ -64,5 +93,38 @@
             </tbody>
         </table>
     </div>
+    <div style="text-align:right;margin-top:30px">
+        <button type="button" data-paad="@Model.id_paad" data-action="Cancel" data-toggle="modal" data-target="#mdlSubmit" id="btnCancel" class="btn btn-rojo btnAction" style="display: none">Cancelar Entrega</button>
+        <button type="button" data-paad="@Model.id_paad" data-action="Request" data-toggle="modal" data-target="#mdlSubmit" id="btnRequest" class="btn btn-amarillo btnAction" style="display: none">Solicitar Modificacion</button>
+        <button type="button" data-paad="@Model.id_paad" data-action="Reject" data-toggle="modal" data-target="#mdlSubmit" id="btnReject" class="btn btn-rojo btnAction" style="display: none">Rechazar formato</button>
+        <button type="button" data-paad="@Model.id_paad" data-action="Approve" data-toggle="modal" data-target="#mdlSubmit" id="btnApprove" class="btn btn-verde-light btnAction" style="display: none">Aprobar formato</button>
+        <button type="button" data-paad="@Model.id_paad" data-action="RejReq" data-toggle="modal" data-target="#mdlSubmit" id="btnRejReq" class="btn btn-rojo btnAction" style="display: none">Rechazar Solicitud</button>
+        <button type="button" data-paad="@Model.id_paad" data-action="Modif" data-toggle="modal" data-target="#mdlSubmit" id="btnModif" class="btn btn-amarillo btnAction" style="display: none">Autorizar Solicitud</button>
+    </div>
 </main>
 <!--Scripts-->
+<script>
+    $(document).ready(function () {
+
+        if (@Model.rol== 1) {
+            if ('@Model.estado' == "Entregado")
+                document.getElementById('btnCancel').style.display = '';
+            else if ('@Model.estado' == "Aprobado")
+                document.getElementById('btnRequest').style.display = '';
+        }
+        else {
+            if ('@Model.estado' == "Entregado") {
+                document.getElementById('btnReject').style.display = '';
+                document.getElementById('btnApprove').style.display = '';
+            }
+            else if ('@Model.estado' == "Solicitud de modificacion") {
+                document.getElementById('btnRejReq').style.display = '';
+                document.getElementById('btnModif').style.display = '';
+            }
+        }
+        $(".btnAction").click(function () {
+            var action = $(this).data('action');
+            $('#mdl_action').val(action);
+        });
+    });
+</script>

@@ -158,7 +158,6 @@ namespace ISProject.Controllers
         [HttpPost]
         public ActionResult submitPAAD(LlenarPAADCLS check)
         {
-            LlenarPAADCLS model = new LlenarPAADCLS();
             using (var db = new DB_PAAD_IADEntities())
             {
                 Docentes doc = ((Docentes)Session["user"]);

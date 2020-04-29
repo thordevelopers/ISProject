@@ -30,7 +30,7 @@ namespace ISProject.Controllers
         {
             if (Session["user"] != null)
             {
-                List<RegistroPAAD> paads= userPAADs();
+                List<RegistroPAAD> paads = userPAADs();
                 return View(paads);
             }
             else
@@ -46,7 +46,7 @@ namespace ISProject.Controllers
             {
                 Docentes doc = ((Docentes)Session["user"]);
                 PAADs paad;
-                if (doc.rol>1)
+                if (doc.rol > 1)
                     paad = db.PAADs.Where(p => p.id_paad == id).FirstOrDefault();
                 else
                     paad = db.PAADs.Where(p => p.docente == doc.id_docentes && p.id_paad == id).FirstOrDefault();
@@ -80,6 +80,7 @@ namespace ISProject.Controllers
                     cuerpo_academico = x.cuerpo_academico,
                     iso = x.iso
                 }).ToList();
+                model.rol = doc.rol;
 
             }
             return model;
@@ -121,6 +122,101 @@ namespace ISProject.Controllers
                 }
             }
             return list;
+        }
+        [HttpPost]
+        public ActionResult doAction(VisualizarPAADCLS model)
+        {
+            if (model.action == "Cancel")
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes doc = ((Docentes)Session["user"]);
+                    if (db.USERS.Where(p => p.EMAIL == model.user.Email && p.PASSWORD == model.user.Password && p.EMAIL == doc.correo) == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == model.id_paad).FirstOrDefault();
+                    if (paad == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    paad.estado = 1;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index", "LlenarPAAD");
+            } 
+            else if (model.action == "Request")
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes doc = ((Docentes)Session["user"]);
+                    if (db.USERS.Where(p => p.EMAIL == model.user.Email && p.PASSWORD == model.user.Password && p.EMAIL == doc.correo) == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == model.id_paad).FirstOrDefault();
+                    if (paad == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    paad.estado = 4;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("ListPAADs", "VisualizarPAAD");
+            }
+            else if (model.action == "Reject")
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes doc = ((Docentes)Session["user"]);
+                    if (db.USERS.Where(p => p.EMAIL == model.user.Email && p.PASSWORD == model.user.Password && p.EMAIL == doc.correo) == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == model.id_paad).FirstOrDefault();
+                    if (paad == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    paad.estado = 1;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("ListPAADs", "VisualizarPAAD");
+            }
+            else if (model.action == "Approve")
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes doc = ((Docentes)Session["user"]);
+                    if (db.USERS.Where(p => p.EMAIL == model.user.Email && p.PASSWORD == model.user.Password && p.EMAIL == doc.correo) == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == model.id_paad).FirstOrDefault();
+                    if (paad == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    paad.estado = 3;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("ListPAADs", "VisualizarPAAD");
+            }
+            else if (model.action == "RejReq")
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes doc = ((Docentes)Session["user"]);
+                    if (db.USERS.Where(p => p.EMAIL == model.user.Email && p.PASSWORD == model.user.Password && p.EMAIL == doc.correo) == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == model.id_paad).FirstOrDefault();
+                    if (paad == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    paad.estado = 3;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("ListPAADs", "VisualizarPAAD");
+            }
+            else if (model.action == "Modif")
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes doc = ((Docentes)Session["user"]);
+                    if (db.USERS.Where(p => p.EMAIL == model.user.Email && p.PASSWORD == model.user.Password && p.EMAIL == doc.correo) == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == model.id_paad).FirstOrDefault();
+                    if (paad == null)
+                        return RedirectToAction("ListPAADs", "VisualizarPAAD");
+                    paad.estado = 1;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("ListPAADs", "VisualizarPAAD");
+            }
+            return RedirectToAction("ListPAADs", "VisualizarPAAD");
         }
     }
 }
