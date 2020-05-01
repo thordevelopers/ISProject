@@ -35,7 +35,7 @@ namespace ISProject.Controllers
             }
             else
             {
-                return View("~/Views/Login/Login");
+                return RedirectToAction("Login", "Login");
             }
         }
 

@@ -29,7 +29,7 @@
                     <button type="button" class="btn btn-rojo btn-margin-left" name="button" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-verde-light">Entregar</button>
                 </div>
-                @Html.HiddenFor(p => p.id_paad, new { @id = "mdl_paad",@value=Model.id_paad })
+                @Html.HiddenFor(p => p.id_paad, new { @value=Model.id_paad })
             }
         </div>
     </div>
@@ -149,7 +149,7 @@
                         <td>@item.cuerpo_academico</td>
                         <td>@item.iso</td>
                         <td>
-                            <button data-id="@item.Id" data-paad="@item.id_paad" data-actividad="@item.actividad" data-produccion="@item.produccion" data-lugar="@item.lugar" data-porcentaje="@item.porcentaje_inicial" data-cacei="@item.cacei"
+                            <button data-id="@item.Id" data-actividad="@item.actividad" data-produccion="@item.produccion" data-lugar="@item.lugar" data-porcentaje="@item.porcentaje_inicial" data-cacei="@item.cacei"
                                     data-academico="@item.cuerpo_academico" data-iso="@item.iso" id="myBtn" type="button" class="glyphicon glyphicon-pencil btn btn-verde-light btnEditAct" data-toggle="modal" data-target="#myModal"></button>
                             @Html.ActionLink(" ", "DeleteActivity", "LlenarPAAD", new { id = item.Id }, new { @class = "glyphicon glyphicon-trash btn btn-danger", @onclick = "eliminar()" })
                         </td>
@@ -161,7 +161,7 @@
     </div>
     <div class="" style="width:100%;text-align:right">
         @Html.ActionLink("Limpiar", "DeleteAllActivitys", "LlenarPAAD", new { id = @Model.id_paad }, new { @class = "btn btn-rojo", @onclick = "limpiar()" })
-        <button type="button" data-paad="@Model.id_paad" data-toggle="modal" data-target="#mdlSubmit" class="btn btn-amarillo" onload="test()">Entregar PAAD</button>
+        <button type="button" data-toggle="modal" data-target="#mdlSubmit" class="btn btn-amarillo" onload="test()">Entregar PAAD</button>
     </div>
 </main>
 <!--Scripts-->
