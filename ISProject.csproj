@@ -144,9 +144,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CoordinadorController.cs" />
+    <Compile Include="Controllers\DirectorController.cs" />
+    <Compile Include="Controllers\DocenteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LlenarPAADController.cs" />
+    <Compile Include="Controllers\SubdirectorController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\VisualizarPAADController.cs" />
     <Compile Include="Global.asax.cs">
@@ -287,6 +291,10 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="assets\" />
+    <Folder Include="Views\Coordinador\" />
+    <Folder Include="Views\Director\" />
+    <Folder Include="Views\Docente\" />
+    <Folder Include="Views\Subdirector\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
