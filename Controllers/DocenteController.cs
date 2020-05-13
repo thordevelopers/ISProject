@@ -187,9 +187,15 @@ namespace ISProject.Controllers
                     });
                 }
                 else if (action_paad == 1)
+                {
                     paad.estado = 2;
+                    paad.firma_docente = Guid.NewGuid().ToString("N");
+                }
                 else if (action_paad == 2)
+                {
                     paad.estado = 1;
+                    paad.firma_docente = null;
+                }
                 else if (action_paad == 3)
                     paad.estado = 4;
                 else if (action_paad == 4)

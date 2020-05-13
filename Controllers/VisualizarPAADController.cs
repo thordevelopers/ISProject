@@ -22,7 +22,8 @@ namespace ISProject.Controllers
             VisualizarPAADCLS paad = FillPAAD(id);
             return new ViewAsPdf(paad)
             {
-                PageOrientation = Rotativa.Options.Orientation.Landscape
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
             };
         }
 
