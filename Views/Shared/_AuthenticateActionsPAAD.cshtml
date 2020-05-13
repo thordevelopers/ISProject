@@ -1,0 +1,27 @@
+﻿@using ISProject.Models
+@model AuthenticationCLS
+
+@using(Ajax.BeginForm("AuthenticateActionsPAAD"))
+<div class="renglon" style="padding-bottom:13px">
+    <div class="" style="width :95%">
+        <div class="renglon-3">
+            <label class="mdllab">Actividad </label>
+            @Html.TextAreaFor(p => p.email, new { @placeholder = "Escribe aquí tu actividad...", @rows = 6, @class = "mdltxta" })
+        </div><br>
+        <div>
+            @Html.ValidationMessage("Correo", new { @style = "color:red" })
+        </div><br>
+        <div class="renglon-3">
+            <label class="mdllab">Producción </label>
+            @Html.TextAreaFor(p => p.password, new { @class = "mdltxta", @rows = 6 })
+        </div><br>
+        <div>
+            @Html.ValidationMessage("Contraseña", new { @style = "color:red" })
+        </div><br>
+    </div>
+</div>
+@Html.HiddenFor(p => p.id_paad,Model.id_paad)
+<div class="modal-footer">
+    <button type="button" class="btn btn-rojo btn-margin-left" name="button">Cancelar</button>
+    <button type="button" class="btn btn-verde-light">Aceptar</button>
+</div>

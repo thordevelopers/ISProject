@@ -1,0 +1,37 @@
+﻿@using ISProject.Models
+@model List<ActivityCLS>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <td width="30%"> Actividad</td>
+                <td width="20%"> Producción</td>
+                <td width="10%"> Lugar</td>
+                <td width="5%"> %Avance</td>
+                <td width="5%"> CACEI</td>
+                <td width="5%"> Cuerpo academico</td>
+                <td width="5%"> ISO 9000</td>
+                <td width="8%"> Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.actividad</td>
+                    <td>@item.produccion</td>
+                    <td>@item.lugar</td>
+                    <td>@item.porcentaje_inicial %</td>
+                    <td style="text-align:center">@if (item.cacei){ <label>Si</label> } else { <label>No</label> }</td>
+                    <td style="text-align:center">@if (item.cuerpo_academico){ <label>Si</label> } else { <label>No</label> } </td>
+                    <td style="text-align:center">@if (item.iso){ <label>Si</label> } else { <label>No</label> }</td>
+                    <td>
+                        <button type="button" onclick="getActivity(@item.id)" class="glyphicon glyphicon-pencil btn btn-verde-light"></button>
+                        <button type="button" onclick="deleteActivity(@item.id)" class="glyphicon glyphicon-trash btn btn-danger"></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button onclick="getActivity(0)" type="button" class="btn btn-verde-light btn-add-act btnAddAct" style="margin-top:10px;width:30%">Agregar Actividad</button>
+</div>

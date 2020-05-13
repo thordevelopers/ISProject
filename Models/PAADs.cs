@@ -39,8 +39,8 @@ namespace ISProject.Models
         public virtual Cargos Cargos { get; set; }
         public virtual Carreras Carreras { get; set; }
         public virtual Categorias Categorias { get; set; }
-        public virtual Docentes Docentes { get; set; }
         public virtual Estados Estados { get; set; }
         public virtual Periodos Periodos { get; set; }
+        public virtual Docentes Docentes { get; set; }
     }
 }

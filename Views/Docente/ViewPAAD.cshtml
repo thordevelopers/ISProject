@@ -1,0 +1,32 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ViewPAAD";
+    Layout = "~/Views/Docente/_LayoutDocente.cshtml";
+    HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
+    List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
+    int Id_PAAD = (int)ViewBag.id;
+    int Status_PAAD = (int)ViewBag.status;
+}
+
+<div class="renglon-3" style="width:100%">
+    <button type="button" class="btn btn-azul-claro" name="button">Regresar</button>
+    <label class="lbl-estado" style="color: #128FFF;text-align:right;padding-right:0px;">Entregado</label>
+</div>
+<div>
+    @Html.Partial("_HeaderPAAD", header)
+</div>
+<div id="tblActivities">
+    @Html.Partial("_ViewActivitiesTable", activities)
+</div>
+<div class="" style="width:100%;text-align:right">
+    @if (Status_PAAD == 2)
+    {
+        <button type="button" data-paad="@Model.id_paad" data-action="Cancel" data-toggle="modal" data-target="#mdlSubmit" id="btnCancel" class="btn btn-rojo btnAction" style="display: none">Cancelar Entrega</button>
+    }
+    else if (Status_PAAD == 3)
+    {
+        <button type="button" data-paad="@Model.id_paad" data-action="Request" data-toggle="modal" data-target="#mdlSubmit" id="btnRequest" class="btn btn-amarillo btnAction" style="display: none">Solicitar Modificacion</button>
+    }
+    <button type="button" onclick="dropActivities()" class="btn btn-danger">Limpiar</button>
+    <button type="button" onclick="authCredentials()" class="btn btn-amarillo">Entregar PAAD</button>
+</div>

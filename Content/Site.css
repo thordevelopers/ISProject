@@ -359,6 +359,42 @@ th {
     margin: 10px;
 }
 
+.btn-azul-claro {
+    border: 1px solid #58AFFD;
+    background-color: #58AFFD;
+    color: white;
+    font-size: 20px;
+}
+
+.lbl-estado-sin-entregar {
+    font-size: 20px;
+    font-family: Helvetica;
+    color: red;
+    float: right;
+}
+
+.lbl-estado-entregado {
+    font-size: 20px;
+    font-family: Helvetica;
+    color: #128FFF;
+    float: right;
+}
+
+.lbl-estado-aprobado {
+    font-size: 20px;
+    font-family: Helvetica;
+    color: #249A0F;
+    float: right;
+}
+
+.lbl-estado-solicitado {
+    font-size: 20px;
+    font-family: Helvetica;
+    color: #DDAD23;
+    float: right;
+}
+/*Develop CSS*/
+
 .mdltxta {
     resize: vertical;
     width: 100%;

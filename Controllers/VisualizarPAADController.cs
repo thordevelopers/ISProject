@@ -49,7 +49,7 @@ namespace ISProject.Controllers
                 if (doc.rol > 1)
                     paad = db.PAADs.Where(p => p.id_paad == id).FirstOrDefault();
                 else
-                    paad = db.PAADs.Where(p => p.docente == doc.id_docentes && p.id_paad == id).FirstOrDefault();
+                    paad = db.PAADs.Where(p => p.docente == doc.id_docente && p.id_paad == id).FirstOrDefault();
                 if (paad == null)
                 {
                     return null;
@@ -58,8 +58,8 @@ namespace ISProject.Controllers
                 model.estado = db.Estados.Where(p => p.id_estado == paad.estado).FirstOrDefault().estado;
                 model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).FirstOrDefault().periodo;
                 model.carrera = db.Carreras.Where(p => p.id_carrera == paad.carrera).FirstOrDefault().carrera;
-                model.numero_empleado = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().numero_empleado;
-                model.nombre_docente = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().nombre;
+                model.numero_empleado = db.Docentes.Where(p => p.id_docente == paad.docente).FirstOrDefault().numero_empleado;
+                model.nombre_docente = db.Docentes.Where(p => p.id_docente == paad.docente).FirstOrDefault().nombre;
                 model.categoria_docente = db.Categorias.Where(p => p.id_categoria == paad.categoria_docente).FirstOrDefault().categoria;
                 model.horas_clase = paad.horas_clase;
                 model.horas_investigacion = paad.horas_investigacion;
@@ -70,7 +70,7 @@ namespace ISProject.Controllers
                 model.firma_docente = paad.firma_docente;
                 model.activities = db.Actividades.Where(p => p.id_paad == paad.id_paad).Select(x => new ActivityCLS
                 {
-                    Id = x.id_actividad,
+                    id = x.id_actividad,
                     actividad = x.actividad,
                     produccion = x.produccion,
                     lugar = x.lugar,
@@ -96,7 +96,7 @@ namespace ISProject.Controllers
                 Docentes doc = ((Docentes)Session["user"]);
                 List<PAADs> paads;
                 if (doc.rol == 1)
-                    paads = db.PAADs.Where(p => p.docente == doc.id_docentes).ToList();
+                    paads = db.PAADs.Where(p => p.docente == doc.id_docente).ToList();
                 else if (doc.rol == 2)
                     paads = db.PAADs.Where(p => p.estado != 1).ToList();
                 else if (doc.rol == 3)
@@ -114,8 +114,8 @@ namespace ISProject.Controllers
                     model.estado = db.Estados.Where(p => p.id_estado == paad.estado).FirstOrDefault().estado;
                     model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).FirstOrDefault().periodo;
                     model.carrera = db.Carreras.Where(p => p.id_carrera == paad.carrera).FirstOrDefault().carrera;
-                    model.numero_empleado = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().numero_empleado;
-                    model.nombre_docente = db.Docentes.Where(p => p.id_docentes == paad.docente).FirstOrDefault().nombre;
+                    model.numero_empleado = db.Docentes.Where(p => p.id_docente == paad.docente).FirstOrDefault().numero_empleado;
+                    model.nombre_docente = db.Docentes.Where(p => p.id_docente == paad.docente).FirstOrDefault().nombre;
                     model.categoria_docente = db.Categorias.Where(p => p.id_categoria == paad.categoria_docente).FirstOrDefault().categoria;
                     model.cargo = db.Cargos.Where(p => p.id_cargo == paad.cargo).FirstOrDefault().cargo;
                     list.Add(model);

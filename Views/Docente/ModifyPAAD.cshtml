@@ -1,0 +1,155 @@
+﻿@using ISProject.Models
+@model HeaderPAADCLS
+@{
+    ViewBag.Title = "ModifyPAAD";
+    Layout = "~/Views/Docente/_LayoutDocente.cshtml";
+    HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
+    List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
+    InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+}
+<div class="d-flex justify-content-between" style="width:100%;">
+    <button type="button" class="btn btn-azul-claro">Regresar</button>
+    @Html.Partial("_StatusPAAD",info)
+</div>
+<div>
+    @Html.Partial("_HeaderPAAD", header)
+</div>
+<div id="tblActivities">
+    @Html.Partial("_EditActivitiesTable", activities)
+</div>
+<div class="" style="width:100%;text-align:right">
+    <button type="button" onclick="dropActivities()" class="btn btn-danger">Limpiar</button>
+    <button type="button" onclick="authCredentials()" class="btn btn-amarillo">Entregar PAAD</button>
+</div>
+<div id="mdlActivity" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Añadir Actividad</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("SaveActivity", "Docente", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                OnSuccess = "activityResponse"
+            }, new { id = "frmSaveActivity" }))
+            {
+                <div id="mdlActivityContent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="descartarModal()" class="btn btn-rojo btn-margin-left" name="button">Decartar</button>
+                    <button type="submit" class="btn btn-verde-light">Guardar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div id="mdlAuthCredentials" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Verifique sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("ApplyActionPAAD", "Docente", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "authResponse"
+            }, new { id = "frmSendPAAD" }))
+            {
+                <div id="mdlAuthCredentialsContent">
+                    @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
+                </div>
+                @Html.Hidden("id_paad", info.id_paad)
+                @Html.Hidden("action_paad", 1)
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@using (Ajax.BeginForm("ModalActivity", "Docente", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "mdlActivityContent",
+    InsertionMode = InsertionMode.Replace,
+    OnSuccess = "showActivity"
+}, new { id = "frmModalActivity" }))
+{
+    @Html.Hidden("mdl_id_paad", info.id_paad)
+    @Html.Hidden("mdl_id_activity")
+}
+@using (Ajax.BeginForm("DeleteActivity", "Docente", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "tblActivities",
+    InsertionMode = InsertionMode.Replace
+}, new { id = "frmDeleteActivity" }))
+{
+    @Html.Hidden("del_id_paad", info.id_paad)
+    @Html.Hidden("del_id_activity")
+}
+@using (Ajax.BeginForm("DropActivities", "Docente", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "tblActivities",
+    InsertionMode = InsertionMode.Replace
+}, new { id = "frmDropActivities" }))
+{
+    @Html.Hidden("drop_id_paad", info.id_paad)
+}
+<script type="text/javascript">
+    function showActivity() {
+        $("#mdlActivity").modal("show");
+    }
+    function getActivity(id) {
+        $("#mdl_id_activity").val(id);
+        $("#frmModalActivity").submit()
+    }
+    function activityResponse(response) {
+        if (response.Status == 1) {
+            $("#mdlActivity").modal("hide");
+            $("#tblActivities").html(response.AjaxResponse);
+        } else {
+            $("#mdlActivityContent").html(response.AjaxResponse);
+        }
+    }
+    function deleteActivity(id) {
+        if (confirm("¿Desea eliminar esta actividad?")) {
+            $("#del_id_activity").val(id);
+            $("#frmDeleteActivity").submit()
+        }
+    }
+    function dropActivities() {
+        if (confirm("¿Esta seguro que desea eliminar todas las actividades?")) {
+            $("#frmDropActivities").submit()
+        }
+    }
+    function descartarModal() {
+        if (confirm("¿Desea descartar la actividad, se borraran los cambios?")){
+            $("#mdlActivity").modal("hide");
+        }
+    }
+    function authCredentials() {
+        $("#mdlAuthCredentials").modal("show");
+    }
+    function sendPAAD() {
+        $("#frmSendPAAD").submit();
+    }
+    function authResponse(response) {
+        if (response.Status != 1) {
+            $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
+        }
+        else {
+            window.location ="@Url.Action("ViewPAAD", "Docente",new { id = info.id_paad})";
+        }
+    }
+</script>

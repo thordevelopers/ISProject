@@ -36,11 +36,11 @@ namespace ISProject.Controllers
             else
             {
                 ActivityCLS act = model.activity;
-                if (model.activity.Id != 0)
+                if (model.activity.id != 0)
                 {
                     using (var db = new DB_PAAD_IADEntities())
                     {
-                        Actividades act_db = db.Actividades.Single(p => p.id_actividad == model.activity.Id);
+                        Actividades act_db = db.Actividades.Single(p => p.id_actividad == model.activity.id);
                         act_db.actividad = act.actividad;
                         act_db.actividad = act.actividad;
                         act_db.produccion = act.produccion;
@@ -99,12 +99,11 @@ namespace ISProject.Controllers
 
         public LlenarPAADCLS FillPAAD()
         {
-
             LlenarPAADCLS model = new LlenarPAADCLS();
             using (var db = new DB_PAAD_IADEntities())
             {
                 Docentes doc = ((Docentes)Session["user"]);
-                PAADs paad = db.PAADs.Where(p => p.docente == doc.id_docentes).FirstOrDefault();
+                PAADs paad = db.PAADs.Where(p => p.docente == doc.id_docente).FirstOrDefault();
                 if (paad == null)
                 {
                     db.PAADs.Add(new PAADs
@@ -113,7 +112,7 @@ namespace ISProject.Controllers
                         estado = 1,
                         periodo = 1,
                         carrera = 1,
-                        docente = doc.id_docentes,
+                        docente = doc.id_docente,
                         categoria_docente = 1,
                         horas_clase = 10,
                         horas_investigacion = 10,
@@ -123,7 +122,7 @@ namespace ISProject.Controllers
                     });
                     db.SaveChanges();
                 }
-                paad = db.PAADs.Where(p => p.docente == doc.id_docentes).FirstOrDefault();
+                paad = db.PAADs.Where(p => p.docente == doc.id_docente).FirstOrDefault();
                 model.id_paad = paad.id_paad;
                 model.estado = db.Estados.Where(p => p.id_estado == paad.estado).FirstOrDefault().estado;
                 model.periodo = db.Periodos.Where(p => p.id_periodo == paad.periodo).FirstOrDefault().periodo;
@@ -141,7 +140,7 @@ namespace ISProject.Controllers
                 model.modal_open = true;
                 model.activities = db.Actividades.Where(p => p.id_paad == paad.id_paad).Select(x => new ActivityCLS
                 {
-                    Id = x.id_actividad,
+                    id = x.id_actividad,
                     actividad = x.actividad,
                     produccion = x.produccion,
                     lugar = x.lugar,

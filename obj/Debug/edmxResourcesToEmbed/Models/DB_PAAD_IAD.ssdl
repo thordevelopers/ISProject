@@ -42,9 +42,9 @@
   </EntityType>
   <EntityType Name="Docentes">
     <Key>
-      <PropertyRef Name="id_docentes" />
+      <PropertyRef Name="id_docente" />
     </Key>
-    <Property Name="id_docentes" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_docente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="numero_empleado" Type="int" Nullable="false" />
     <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
@@ -109,6 +109,7 @@
     </Key>
     <Property Name="id_periodo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="periodo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="activo" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Roles">
     <Key>
@@ -225,7 +226,7 @@
     <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Docentes">
-        <PropertyRef Name="id_docentes" />
+        <PropertyRef Name="id_docente" />
       </Principal>
       <Dependent Role="IADs">
         <PropertyRef Name="docente" />
@@ -297,7 +298,7 @@
     <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Docentes">
-        <PropertyRef Name="id_docentes" />
+        <PropertyRef Name="id_docente" />
       </Principal>
       <Dependent Role="PAADs">
         <PropertyRef Name="docente" />

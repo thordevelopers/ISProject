@@ -144,6 +144,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\CoordinadorController.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\DocenteController.cs" />
@@ -160,6 +161,8 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityCLS.cs" />
+    <Compile Include="Models\AjaxRequestCLS.cs" />
+    <Compile Include="Models\AuthenticationCLS.cs" />
     <Compile Include="Models\Cargos.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
@@ -193,9 +196,11 @@
     <Compile Include="Models\Fechas.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\HeaderPAADCLS.cs" />
     <Compile Include="Models\IADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\InfoPAADCLS.cs" />
     <Compile Include="Models\ListaPAADCLS.cs" />
     <Compile Include="Models\LlenarPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
@@ -251,11 +256,15 @@
       <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
     </Content>
     <Content Include="App_Browsers\qt.browser" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.5.1.js" />
+    <Content Include="Scripts\jquery-3.5.1.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.5.1.min.map" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -285,15 +294,33 @@
     <Content Include="Views\VisualizarPAAD\ViewPAAD.cshtml" />
     <Content Include="Views\VisualizarPAAD\ViewPDF.cshtml" />
     <Content Include="Views\VisualizarPAAD\ListPAADs.cshtml" />
-    <Content Include="Views\Shared\_Credentials.cshtml" />
+    <Content Include="Views\Docente\_LayoutDocente.cshtml" />
+    <Content Include="Views\Shared\_HeaderPAAD.cshtml" />
+    <Content Include="Views\Docente\_EditActivitiesTable.cshtml" />
+    <Content Include="Views\Docente\ModifyPAAD.cshtml" />
+    <Content Include="Views\Docente\_ModalActivityPAAD.cshtml" />
+    <Content Include="Views\Shared\_VerifyCredentials.cshtml" />
     <Content Include="Views\Shared\_Message.cshtml" />
+    <Content Include="Views\Shared\_AuthenticateActionsPAAD.cshtml" />
+    <Content Include="Views\Shared\_AuthenticateCredentials.cshtml" />
+    <Content Include="Views\Docente\HomeDocente.cshtml" />
+    <Content Include="Views\Shared\_ViewActivitiesTable.cshtml" />
+    <Content Include="Views\Docente\ViewPAAD.cshtml" />
+    <Content Include="Views\Docente\ViewPAAD_Docente.cshtml" />
+    <Content Include="Views\Shared\_StatusPAAD.cshtml" />
+    <Content Include="Views\Docente\ListRecordPAADs_Docente.cshtml" />
+    <Content Include="Views\Shared\_ListPAADs.cshtml" />
+    <Content Include="Views\Director\_LayoutDirector.cshtml" />
+    <Content Include="Views\Director\ListActivePAADs_Director.cshtml" />
+    <Content Include="Views\Director\HomeDirector.cshtml" />
+    <Content Include="Views\Director\ViewPAAD_Director.cshtml" />
+    <Content Include="Views\Director\ListRecordPAADs_Director.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="assets\" />
+    <Folder Include="Views\Authentication\" />
     <Folder Include="Views\Coordinador\" />
-    <Folder Include="Views\Director\" />
-    <Folder Include="Views\Docente\" />
     <Folder Include="Views\Subdirector\" />
   </ItemGroup>
   <ItemGroup>
@@ -306,8 +333,6 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

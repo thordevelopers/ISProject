@@ -1,0 +1,13 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "HomeDocente";
+    Layout = "~/Views/Docente/_LayoutDocente.cshtml";
+}
+
+<div class="site-body">
+    <div class="col-md-12">
+        <div class="center">
+            <h2>Bienvenido <br /> <br /> @(((Docentes)Session["user"]).nombre)</h2>
+        </div>
+    </div>
+</div>

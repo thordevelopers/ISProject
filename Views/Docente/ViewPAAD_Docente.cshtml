@@ -1,0 +1,81 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ViewPAAD_Docente";
+    Layout = "~/Views/Docente/_LayoutDocente.cshtml";
+    HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
+    List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
+    InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+}
+
+<div class="d-flex justify-content-between" style="width:100%;">
+    <button type="button" class="btn btn-azul-claro">Regresar</button>
+    @Html.Partial("_StatusPAAD",info)
+</div>
+<div>
+    @Html.Partial("_HeaderPAAD", header)
+</div>
+<div id="tblActivities">
+    @Html.Partial("_ViewActivitiesTable", activities)
+</div>
+<div class="" style="width:100%;text-align:right;margin-top:30px">
+    @if (info.active)
+    {
+        if (info.status_value == 2)
+        {
+            <button type="button" onclick="authCredentials(2)" class="btn btn-rojo">Cancelar Entrega</button>
+        }
+        else if (info.status_value == 3)
+        {
+            <button type="button" onclick="authCredentials(3)" class="btn btn-amarillo">Solicitar Modificacion</button>
+        }
+        else if (info.status_value == 4)
+        {
+            <button type="button" onclick="authCredentials(4)" class="btn btn-danger">Cancelar Solicitud de Modificacion</button>
+        }
+    }
+</div>
+<div id="mdlAuthCredentials" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Verifique sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("ApplyActionPAAD",null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "authResponse"
+            }, new { id = "frmApplyActionPAAD" }))
+            {
+                <div id="mdlAuthCredentialsContent">
+                    @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
+                </div>
+                @Html.Hidden("id_paad", info.id_paad)
+                @Html.Hidden("action_paad")
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function authCredentials(action) {
+        $("#action_paad").val(action);
+        $("#mdlAuthCredentials").modal("show");
+    }
+    function sendPAAD() {
+        $("#frmApplyActionPAAD").submit();
+    }
+    function authResponse(response) {
+        if (response.Status != 1) {
+            $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
+        }
+        else {
+            window.location ="@Url.Action("ModifyPAAD","Docente")";
+        }
+    }
+</script>
