@@ -29,6 +29,7 @@ namespace ISProject.Controllers
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
+            ViewBag.msg = GetMessages(info.id_paad);
             return View();
         }
         public ActionResult ModalActivity(int mdl_id_paad, int mdl_id_activity)
@@ -151,9 +152,10 @@ namespace ISProject.Controllers
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
+            ViewBag.msg = GetMessages(info.id_paad);
             return View("ViewPAAD_Docente");
         }
-        public ActionResult ApplyActionPAAD(AuthenticationCLS credentials,int id_paad,int action_paad)
+        public ActionResult ApplyActionPAAD(AuthenticationCLS credentials,int id_paad,int action_paad,string message_modif=null)
         {
             if (!ModelState.IsValid)
                 return Json(new
@@ -186,9 +188,10 @@ namespace ISProject.Controllers
                         AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                     });
                 }
-                else if (action_paad == 1)
+                if (action_paad == 1)
                 {
                     paad.estado = 2;
+                    paad.razones_rechazo = null;
                     paad.firma_docente = Guid.NewGuid().ToString("N");
                 }
                 else if (action_paad == 2)
@@ -197,9 +200,15 @@ namespace ISProject.Controllers
                     paad.firma_docente = null;
                 }
                 else if (action_paad == 3)
+                {
                     paad.estado = 4;
+                    paad.razones_modificacion = message_modif;
+                    paad.razones_rechazo_solicitud = null;
+                }
                 else if (action_paad == 4)
+                {
                     paad.estado = 3;
+                }
                 db.SaveChanges();
             }
             return Json(new
@@ -367,6 +376,22 @@ namespace ISProject.Controllers
                 periods.Insert(0, new SelectListItem { Text = "Todos", Value = "0" });
             }
             return periods;
+        }
+        public MessagesPAADCLS GetMessages(int id)
+        {
+            MessagesPAADCLS msg;
+            using(var db=new DB_PAAD_IADEntities())
+            {
+                msg = (from paad in db.PAADs
+                       where paad.id_paad == id
+                       select new MessagesPAADCLS
+                       {
+                           reject_paad = paad.razones_rechazo,
+                           request_modificaction = paad.razones_modificacion,
+                           reject_modificaction = paad.razones_rechazo_solicitud
+                       }).FirstOrDefault();
+            }
+            return msg;
         }
         public string RenderRazorViewToString(string viewName, object model)
         {

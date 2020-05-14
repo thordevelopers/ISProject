@@ -107,6 +107,9 @@
           <Property Name="cargo" Type="int" Nullable="false" />
           <Property Name="firma_docente" Type="nvarchar(max)" />
           <Property Name="firma_director" Type="nvarchar(max)" />
+          <Property Name="razones_rechazo" Type="nvarchar(max)" />
+          <Property Name="razones_modificacion" Type="nvarchar(max)" />
+          <Property Name="razones_rechazo_solicitud" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Periodos">
           <Key>
@@ -534,6 +537,9 @@
           <NavigationProperty Name="Estados" Relationship="Self.FK_PAADs_Estados" FromRole="PAADs" ToRole="Estados" />
           <NavigationProperty Name="Periodos" Relationship="Self.FK_PAADs_Periodos" FromRole="PAADs" ToRole="Periodos" />
           <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_PAADs_Docentes" FromRole="PAADs" ToRole="Docentes" />
+          <Property Name="razones_rechazo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="razones_modificacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="razones_rechazo_solicitud" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Periodos">
           <Key>
@@ -948,6 +954,9 @@
           <EntitySetMapping Name="PAADs">
             <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
               <MappingFragment StoreEntitySet="PAADs">
+                <ScalarProperty Name="razones_rechazo_solicitud" ColumnName="razones_rechazo_solicitud" />
+                <ScalarProperty Name="razones_modificacion" ColumnName="razones_modificacion" />
+                <ScalarProperty Name="razones_rechazo" ColumnName="razones_rechazo" />
                 <ScalarProperty Name="id_paad" ColumnName="id_paad" />
                 <ScalarProperty Name="estado" ColumnName="estado" />
                 <ScalarProperty Name="periodo" ColumnName="periodo" />

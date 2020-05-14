@@ -21,9 +21,10 @@ namespace ISProject.Controllers
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
+            ViewBag.msg = GetMessages(info.id_paad);
             return View("ViewPAAD_Director");
         }
-        public ActionResult ApplyActionPAAD(AuthenticationCLS credentials, int id_paad, int action_paad)
+        public ActionResult ApplyActionPAAD(AuthenticationCLS credentials, int id_paad, int action_paad,string reject_message)
         {
             if (!ModelState.IsValid)
                 return Json(new
@@ -57,13 +58,31 @@ namespace ISProject.Controllers
                     });
                 }
                 else if (action_paad == 1)
+                {
                     paad.estado = 1;
+                    paad.firma_docente = null;
+                    paad.razones_rechazo=reject_message;
+                }
                 else if (action_paad == 2)
+                {
                     paad.estado = 3;
+                    paad.firma_director = Guid.NewGuid().ToString("N");
+                }
                 else if (action_paad == 3)
+                {
                     paad.estado = 3;
+                    paad.razones_rechazo_solicitud = reject_message;
+                    paad.razones_modificacion = null;
+                }
                 else if (action_paad == 4)
+                {
                     paad.estado = 1;
+                    paad.firma_docente = null;
+                    paad.firma_director = null;
+                    paad.razones_rechazo_solicitud = null;
+                    paad.razones_modificacion = null;
+                    paad.razones_rechazo = null;
+                }
                 db.SaveChanges();
             }
             return Json(new
@@ -294,6 +313,22 @@ namespace ISProject.Controllers
                 periods.Insert(0, new SelectListItem { Text = "Todos", Value = "0" });
             }
             return periods;
+        }
+        public MessagesPAADCLS GetMessages(int id)
+        {
+            MessagesPAADCLS msg;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                msg = (from paad in db.PAADs
+                       where paad.id_paad == id
+                       select new MessagesPAADCLS
+                       {
+                           reject_paad = paad.razones_rechazo,
+                           request_modificaction = paad.razones_modificacion,
+                           reject_modificaction = paad.razones_rechazo_solicitud
+                       }).FirstOrDefault();
+            }
+            return msg;
         }
         public string RenderRazorViewToString(string viewName, object model)
         {

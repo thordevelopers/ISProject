@@ -5,11 +5,19 @@
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+    MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
-
+ @if (msg.reject_modificaction != null)
+    {
+<div style="background: rgba(255,0,0,0.6); padding: 8px 60px; ">
+        <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>
+        <a href="#" onclick="showMessage('@msg.reject_modificaction')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
+</div>
+}
+<br>
 <div class="d-flex justify-content-between" style="width:100%;">
     <button type="button" class="btn btn-azul-claro">Regresar</button>
-    @Html.Partial("_StatusPAAD",info)
+    @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
     @Html.Partial("_HeaderPAAD", header)
@@ -38,17 +46,29 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" style="margin-bottom:10px">
-                <label class="lbl-30" style="padding-top:20px">Verifique sus credenciales</label>
+                <label class="lbl-30" style="padding-top:20px">Solicitar Modificacion</label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            @using (Ajax.BeginForm("ApplyActionPAAD",null, new AjaxOptions
+            @using (Ajax.BeginForm("ApplyActionPAAD", null, new AjaxOptions
             {
                 HttpMethod = "POST",
                 OnSuccess = "authResponse"
             }, new { id = "frmApplyActionPAAD" }))
             {
+                if (info.status_value == 3)
+                {
+                    <div id="divRejectMessage" style="width :95%">
+                        <div style="text-align:center">
+                            @Html.TextArea("message_modif", new { placeholder = "Razones del rechazo", rows = 6, value = "", @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                        </div>
+                        <hr />
+                        <div style="text-align:center">
+                            <label class="lbl-30" style="">Verifique sus credenciales</label>
+                        </div>
+                    </div>
+                }
                 <div id="mdlAuthCredentialsContent">
                     @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
                 </div>
@@ -59,6 +79,28 @@
                     <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
                 </div>
             }
+        </div>
+    </div>
+</div>
+<div id="mdlShowMessage" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Razones de Rechazo de la Solicitud de Modificacion</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div>
+                <div id="divRejectMessage" style="width :95%">
+                    <div style="text-align:center">
+                        @Html.TextArea("reject_message", new { placeholder = "Razones del rechazo", rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -77,5 +119,9 @@
         else {
             window.location ="@Url.Action("ModifyPAAD","Docente")";
         }
+    }
+    function showMessage(message) {
+        $("#reject_message").text(message);
+        $("#mdlShowMessage").modal("show");
     }
 </script>

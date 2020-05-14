@@ -203,6 +203,7 @@
     <Compile Include="Models\InfoPAADCLS.cs" />
     <Compile Include="Models\ListaPAADCLS.cs" />
     <Compile Include="Models\LlenarPAADCLS.cs" />
+    <Compile Include="Models\MessagesPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
@@ -305,7 +306,6 @@
     <Content Include="Views\Shared\_AuthenticateCredentials.cshtml" />
     <Content Include="Views\Docente\HomeDocente.cshtml" />
     <Content Include="Views\Shared\_ViewActivitiesTable.cshtml" />
-    <Content Include="Views\Docente\ViewPAAD.cshtml" />
     <Content Include="Views\Docente\ViewPAAD_Docente.cshtml" />
     <Content Include="Views\Shared\_StatusPAAD.cshtml" />
     <Content Include="Views\Docente\ListRecordPAADs_Docente.cshtml" />

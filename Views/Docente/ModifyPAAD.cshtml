@@ -6,10 +6,21 @@
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+    MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
+@if (msg.reject_paad != null)
+    {
+<div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
+    
+        <label style="font-size: 15px; font-family: Helvetica;">Formato PAAD Rechazado</label>
+        <a href="#" onclick="showMessage('@msg.reject_paad')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
+    
+</div>
+}
+<br>
 <div class="d-flex justify-content-between" style="width:100%;">
     <button type="button" class="btn btn-azul-claro">Regresar</button>
-    @Html.Partial("_StatusPAAD",info)
+    @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
     @Html.Partial("_HeaderPAAD", header)
@@ -75,7 +86,28 @@
         </div>
     </div>
 </div>
-
+<div id="mdlShowMessage" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Razones de Rechazo del Formato PAAAD</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div>
+                <div id="divRejectMessage" style="width :95%">
+                    <div style="text-align:center">
+                        @Html.TextArea("reject_message", new { placeholder = "Razones del rechazo", rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @using (Ajax.BeginForm("ModalActivity", "Docente", null, new AjaxOptions
 {
     HttpMethod = "POST",
@@ -151,5 +183,9 @@
         else {
             window.location ="@Url.Action("ViewPAAD", "Docente",new { id = info.id_paad})";
         }
+    }
+    function showMessage(message) {
+        $("#reject_message").text(message);
+        $("#mdlShowMessage").modal("show");
     }
 </script>

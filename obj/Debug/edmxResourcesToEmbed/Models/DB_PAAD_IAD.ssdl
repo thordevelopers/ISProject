@@ -102,6 +102,9 @@
     <Property Name="cargo" Type="int" Nullable="false" />
     <Property Name="firma_docente" Type="nvarchar(max)" />
     <Property Name="firma_director" Type="nvarchar(max)" />
+    <Property Name="razones_rechazo" Type="nvarchar(max)" />
+    <Property Name="razones_modificacion" Type="nvarchar(max)" />
+    <Property Name="razones_rechazo_solicitud" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="Periodos">
     <Key>

@@ -86,6 +86,9 @@
     <EntitySetMapping Name="PAADs">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
         <MappingFragment StoreEntitySet="PAADs">
+          <ScalarProperty Name="razones_rechazo_solicitud" ColumnName="razones_rechazo_solicitud" />
+          <ScalarProperty Name="razones_modificacion" ColumnName="razones_modificacion" />
+          <ScalarProperty Name="razones_rechazo" ColumnName="razones_rechazo" />
           <ScalarProperty Name="id_paad" ColumnName="id_paad" />
           <ScalarProperty Name="estado" ColumnName="estado" />
           <ScalarProperty Name="periodo" ColumnName="periodo" />

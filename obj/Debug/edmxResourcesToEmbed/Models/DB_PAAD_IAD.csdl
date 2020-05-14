@@ -117,6 +117,9 @@
     <NavigationProperty Name="Estados" Relationship="Self.FK_PAADs_Estados" FromRole="PAADs" ToRole="Estados" />
     <NavigationProperty Name="Periodos" Relationship="Self.FK_PAADs_Periodos" FromRole="PAADs" ToRole="Periodos" />
     <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_PAADs_Docentes" FromRole="PAADs" ToRole="Docentes" />
+    <Property Name="razones_rechazo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="razones_modificacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="razones_rechazo_solicitud" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Periodos">
     <Key>

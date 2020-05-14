@@ -33,6 +33,9 @@ namespace ISProject.Models
         public int cargo { get; set; }
         public string firma_docente { get; set; }
         public string firma_director { get; set; }
+        public string razones_rechazo { get; set; }
+        public string razones_modificacion { get; set; }
+        public string razones_rechazo_solicitud { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Actividades> Actividades { get; set; }
