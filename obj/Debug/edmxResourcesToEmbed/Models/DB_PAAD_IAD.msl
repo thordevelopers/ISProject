@@ -45,17 +45,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Docentes">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
-        <MappingFragment StoreEntitySet="Docentes">
-          <ScalarProperty Name="rol" ColumnName="rol" />
-          <ScalarProperty Name="id_docentes" ColumnName="id_docentes" />
-          <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
-          <ScalarProperty Name="nombre" ColumnName="nombre" />
-          <ScalarProperty Name="correo" ColumnName="correo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Estados">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Estados">
         <MappingFragment StoreEntitySet="Estados">
@@ -97,6 +86,9 @@
     <EntitySetMapping Name="PAADs">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
         <MappingFragment StoreEntitySet="PAADs">
+          <ScalarProperty Name="razones_rechazo_solicitud" ColumnName="razones_rechazo_solicitud" />
+          <ScalarProperty Name="razones_modificacion" ColumnName="razones_modificacion" />
+          <ScalarProperty Name="razones_rechazo" ColumnName="razones_rechazo" />
           <ScalarProperty Name="id_paad" ColumnName="id_paad" />
           <ScalarProperty Name="estado" ColumnName="estado" />
           <ScalarProperty Name="periodo" ColumnName="periodo" />
@@ -116,6 +108,7 @@
     <EntitySetMapping Name="Periodos">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Periodos">
         <MappingFragment StoreEntitySet="Periodos">
+          <ScalarProperty Name="activo" ColumnName="activo" />
           <ScalarProperty Name="id_periodo" ColumnName="id_periodo" />
           <ScalarProperty Name="periodo" ColumnName="periodo" />
         </MappingFragment>
@@ -147,6 +140,17 @@
         <MappingFragment StoreEntitySet="Roles">
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Docentes">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
+        <MappingFragment StoreEntitySet="Docentes">
+          <ScalarProperty Name="rol" ColumnName="rol" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
+          <ScalarProperty Name="id_docente" ColumnName="id_docente" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

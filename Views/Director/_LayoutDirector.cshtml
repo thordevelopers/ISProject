@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "_LayoutDocente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav>
+    <!--Inicio de la barra de navegación-->
+    <div id="container">
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding: 10px">
+                <!--Contenedor de la imagen-->
+                <img src="~/assets/logo_uabc.gif" style="width:70px; height:100px;">
+            </div>
+            <div class="col-md-8" style="text-align: center">
+                <!--Contenedor de lo demas-->
+                <br> <p class="center p-blanco">UNIVERSIDAD AUT&Oacute;NOMA DE BAJA CALIFORNIA</p><br>
+                <p class="center p-blanco-min">Sistema de Administraci&oacute;n PAAD/IAD</p> <br>
+                <div>
+                    <div class="dropdown">
+                        <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
+                            <input type="button" class="dropbtn" value="Inicio" />
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropbtn">Formatos Activos</button>
+                        <div class="dropdown-content">
+                            <a href="@Url.Action("ListActivePAADs", "Director", Request.Url.Scheme)">PAAD</a>
+
+                            <a href="#">IAD</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropbtn">Historial de Formatos</button>
+                        <div class="dropdown-content">
+                            <a href="@Url.Action("ListRecordPAADs", "Director", Request.Url.Scheme)">PAAD</a>
+                            <a href="#">IAD</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropbtn" href="@Url.Action("Login", "Login", Request.Url.Scheme)">Cerrar Sesion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container body-content">
+    <!-- Aqui comienza el body-->
+    @RenderBody() <!-- Esto invoca el codigo html de cada vista-->
+
+</div>

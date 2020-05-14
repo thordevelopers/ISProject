@@ -33,14 +33,17 @@ namespace ISProject.Models
         public int cargo { get; set; }
         public string firma_docente { get; set; }
         public string firma_director { get; set; }
+        public string razones_rechazo { get; set; }
+        public string razones_modificacion { get; set; }
+        public string razones_rechazo_solicitud { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Actividades> Actividades { get; set; }
         public virtual Cargos Cargos { get; set; }
         public virtual Carreras Carreras { get; set; }
         public virtual Categorias Categorias { get; set; }
-        public virtual Docentes Docentes { get; set; }
         public virtual Estados Estados { get; set; }
         public virtual Periodos Periodos { get; set; }
+        public virtual Docentes Docentes { get; set; }
     }
 }

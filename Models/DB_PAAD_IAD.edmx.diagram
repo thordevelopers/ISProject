@@ -9,7 +9,6 @@
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Cargos" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Carreras" Width="1.5" PointX="0.75" PointY="10.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Categorias" Width="1.5" PointX="0.75" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_PAAD_IADModel.Docentes" Width="1.5" PointX="0.75" PointY="16.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Estados" Width="1.5" PointX="0.75" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Fechas" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.IADs" Width="1.5" PointX="6" PointY="5.625" IsExpanded="true" />
@@ -25,15 +24,16 @@
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Carreras" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Categorias" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Categorias" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Docentes" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Docentes" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Estados" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Estados" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Fechas_Periodos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Periodos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Periodos" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Roles" Width="1.5" PointX="0.75" PointY="21.625" />
+        <EntityTypeShape EntityType="DB_PAAD_IADModel.Docentes" Width="1.5" PointX="3" PointY="21.125" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Docentes_Roles" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Docentes" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Docentes" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,33 @@
+﻿@using ISProject.Models
+@model HeaderPAADCLS
+
+<div>
+    <h1 class="right">PAAD-03</h1>
+    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
+    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
+    <br><br>
+    <table>
+        <tr>
+            <td> Nombre del academico:</td>
+            <td colspan="3"> @Model.nombre</td>
+            <td> No. de Empleado</td>
+            <td> @Model.numero_empleado</td>
+        </tr>
+        <tr>
+            <td> Categoría:</td>
+            <td> @Model.categoria</td>
+            <td> Horas de clase:</td>
+            <td> @Model.horas_clase horas</td>
+            <td> Horas de gestión:</td>
+            <td> @Model.horas_gestion horas</td>
+        </tr>
+        <tr>
+            <td> Cargo:</td>
+            <td> @Model.cargo</td>
+            <td>Horas de investigación:</td>
+            <td style="width:80px;"> @Model.horas_investigacion horas</td>
+            <td>Horas de tutorías o dirección de trabajos:</td>
+            <td style="width:80px;"> @Model.horas_tutorias horas</td>
+        </tr>
+    </table> <br><br>
+ </div>

@@ -8,25 +8,29 @@ namespace ISProject.Models
 {
     public class ActivityCLS
     {
-        public int Id { get; set; }
+        public int id { get; set; }
+        [Display(Name = "Actividad")]
         [Required]
         [StringLength(150, ErrorMessage = "Maximo 150 caracteres")]
         public string actividad { get; set; }
+        [Display(Name = "Produccion")]
         [Required]
         [StringLength(300, ErrorMessage = "Maximo 300 caracteres")]
         public string produccion { get; set; }
+        [Display(Name = "Lugar")]
         [Required]
         [StringLength(150, ErrorMessage = "Maximo 150 caracteres")]
         public string lugar { get; set; }
+        [Display(Name = "Avance")]
         [Required]
+        [Range(0,99,ErrorMessage = "Fuera de rango (0 - 99)")]
         public int porcentaje_inicial { get; set; }
+        [Display(Name = "Avance")]
         [Required]
+        [Range(0, 100, ErrorMessage = "Fuera de rango (0 - 100)")]
         public int porcentaje_final { get; set; }
-        [Required]
         public bool cacei { get; set; }
-        [Required]
         public bool cuerpo_academico { get; set; }
-        [Required]
         public bool iso { get; set; }
         public int id_paad { get; set; }
         public int id_iad { get; set; }

@@ -1,0 +1,140 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ViewPAAD_Director";
+    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
+    List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
+    InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+    MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
+}
+
+@if (msg.request_modificaction != null)
+{
+    <div style="background: #DDAD23; padding: 8px 60px; ">
+        <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>
+        <a href="#" onclick="showMessage('@msg.request_modificaction')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
+    </div>
+}
+<div class="d-flex justify-content-between" style="width:100%;">
+    <a class="btn btn-azul-claro" href="@Url.Action("ListActivePAADs", "Director", Request.Url.Scheme)">Regresar</a>
+    @Html.Partial("_StatusPAAD", info)
+</div>
+<div>
+    @Html.Partial("_HeaderPAAD", header)
+</div>
+<div id="tblActivities">
+    @Html.Partial("_ViewActivitiesTable", activities)
+</div>
+<div class="" style="width:100%;text-align:right;margin-top:30px">
+    @if (info.active)
+    {
+        if (info.status_value == 2)
+        {
+            <button type="button" onclick="authCredentials(1)" class="btn btn-rojo btnAction">Rechazar formato</button>
+            <button type="button" onclick="authCredentials(2)" class="btn btn-verde-light btnAction">Aprobar formato</button>
+        }
+        else if (info.status_value == 4)
+        {
+            <button type="button" onclick="authCredentials(3)" class="btn btn-rojo btnAction">Rechazar Solicitud</button>
+            <button type="button" onclick="authCredentials(4)" class="btn btn-amarillo btnAction">Autorizar Solicitud</button>
+        }
+    }
+</div>
+
+
+<div id="mdlAuthCredentials" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label id="mdlAuthTitle" class="lbl-30" style="padding-top:20px">Verifique sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("ApplyActionPAAD", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "authResponse"
+            }, new { id = "frmApplyActionPAAD" }))
+            {
+                <div id="divRejectMessage" style="width :95%">
+                    <div style="text-align:center">
+                        @Html.TextArea("reject_message", new { placeholder = "Razones del rechazo", rows = 6, value = "", @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                    </div>
+                    <hr />
+                    <div style="text-align:center">
+                        <label class="lbl-30" style="">Verifique sus credenciales</label>
+                    </div>
+                </div>
+                <div id="mdlAuthCredentialsContent">
+                    @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
+                </div>
+                @Html.Hidden("id_paad", info.id_paad)
+                @Html.Hidden("action_paad")
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div id="mdlShowMessage" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label class="lbl-30" style="padding-top:20px">Razones de la Solicitud de Modificacion</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div>
+                <div id="divRejectMessage" style="width :95%">
+                    <div style="text-align:center">
+                        @Html.TextArea("Testeo", new { rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function authCredentials(action) {
+        $("#action_paad").val(action);
+        if (action == 1) {
+            $("#mdlAuthTitle").text("Rechazar Formato PAAD");
+            $("#divRejectMessage").show();
+        }
+        else if (action == 2) {
+            $("#mdlAuthTitle").text("Aprobar Formato PAAD");
+            $("#divRejectMessage").hide();
+        }
+        else if (action == 3) {
+            $("#mdlAuthTitle").text("Rechazar Solicitud de Modificacion");
+            $("#divRejectMessage").show();
+        }
+        else if (action == 4) {
+            $("#mdlAuthTitle").text("Aprobar Solicitud de Modificacion");
+            $("#divRejectMessage").hide();
+        }
+        $("#mdlAuthCredentials").modal("show");
+    }
+    function sendPAAD() {
+        $("#frmApplyActionPAAD").submit();
+    }
+    function authResponse(response) {
+        if (response.Status != 1) {
+            $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
+        }
+        else {
+            window.location ="@Url.Action("ViewPAAD","Director",new { id = info.id_paad })";
+        }
+    }
+    function showMessage(message) {
+        $("#Testeo").text(message);
+        $("#mdlShowMessage").modal("show");
+    }
+</script>

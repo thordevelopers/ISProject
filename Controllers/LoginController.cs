@@ -30,6 +30,7 @@ namespace ISProject.Controllers
             else
             {
                 USERS user_db;
+                Docentes doc;
                 using (var db= new DB_PAAD_IADEntities())
                 {
                     user_db = db.USERS.Where(p => p.EMAIL==user.Email && p.PASSWORD==user.Password).FirstOrDefault();
@@ -42,11 +43,14 @@ namespace ISProject.Controllers
                 {
                     using (var db = new DB_PAAD_IADEntities())
                     {
-                        Session["user"] = db.Docentes.Where(p => p.correo == user_db.EMAIL).FirstOrDefault();
+                        doc = db.Docentes.Where(p => p.correo == user_db.EMAIL).FirstOrDefault();
                     }
-                    Console.WriteLine(Session["user"]);
-                    user = null;
-                    return RedirectToAction("Index", "Home");
+                    Session["user"] = doc;
+                    if (doc.rol==1)
+                        return RedirectToAction("Home", "Docente");
+                    else if (doc.rol == 4)
+                        return RedirectToAction("Home", "Director");
+                    return View();
                 }
                 
             }
