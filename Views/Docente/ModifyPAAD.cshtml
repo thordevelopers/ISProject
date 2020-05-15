@@ -9,17 +9,15 @@
     MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
 @if (msg.reject_paad != null)
-    {
-<div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
-    
-        <label style="font-size: 15px; font-family: Helvetica;">Formato PAAD Rechazado</label>
-        <a href="#" onclick="showMessage('@msg.reject_paad')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
-    
-</div>
+{
+    <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
+            <label style="font-size: 15px; font-family: Helvetica;">Formato PAAD Rechazado</label>
+            <a href="#" onclick="showMessage('@msg.reject_paad')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
+    </div>
 }
 <br>
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button type="button" class="btn btn-azul-claro">Regresar</button>
+    <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Docente", Request.Url.Scheme)">Regresar</a>
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>

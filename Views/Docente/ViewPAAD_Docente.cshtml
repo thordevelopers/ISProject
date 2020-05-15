@@ -16,7 +16,7 @@
 }
 <br>
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button type="button" class="btn btn-azul-claro">Regresar</button>
+    <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Docente", Request.Url.Scheme)">Regresar</a>
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
