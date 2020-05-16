@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "_LayoutDocente";
+    ViewBag.Title = "_LayoutCoordinador";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,14 +17,14 @@
                 <p class="center p-blanco-min">Sistema de Administraci&oacute;n PAAD/IAD</p> <br>
                 <div>
                     <div class="dropdown">
-                        <a href="@Url.Action("Home", "Docente", Request.Url.Scheme)">
+                        <a href="@Url.Action("Home", "Coordinador", Request.Url.Scheme)">
                             <input type="button" class="dropbtn" value="Inicio" />
                         </a>
                     </div>
                     <div class="dropdown">
-                        <button class="dropbtn">Formato Activo</button>
+                        <button class="dropbtn">Formatos Activos</button>
                         <div class="dropdown-content">
-                            <a href="@Url.Action("ModifyPAAD", "Docente", Request.Url.Scheme)">PAAD</a>
+                            <a href="@Url.Action("ListActivePAADs", "Coordinador", Request.Url.Scheme)">PAAD</a>
 
                             <a href="#">IAD</a>
                         </div>
@@ -32,7 +32,7 @@
                     <div class="dropdown">
                         <button class="dropbtn">Historial de Formatos</button>
                         <div class="dropdown-content">
-                            <a href="@Url.Action("ListRecordPAADs", "Docente", Request.Url.Scheme)">PAAD</a>
+                            <a href="@Url.Action("ListRecordPAADs", "Coordinador", Request.Url.Scheme)">PAAD</a>
                             <a href="#">IAD</a>
                         </div>
                     </div>

@@ -1,0 +1,29 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ViewPAAD_Coordinador";
+    Layout = "~/Views/Coordinador/_LayoutCoordinador.cshtml";
+    HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
+    List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
+    InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+}
+
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Visualizar Formato: PAAD</h1>
+</div>
+<br />
+<div class="d-flex justify-content-between" style="width:100%;">
+    <button class="btn btn-azul-claro" onclick="goBack()">Regresar</button>
+    @Html.Partial("_StatusPAAD", info)
+</div>
+<div>
+    @Html.Partial("_HeaderPAAD", header)
+</div>
+<div id="tblActivities">
+    @Html.Partial("_ViewActivitiesTable", activities)
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>

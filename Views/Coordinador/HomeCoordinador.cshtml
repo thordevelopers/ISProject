@@ -1,0 +1,17 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "HomeCoordinador";
+    Layout = "~/Views/Coordinador/_LayoutCoordinador.cshtml";
+}
+
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Inicio</h1>
+</div>
+<br />
+<div class="site-body">
+    <div class="col-md-12">
+        <div class="center">
+            <h2>Bienvenido la modulo para la visualizacion de los formatos PAAD/IAD de su carrera <br /> <br /> @(((Docentes)Session["user"]).nombre)</h2>
+        </div>
+    </div>
+</div>

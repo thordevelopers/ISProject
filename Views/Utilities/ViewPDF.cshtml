@@ -1,5 +1,5 @@
 ﻿@using ISProject.Models
-@model VisualizarPAADCLS
+@model ViewPDFCLS
 @{
     ViewBag.Title = "ViewPDF";
     Layout = null;
@@ -64,9 +64,9 @@
                     <td>@item.produccion</td>
                     <td>@item.lugar</td>
                     <td>@item.porcentaje_inicial</td>
-                    <td>@item.cacei</td>
-                    <td>@item.cuerpo_academico</td>
-                    <td>@item.iso</td>
+                    <td style="text-align:center">@if (item.cacei){ <label>Si</label> } else { <label>No</label> }</td>
+                    <td style="text-align:center">@if (item.cuerpo_academico){ <label>Si</label> } else { <label>No</label> } </td>
+                    <td style="text-align:center">@if (item.iso){ <label>Si</label> } else { <label>No</label> }</td>
                 </tr>
             }
         </tbody>
@@ -78,7 +78,7 @@
                 @Model.firma_docente
             </div><br />
             <div style="width:90%;border:groove;border-color:lightgray;border-width:thin;text-align:center;margin-left:5%">
-                <h2 style="font-size:18px">Christian Xavier Navarro Cota</h2>
+                <h2 style="font-size:18px">@Model.nombre_docente</h2>
                 <hr style="margin:2px;color:gray;background-color:darkgray;height:2px" />
                 <h2 style="font-size:18px">Docente</h2>
             </div>
@@ -92,7 +92,7 @@
                 @Model.firma_director
             </div><br />
             <div style="width:90%;border:groove;border-color:lightgray;border-width:thin;text-align:center;margin-left:5%">
-                <h2 style="font-size:18px">Dr. Miguel Enrique Martínez Rosas</h2>
+                <h2 style="font-size:18px">@Model.director</h2>
                 <hr style="margin:2px;color:gray;background-color:darkgray;height:2px" />
                 <h2 style="font-size:18px">Director</h2>
             </div>

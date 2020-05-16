@@ -10,9 +10,11 @@ using ISProject.Models;
 using ISProject.Controllers;
 using Microsoft.Ajax.Utilities;
 using System.Web.Routing;
+using ISProject.Filters;
 
 namespace ISProject.Controllers
 {
+    [FilterDocente]
     public class DocenteController : Controller
     {
         AuthenticationController auth = new AuthenticationController();
@@ -142,6 +144,15 @@ namespace ISProject.Controllers
                 db.SaveChanges();
             }
             return PartialView("_EditActivitiesTable", new List<ActivityCLS>());
+        }
+        public void ChangeCargo(string id_cargo,int id_paad)
+        {
+            using(var db = new DB_PAAD_IADEntities())
+            {
+                PAADs doc_paad = (from paad in db.PAADs where paad.id_paad == id_paad select paad).FirstOrDefault();
+                doc_paad.cargo = Convert.ToInt32(id_cargo);
+                db.SaveChanges();
+            }
         }
         //ViewPAAD_Docente Actions
         public ActionResult ViewPAAD(int id)
@@ -297,10 +308,17 @@ namespace ISProject.Controllers
                               horas_clase = paads.horas_clase,
                               horas_gestion = paads.horas_gestion,
                               horas_investigacion = paads.horas_investigacion,
-                              horas_tutorias = paads.horas_tutorias
-
+                              horas_tutorias = paads.horas_tutorias,
+                              id_paad = id
                           }).First();
-
+                header.cargos = (from cargo in db.Cargos
+                                 select new SelectListItem
+                                 {
+                                     Text = cargo.cargo,
+                                     Value = cargo.id_cargo.ToString()
+                                 }).ToList();
+                int id_cargo = (from paad in db.PAADs where paad.id_paad == id select paad.cargo).FirstOrDefault();
+                header.cargos.Where(p => p.Value == id_cargo.ToString()).FirstOrDefault().Selected = true; 
             }
             return header;
         }
@@ -344,20 +362,15 @@ namespace ISProject.Controllers
                         on paad.carrera equals carrera.id_carrera
                         join docente in db.Docentes
                         on paad.docente equals docente.id_docente
-                        join categoria in db.Categorias
-                        on paad.categoria_docente equals categoria.id_categoria
-                        join cargo in db.Cargos
-                        on paad.cargo equals cargo.id_cargo
                         select new RegistroPAAD
                         {
                             id_paad = paad.id_paad,
                             estado = estado.estado,
+                            estado_valor = 0,
                             periodo = periodo.periodo,
                             carrera = carrera.carrera,
                             numero_empleado = docente.numero_empleado,
-                            nombre_docente = docente.nombre,
-                            categoria_docente = categoria.categoria,
-                            cargo = cargo.cargo
+                            nombre_docente = docente.nombre
                         }).ToList();
             }
             return list;

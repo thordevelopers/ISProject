@@ -9,21 +9,23 @@
     MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
 @if (msg.reject_paad != null)
-    {
-<div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
-    
-        <label style="font-size: 15px; font-family: Helvetica;">Formato PAAD Rechazado</label>
-        <a href="#" onclick="showMessage('@msg.reject_paad')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
-    
-</div>
+{
+    <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
+            <label style="font-size: 15px; font-family: Helvetica;font-weight:bold">Formato PAAD Rechazado</label>
+            <a href="#" onclick="showMessage('@msg.reject_paad')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
+    </div>
 }
 <br>
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Editar Formato: PAAD</h1>
+</div>
+<br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button type="button" class="btn btn-azul-claro">Regresar</button>
+    <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Docente", Request.Url.Scheme)">Regresar</a>
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
-    @Html.Partial("_HeaderPAAD", header)
+    @Html.Partial("_ModifyHeaderPAAD", header)
 </div>
 <div id="tblActivities">
     @Html.Partial("_EditActivitiesTable", activities)
@@ -51,7 +53,7 @@
                 <div id="mdlActivityContent">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="descartarModal()" class="btn btn-rojo btn-margin-left" name="button">Decartar</button>
+                    <button type="button" onclick="descartarModal()" class="btn btn-rojo btn-margin-left" name="button">Descartar</button>
                     <button type="submit" class="btn btn-verde-light">Guardar</button>
                 </div>
             }

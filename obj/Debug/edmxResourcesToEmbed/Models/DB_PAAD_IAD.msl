@@ -146,10 +146,12 @@
     <EntitySetMapping Name="Docentes">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
         <MappingFragment StoreEntitySet="Docentes">
-          <ScalarProperty Name="rol" ColumnName="rol" />
+          <ScalarProperty Name="isdirector" ColumnName="isdirector" />
           <ScalarProperty Name="correo" ColumnName="correo" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
           <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
+          <ScalarProperty Name="rol" ColumnName="rol" />
+          <ScalarProperty Name="carrera" ColumnName="carrera" />
           <ScalarProperty Name="id_docente" ColumnName="id_docente" />
         </MappingFragment>
       </EntityTypeMapping>

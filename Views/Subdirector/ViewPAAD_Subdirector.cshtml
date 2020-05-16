@@ -1,7 +1,7 @@
 ﻿@using ISProject.Models
 @{
-    ViewBag.Title = "ViewPAAD_Director";
-    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    ViewBag.Title = "ViewPAAD_Subdirector";
+    Layout = "~/Views/Subdirector/_LayoutSubdirector.cshtml";
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
@@ -10,8 +10,8 @@
 
 @if (msg.request_modificaction != null)
 {
-    <div style="background-color: #f4e04d; padding: 8px 60px; width:100%;text-align:center">
-        <label style="font-size: 15px; font-family: Helvetica;font-weight:bold">Solicitud de Modificación del Formato PAAD</label>
+    <div style="background: #DDAD23; padding: 8px 60px; ">
+        <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>
         <a href="#" onclick="showMessage('@msg.request_modificaction')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
     </div>
 }
@@ -31,7 +31,7 @@
     @Html.Partial("_ViewActivitiesTable", activities)
 </div>
 <div class="" style="width:100%;text-align:right;margin-top:30px">
-    @if (info.active && !info.isdirector)
+    @if (info.active && info.isdirector)
     {
         if (info.status_value == 2)
         {

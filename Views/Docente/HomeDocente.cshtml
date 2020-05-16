@@ -4,10 +4,13 @@
     Layout = "~/Views/Docente/_LayoutDocente.cshtml";
 }
 
+<div style="text-align:center;margin-bottom:50px">
+    <h1 style="font-weight:bold;font-size:26px">Inicio</h1>
+</div>
 <div class="site-body">
     <div class="col-md-12">
         <div class="center">
-            <h2>Bienvenido <br /> <br /> @(((Docentes)Session["user"]).nombre)</h2>
+            <h2>Bienvenido al modulo para el llenado de los formatos PAAD/IAD <br /> <br /> @(((Docentes)Session["user"]).nombre)</h2>
         </div>
     </div>
 </div>

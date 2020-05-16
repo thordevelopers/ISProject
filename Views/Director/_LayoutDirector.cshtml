@@ -17,7 +17,7 @@
                 <p class="center p-blanco-min">Sistema de Administraci&oacute;n PAAD/IAD</p> <br>
                 <div>
                     <div class="dropdown">
-                        <a href="@Url.Action("Index", "Home", Request.Url.Scheme)">
+                        <a href="@Url.Action("Home", "Director", Request.Url.Scheme)">
                             <input type="button" class="dropbtn" value="Inicio" />
                         </a>
                     </div>
@@ -37,9 +37,18 @@
                         </div>
                     </div>
                     <div class="dropdown">
-                        <a class="dropbtn" href="@Url.Action("Login", "Login", Request.Url.Scheme)">Cerrar Sesion</a>
+                        <a class="dropbtn" href="@Url.Action("ChangeDirectorAccount", "Director", Request.Url.Scheme)">Cambiar director</a>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropbtn" href="https://www.youtube.com/channel/UC1KmIMsAJBCv7_2AjWpkDyQ/playlists" target="_blank">Ayuda</a>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropbtn" href="@Url.Action("LogOut", "Login", Request.Url.Scheme)">Cerrar Sesion</a>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-2" style="text-align: center; padding: 10px">
+                <img src="~/assets/logo_fiad.png" style="width:70px; height:100px;">
             </div>
         </div>
     </div>

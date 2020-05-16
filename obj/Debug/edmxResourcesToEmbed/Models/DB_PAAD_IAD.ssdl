@@ -45,10 +45,12 @@
       <PropertyRef Name="id_docente" />
     </Key>
     <Property Name="id_docente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="carrera" Type="int" Nullable="false" />
+    <Property Name="rol" Type="int" Nullable="false" />
     <Property Name="numero_empleado" Type="int" Nullable="false" />
     <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="rol" Type="int" Nullable="false" />
+    <Property Name="isdirector" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Estados">
     <Key>
@@ -161,6 +163,18 @@
       </Principal>
       <Dependent Role="Actividades">
         <PropertyRef Name="id_paad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Docentes_Carreras">
+    <End Role="Carreras" Type="Self.Carreras" Multiplicity="1" />
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Carreras">
+        <PropertyRef Name="id_carrera" />
+      </Principal>
+      <Dependent Role="Docentes">
+        <PropertyRef Name="carrera" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -353,6 +367,10 @@
     <AssociationSet Name="FK_Actividades_PAADs" Association="Self.FK_Actividades_PAADs">
       <End Role="PAADs" EntitySet="PAADs" />
       <End Role="Actividades" EntitySet="Actividades" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Docentes_Carreras" Association="Self.FK_Docentes_Carreras">
+      <End Role="Carreras" EntitySet="Carreras" />
+      <End Role="Docentes" EntitySet="Docentes" />
     </AssociationSet>
     <AssociationSet Name="FK_Docentes_Roles" Association="Self.FK_Docentes_Roles">
       <End Role="Roles" EntitySet="Roles" />

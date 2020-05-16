@@ -148,12 +148,13 @@
     <Compile Include="Controllers\CoordinadorController.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\DocenteController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\LlenarPAADController.cs" />
     <Compile Include="Controllers\SubdirectorController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
-    <Compile Include="Controllers\VisualizarPAADController.cs" />
+    <Compile Include="Controllers\UtilitiesController.cs" />
+    <Compile Include="Filters\FilterCoordinador.cs" />
+    <Compile Include="Filters\FilterDirector.cs" />
+    <Compile Include="Filters\FilterDocente.cs" />
+    <Compile Include="Filters\FilterSubdirector.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -161,7 +162,6 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityCLS.cs" />
-    <Compile Include="Models\AjaxRequestCLS.cs" />
     <Compile Include="Models\AuthenticationCLS.cs" />
     <Compile Include="Models\Cargos.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -201,8 +201,6 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InfoPAADCLS.cs" />
-    <Compile Include="Models\ListaPAADCLS.cs" />
-    <Compile Include="Models\LlenarPAADCLS.cs" />
     <Compile Include="Models\MessagesPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -221,7 +219,7 @@
     <Compile Include="Models\USERS.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\VisualizarPAADCLS.cs" />
+    <Compile Include="Models\ViewPDFCLS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -282,19 +280,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\PAAD\PAAD.cshtml" />
-    <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Shared\View.cshtml" />
-    <Content Include="Views\VisualizarPAAD\ViewPAAD.cshtml" />
-    <Content Include="Views\VisualizarPAAD\ViewPDF.cshtml" />
-    <Content Include="Views\VisualizarPAAD\ListPAADs.cshtml" />
+    <Content Include="Views\Utilities\ViewPDF.cshtml" />
     <Content Include="Views\Docente\_LayoutDocente.cshtml" />
     <Content Include="Views\Shared\_HeaderPAAD.cshtml" />
     <Content Include="Views\Docente\_EditActivitiesTable.cshtml" />
@@ -315,13 +306,24 @@
     <Content Include="Views\Director\HomeDirector.cshtml" />
     <Content Include="Views\Director\ViewPAAD_Director.cshtml" />
     <Content Include="Views\Director\ListRecordPAADs_Director.cshtml" />
+    <Content Include="Views\Coordinador\_LayoutCoordinador.cshtml" />
+    <Content Include="Views\Coordinador\HomeCoordinador.cshtml" />
+    <Content Include="Views\Coordinador\ListActivePAADs_Coordinador.cshtml" />
+    <Content Include="Views\Coordinador\ListRecordPAADs_Coordinador.cshtml" />
+    <Content Include="Views\Coordinador\ViewPAAD_Coordinador.cshtml" />
+    <Content Include="Views\Subdirector\_LayoutSubdirector.cshtml" />
+    <Content Include="Views\Subdirector\HomeSubdirector.cshtml" />
+    <Content Include="Views\Subdirector\ListActivePAADs_Subdirector.cshtml" />
+    <Content Include="Views\Subdirector\ListRecordPAADs_Subdirector.cshtml" />
+    <Content Include="Views\Subdirector\ViewPAAD_Subdirector.cshtml" />
+    <Content Include="Views\Director\ChangeDirectorAccount.cshtml" />
+    <Content Include="Views\Docente\_ModifyHeaderPAAD.cshtml" />
+    <Content Include="Views\Login\_LayoutGuess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="assets\" />
     <Folder Include="Views\Authentication\" />
-    <Folder Include="Views\Coordinador\" />
-    <Folder Include="Views\Subdirector\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
