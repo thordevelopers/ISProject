@@ -1,28 +1,28 @@
 ﻿@using ISProject.Models
 @model List<RegistroPAAD>
 @{
-    ViewBag.Title = "ListRecordPAADs_Director";
-    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    ViewBag.Title = "ListActivePAADs_Subdirector";
+    Layout = "~/Views/Subdirector/_LayoutSubdirector.cshtml";
     List<RegistroPAAD> list = (List<RegistroPAAD>)ViewBag.list;
-    List<SelectListItem> period = (List<SelectListItem>)ViewBag.period;
+    List<SelectListItem> states = (List<SelectListItem>)ViewBag.states;
     List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
 }
 
 <div style="text-align:center">
-    <h1 style="font-weight:bold;font-size:26px">Listar Historial de Formatos: PAAD</h1>
+    <h1 style="font-weight:bold;font-size:26px">Listar Formatos Activos: PAAD</h1>
 </div>
 <br />
 <div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
 
-    @using (Ajax.BeginForm("FilterRecordPAADs", null, new AjaxOptions
+    @using (Ajax.BeginForm("FilterActivePAADs", null, new AjaxOptions
     {
         HttpMethod = "POST",
         UpdateTargetId = "ListPAADsTable",
         InsertionMode = InsertionMode.Replace
-    }, new { id = "frmFilterRecord" }))
+    }, new { id = "frmFilterActive" }))
     {
-        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Periodo: </p>
-        @Html.DropDownList("filter_period", period)
+        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Estado: </p>
+        @Html.DropDownList("filter_state", states)
         <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Carrera: </p>
         @Html.DropDownList("filter_career", careers)
     }
@@ -32,11 +32,11 @@
 </div>
 
 <script>
-    document.getElementById("filter_period").onchange = function () {
-        $("#frmFilterRecord").submit();
+    document.getElementById("filter_state").onchange = function () {
+        $("#frmFilterActive").submit();
     }
     document.getElementById("filter_career").onchange = function () {
-        $("#frmFilterRecord").submit();
+        $("#frmFilterActive").submit();
     }
 </script>
 

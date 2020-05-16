@@ -1,8 +1,8 @@
 ﻿@using ISProject.Models
 @model List<RegistroPAAD>
 @{
-    ViewBag.Title = "ListActivePAADs_Director";
-    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    ViewBag.Title = "ListActivePAADs_Coordinador";
+    Layout = "~/Views/Coordinador/_LayoutCoordinador.cshtml";
     List<RegistroPAAD> list = (List<RegistroPAAD>)ViewBag.list;
     List<SelectListItem> states = (List<SelectListItem>)ViewBag.states;
     List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
@@ -23,8 +23,6 @@
     {
         <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Estado: </p>
         @Html.DropDownList("filter_state", states)
-        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Carrera: </p>
-        @Html.DropDownList("filter_career", careers)
     }
 </div>
 <div id="ListPAADsTable">
@@ -35,10 +33,4 @@
     document.getElementById("filter_state").onchange = function () {
         $("#frmFilterActive").submit();
     }
-    document.getElementById("filter_career").onchange = function () {
-        $("#frmFilterActive").submit();
-    }
 </script>
-
-
-

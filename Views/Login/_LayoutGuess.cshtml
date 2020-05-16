@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "_LayoutGuess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav>
+    <!--Inicio de la barra de navegación-->
+    <div id="container">
+        <div class="row">
+            <div class="col-md-2" style="text-align: center; padding: 10px">
+                <!--Contenedor de la imagen-->
+                <img src="~/assets/logo_uabc.gif" style="width:70px; height:100px;">
+            </div>
+            <div class="col-md-8" style="text-align: center;margin-top:16px">
+                <!--Contenedor de lo demas-->
+                <br> <p class="center p-blanco">UNIVERSIDAD AUT&Oacute;NOMA DE BAJA CALIFORNIA</p><br>
+                <p class="center p-blanco-min">Sistema de Administraci&oacute;n PAAD/IAD</p>
+            </div>
+            <div class="col-md-2" style="text-align: center; padding: 10px">
+                <img src="~/assets/logo_fiad.png" style="width:70px; height:100px;">
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container body-content">
+    <!-- Aqui comienza el body-->
+    @RenderBody() <!-- Esto invoca el codigo html de cada vista-->
+</div>
+

@@ -7,16 +7,20 @@
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
     MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
- @if (msg.reject_modificaction != null)
-    {
-<div style="background: rgba(255,0,0,0.6); padding: 8px 60px; ">
-        <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>
-        <a href="#" onclick="showMessage('@msg.reject_modificaction')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
-</div>
+@if (msg.reject_modificaction != null)
+{
+    <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center">
+        <label style="font-size: 15px; font-family: Helvetica; text-align:center;font-weight:bold">Solicitud de Modificación del Formato PAAD Rechazada</label>
+        <a href="#" onclick="showMessage('@msg.reject_modificaction')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
+    </div>
 }
 <br>
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Visualizar Formato: PAAD</h1>
+</div>
+<br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Docente", Request.Url.Scheme)">Regresar</a>
+    <button class="btn btn-azul-claro" onclick="goBack()">Regresar</button>
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
@@ -61,7 +65,7 @@
                 {
                     <div id="divRejectMessage" style="width :95%">
                         <div style="text-align:center">
-                            @Html.TextArea("message_modif", new { placeholder = "Razones del rechazo", rows = 6, value = "", @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                            @Html.TextArea("message_modif", new { placeholder = "Razones de la modificacion", rows = 6, value = "", @class = "tb-dato", style = "width:95%;margin-left:5%" })
                         </div>
                         <hr />
                         <div style="text-align:center">
@@ -123,5 +127,8 @@
     function showMessage(message) {
         $("#reject_message").text(message);
         $("#mdlShowMessage").modal("show");
+    }
+    function goBack() {
+        window.history.back();
     }
 </script>

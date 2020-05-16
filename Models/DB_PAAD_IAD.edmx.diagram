@@ -30,11 +30,12 @@
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Periodos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Periodos" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Roles" Width="1.5" PointX="0.75" PointY="21.625" />
-        <EntityTypeShape EntityType="DB_PAAD_IADModel.Docentes" Width="1.5" PointX="3" PointY="21.125" />
+        <EntityTypeShape EntityType="DB_PAAD_IADModel.Docentes" Width="1.5" PointX="3" PointY="15.375" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_Docentes_Carreras" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Docentes_Roles" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Docentes" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Docentes" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
