@@ -201,6 +201,10 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InfoPAADCLS.cs" />
+    <Compile Include="Models\Mensajes.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MessageCLS.cs" />
     <Compile Include="Models\MessagesPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -213,6 +217,9 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TiposDeMensaje.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserCLS.cs" />
@@ -283,7 +290,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
-    <Content Include="Views\PAAD\PAAD.cshtml" />
     <Content Include="Views\Shared\View.cshtml" />
     <Content Include="Views\Utilities\ViewPDF.cshtml" />
     <Content Include="Views\Docente\_LayoutDocente.cshtml" />

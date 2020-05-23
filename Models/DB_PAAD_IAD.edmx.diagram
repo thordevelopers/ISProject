@@ -12,29 +12,34 @@
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Estados" Width="1.5" PointX="0.75" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Fechas" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.IADs" Width="1.5" PointX="6" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_PAAD_IADModel.PAADs" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Periodos" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.USERS" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Actividades_IADs" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_Actividades_PAADs" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Cargos" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Cargos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Carreras" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Carreras" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Categorias" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Categorias" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Estados" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Estados" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Fechas_Periodos" ManuallyRouted="false" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Periodos" ManuallyRouted="false" />
-        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Periodos" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Roles" Width="1.5" PointX="0.75" PointY="21.625" />
         <EntityTypeShape EntityType="DB_PAAD_IADModel.Docentes" Width="1.5" PointX="3" PointY="15.375" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Docentes_Carreras" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_Docentes_Roles" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_IADs_Docentes" />
+        <EntityTypeShape EntityType="DB_PAAD_IADModel.Mensajes" Width="1.5" PointX="8.25" PointY="9" />
+        <EntityTypeShape EntityType="DB_PAAD_IADModel.PAADs" Width="1.5" PointX="5.25" PointY="11.75" />
+        <EntityTypeShape EntityType="DB_PAAD_IADModel.TiposDeMensaje" Width="1.5" PointX="6" PointY="18.5" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_Actividades_PAADs" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Cargos" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Carreras" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Categorias" />
         <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Docentes" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Estados" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_Mensajes_IADs" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_Mensajes_PAADs" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_Mensajes_TiposDeMensaje" />
+        <AssociationConnector Association="DB_PAAD_IADModel.FK_PAADs_Periodos" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
