@@ -10,12 +10,10 @@ namespace ISProject.Controllers
 {
     public class AuthenticationController : Controller
     {
-        // GET: Authentication
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        /* Esta accion se manda llamar cuando se quiere validar las credenciales de una cuenta
+         * Esta cuenta validad que la contrasena corresponda correctamente al correo
+         * Recibe las credenciales
+         * Regresa un booleano con el resultado de la autenticacion*/
         public bool AuthenticateCredentials(string email, string password)
         {
             using (var db = new DB_PAAD_IADEntities())

@@ -9,31 +9,45 @@ using ISProject.Models;
 
 namespace ISProject.Controllers
 {
+    //Esta etiqueta liga todas las acciones de la clase al filtro "FilterDirector", lo que significa que antes de la ejecucion del cualquier accion en la clase primero se va ejectuar las
+    //acciones del filtro.
     [FilterDirector]
     public class DirectorController : Controller
     {
+        /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
         AuthenticationController auth = new AuthenticationController();
+        //Acciones de la vista ------------------------------------------------ HomeDirector ------------------------------------------------
+        //Vista de inicio para el director
         public ActionResult Home()
         {
             return View("HomeDirector");
         }
-        // ViewPAAD Actions
+        //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
+        /* Esta accion corresponde a la vista ViewPAAD
+         * Recibe el id del paad 
+         * Devuelve la vista*/
         public ActionResult ViewPAAD(int id)
         {
+            //Valida que el id del paad se valido si no redirecciona a home
             if (id < 1)
                 return RedirectToAction("Home");
             InfoPAADCLS info = GetInfoPAAD(id);
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
+            //Valida si el paad a ver es del director para mostrar o no los mensajes de rechazo o aprobacion
             if (!info.isdirector)
                 ViewBag.msg = GetMessages(info.id_paad);
             else
                 ViewBag.msg = new MessagesPAADCLS();
             return View("ViewPAAD_Director");
         }
+        /* Esta accion aplica las acciones sobre el paad como rechazar paad, aprobar paad, aprobar modificacion y rechazar modificacion
+         * Recibe las credenciales a autenticar, el id del padd, la accion a realizar y el mensaje de rechazo de manera opcional
+         * devuelve un json con el estado de la respuesta, el mensaje de respuesta, y una vista parcial en string */
         public ActionResult ApplyActionPAAD(AuthenticationCLS credentials, int id_paad, int action_paad, string reject_message)
         {
+            //Valida los campos del modelo de las credenciales
             if (!ModelState.IsValid)
                 return Json(new
                 {
@@ -41,8 +55,10 @@ namespace ISProject.Controllers
                     Message = "Invalid",
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
+            //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4)
+            //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
+            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo!=credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -58,6 +74,7 @@ namespace ISProject.Controllers
                 
                 PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad).FirstOrDefault();
                 bool isdirector = (from docente in db.Docentes where docente.id_docente == paad.docente select docente.isdirector).FirstOrDefault();
+                //Valida que el paad sea del director
                 if (paad == null || isdirector)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
@@ -70,6 +87,7 @@ namespace ISProject.Controllers
                 }
                 else if (action_paad == 1)
                 {
+                    //Acciones para el caso de Rechazar PAAD
                     paad.estado = 1;
                     paad.firma_docente = null;
                     db.Mensajes.Add(new Mensajes
@@ -81,11 +99,13 @@ namespace ISProject.Controllers
                 }
                 else if (action_paad == 2)
                 {
+                    //Acciones para el caso de Aprobar PAAD
                     paad.estado = 3;
                     paad.firma_director = Guid.NewGuid().ToString("N");
                 }
                 else if (action_paad == 3)
                 {
+                    //Acciones para el caso de Rechazar Solicitud
                     paad.estado = 3;
                     db.Mensajes.Add(new Mensajes
                     {
@@ -97,11 +117,13 @@ namespace ISProject.Controllers
                 }
                 else if (action_paad == 4)
                 {
+                    //Acciones para el caso de Aprobar Solicitud
                     paad.estado = 1;
                     paad.firma_docente = null;
                     paad.firma_director = null;
                     mssg = db.Mensajes.Where(p => p.paad == id_paad && p.tipo == 2).FirstOrDefault();
                 }
+                //Si hay mensajes que borrar los elimina, por lo generar por cada paad solo hay un mensaje activo que mostrar, en caso de eliminar varios al mismo tiempo se debera modificar.
                 if (mssg != null)
                     db.Mensajes.Remove(mssg);
                 db.SaveChanges();
@@ -112,7 +134,8 @@ namespace ISProject.Controllers
                 Message = "Success"
             });
         }
-        // ListActivePAADs Actions
+        //Acciones de la vista ------------------------------------------------ ListActivePAADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListActivePAADs*/
         public ActionResult ListActivePAADs()
         {
             ViewBag.list = GetActivePAADs();
@@ -120,12 +143,17 @@ namespace ISProject.Controllers
             ViewBag.careers = GetCareers();
             return View("ListActivePAADs_Director");
         }
+        /* Esta accion se dispara cuando el valor seleccionado de cualquier dropdownlist cambia
+         * Filtra la lista segun el valor seleccionado del dropdownlist
+         * Recibe el id del estado, el id de la carrera
+         * Regresa una vista parcial de la tabla con los paads filtrados */
         public ActionResult FilterActivePAADs(string filter_state,string filter_career )
         {
             List<RegistroPAAD> list = GetActivePAADs(Convert.ToInt32(filter_state), Convert.ToInt32(filter_career));
             return PartialView("_ListPAADs", list);
         }
-        //ListRecordPAADs Actions
+        //Acciones de la vista ------------------------------------------------ ListRecordPAADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListRecordPAADs*/
         public ActionResult ListRecordPAADs()
         {
             ViewBag.list = GetRecordPAADs();
@@ -133,20 +161,30 @@ namespace ISProject.Controllers
             ViewBag.careers = GetCareers();
             return View("ListRecordPAADs_Director");
         }
+        /* Esta accion se dispara cuando se el valor seleccionado de cualquier dropdownlist cambie
+         * Filtra la lista segun el valor seleccionado del dropdownlist
+         * Recibe el id del periodo, el id de la carrera 
+         * Regresa una vista parcial de la tabla con los paads filtrados */
         public ActionResult FilterRecordPAADs(string filter_period, string filter_career)
         {
             List<RegistroPAAD> list = GetRecordPAADs(Convert.ToInt32(filter_period), Convert.ToInt32(filter_career));
             return PartialView("_ListPAADs", list);
         }
-        // ChangeDirectorAccount Actions
+        //Acciones de la vista ------------------------------------------------ ChangeDirectorAccount ------------------------------------------------
+        /* Esta accion muestra la vista de ChangeDirectorAccount*/
         public ActionResult ChangeDirectorAccount()
         {
             ViewBag.director = GetDirector();
             ViewBag.accounts=GetAccounts();
             return View("ChangeDirectorAccount");
         } 
+        /* Esta accion se llama cuando le da al boton de aceptar en el modal de credenciales
+         * Esta funcion sirve para cambiar el campo isdirector de la tabla de docentes de una cuenta a otra
+         * Recibe las credenciales y el id del docente que sera el nuevo director
+         * Regresa un json con el estado de la respuesta, el mensaje de respuesta, y una vista parcial en string */
         public ActionResult ChangeDirector(AuthenticationCLS credentials, int id_docente)
         {
+            //Valida los campos del modelo de las credenciales
             if (!ModelState.IsValid)
                 return Json(new
                 {
@@ -154,8 +192,10 @@ namespace ISProject.Controllers
                     Message = "Invalid",
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
+            //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4)
+            //Valida que la autenticacion sea correcto, que el correo de la autenticacion se el mismo que el de la sesion y que se tengan los permisos necesario para realizar esa accion
+            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -168,6 +208,7 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 Docentes docente = db.Docentes.Where(p => p.id_docente == id_docente).FirstOrDefault();
+                //Si el docente no se encutra o ya es director regresa un mensaje de error, si no lo vuelve director
                 if (docente == null || docente.isdirector)
                 {
                     credentials.message = "Cuenta no encontrada o esta cuenta ya es director";
@@ -190,7 +231,10 @@ namespace ISProject.Controllers
                 Message = "Success"
             });
         }
-        // Utilities actions 
+        //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
+        /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
+         * Recibe el id del paad 
+         * Regresa el modelo lleno*/
         public InfoPAADCLS GetInfoPAAD(int id )
         {
             InfoPAADCLS info = new InfoPAADCLS();
@@ -216,6 +260,9 @@ namespace ISProject.Controllers
             }
             return info;
         }
+        /* Obtiene la informacion del encabezado del PAAD de la base de datos
+         * Recibe el id del paad
+         * Regresa el modelo lleno */
         public HeaderPAADCLS GetHeader(int id)
         {
             HeaderPAADCLS header = null;
@@ -252,6 +299,9 @@ namespace ISProject.Controllers
             }
             return header;
         }
+        /* Esta accion recupera las actividades de un paad de la base de datos 
+         * Recibe el id del paad 
+         * Regresa una lista con los modelos de la actividades*/
         public List<ActivityCLS> GetActivities(int id)
         {
             List<ActivityCLS> activities = null;
@@ -275,6 +325,9 @@ namespace ISProject.Controllers
             }
             return activities;
         }
+        /* Esta accion recupera todos los paads activos de la base de datos 
+         * Recibe de forma opcional el id del estado y el id de la carrera, si vienen vacios se omiten en el filtrado
+         * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetActivePAADs(int state = 0,int career=0)
         {
             List<RegistroPAAD> list = null;
@@ -307,6 +360,9 @@ namespace ISProject.Controllers
             }
             return list;
         }
+        /* Esta accion recupera todos los paads arpobados de la base de datos 
+         * Recibe de forma opcional el id del periodo y el id de la carrera, si vienen vacios se omiten en el filtrado
+         * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetRecordPAADs(int period = 0, int career = 0)
         {
             List<RegistroPAAD> list = null;
@@ -337,6 +393,9 @@ namespace ISProject.Controllers
             }
             return list;
         }
+        /* Esta accion recupera los estados 
+         * No recibe argumentos
+         * Regresa una lista con los modelos de los estados*/
         public List<SelectListItem> GetStates()
         {
             List<SelectListItem> periods = null;
@@ -352,6 +411,9 @@ namespace ISProject.Controllers
             }
             return periods;
         }
+        /* Esta accion recupera las carreras 
+         * No recibe argumentos
+         * Regresa una lista con los modelos de las carreras*/
         public List<SelectListItem> GetCareers()
         {
             List<SelectListItem> periods = null;
@@ -367,6 +429,9 @@ namespace ISProject.Controllers
             }
             return periods;
         }
+        /* Esta accion recupera los periodos 
+         * No recibe argumentos
+         * Regresa una lista con los modelos de los periodos*/
         public List<SelectListItem> GetPeriods()
         {
             List<SelectListItem> periods = null;
@@ -382,6 +447,9 @@ namespace ISProject.Controllers
             }
             return periods;
         }
+        /* Esta accion recupera los docentes
+         * No recibe argumentos
+         * Regresa una lista con los modelos de los docentes */
         public List<SelectListItem> GetAccounts()
         {
             List<SelectListItem> accounts = null;
@@ -400,6 +468,9 @@ namespace ISProject.Controllers
             }
             return accounts;
         }
+        /* Esta accion recupera los mensajes de un paad la base de datos 
+         * Recibe el id del paad 
+         * Regresa un modelo con la informacion del mensaje*/
         public MessageCLS GetMessages(int id)
         {
             MessageCLS msg;
@@ -421,6 +492,9 @@ namespace ISProject.Controllers
             }
             return msg;
         }
+        /* Esta accion recupera al docente que tiene el campo isdirector en true
+         * No recibe argumentos
+         * Regresa un modelo con la informacion del docente*/
         public Docentes GetDirector()
         {
             Docentes director;
@@ -430,6 +504,10 @@ namespace ISProject.Controllers
             }
             return director;
         }
+        /* Esta accion transforma una vista en string
+         * Recibe el nombre de la vista y el modelo con el cual llenar la vista
+         * Regresa un string con la vista 
+         * Esta funcion fue obtenida de stackoverflow: https://stackoverflow.com/questions/17554734/mvc-render-partialviewresult-to-string */
         public string RenderRazorViewToString(string viewName, object model)
         {
             ViewData.Model = model;

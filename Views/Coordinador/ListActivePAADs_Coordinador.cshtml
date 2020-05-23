@@ -1,19 +1,23 @@
-﻿@using ISProject.Models
+﻿<!--
+    Esta vista muestra los paads activos para el coordinador    
+-->
+@using ISProject.Models
 @model List<RegistroPAAD>
 @{
     ViewBag.Title = "ListActivePAADs_Coordinador";
     Layout = "~/Views/Coordinador/_LayoutCoordinador.cshtml";
+    //Lista que contiene todo los paads activos o filtrados de la carrera del coordinador
     List<RegistroPAAD> list = (List<RegistroPAAD>)ViewBag.list;
+    //Info para el dropdown list de estados
     List<SelectListItem> states = (List<SelectListItem>)ViewBag.states;
-    List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
 }
-
+<!--Titulo de la pagina-->
 <div style="text-align:center">
     <h1 style="font-weight:bold;font-size:26px">Listar Formatos Activos: PAAD</h1>
 </div>
 <br />
 <div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
-
+    <!--Peticion asincrona con ajax para filtrar la lista de paads-->
     @using (Ajax.BeginForm("FilterActivePAADs", null, new AjaxOptions
     {
         HttpMethod = "POST",
@@ -22,15 +26,18 @@
     }, new { id = "frmFilterActive" }))
     {
         <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Estado: </p>
+        //Dropdownlist para los estados 
         @Html.DropDownList("filter_state", states)
     }
 </div>
 <div id="ListPAADsTable">
+    <!--Vista parcial de la listas paads-->
     @Html.Partial("_ListPAADs", list)
 </div>
 
 <script>
     document.getElementById("filter_state").onchange = function () {
+        //Lanza el formulario de ajax
         $("#frmFilterActive").submit();
     }
 </script>
