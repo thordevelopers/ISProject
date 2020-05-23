@@ -31,7 +31,7 @@ namespace ISProject.Controllers
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
-            ViewBag.msg = GetMessages(info.id_paad);
+            ViewBag.msg = GetMessages(info.id_paad,1);
             return View();
         }
         public ActionResult ModalActivity(int mdl_id_paad, int mdl_id_activity)
@@ -163,7 +163,7 @@ namespace ISProject.Controllers
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
-            ViewBag.msg = GetMessages(info.id_paad);
+            ViewBag.msg = GetMessages(info.id_paad,3);
             return View("ViewPAAD_Docente");
         }
         public ActionResult ApplyActionPAAD(AuthenticationCLS credentials,int id_paad,int action_paad,string message_modif=null)
@@ -188,6 +188,8 @@ namespace ISProject.Controllers
             }
             using (var db = new DB_PAAD_IADEntities())
             {
+                Mensajes mssg=null;
+                
                 PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad && p.docente == doc.id_docente).FirstOrDefault();
                 if (paad == null)
                 {
@@ -202,7 +204,7 @@ namespace ISProject.Controllers
                 if (action_paad == 1)
                 {
                     paad.estado = 2;
-                    paad.razones_rechazo = null;
+                    mssg = db.Mensajes.Where(p => p.paad == id_paad && p.tipo == 1).FirstOrDefault();
                     paad.firma_docente = Guid.NewGuid().ToString("N");
                 }
                 else if (action_paad == 2)
@@ -213,13 +215,21 @@ namespace ISProject.Controllers
                 else if (action_paad == 3)
                 {
                     paad.estado = 4;
-                    paad.razones_modificacion = message_modif;
-                    paad.razones_rechazo_solicitud = null;
+                    mssg = db.Mensajes.Where(p => p.paad == id_paad && p.tipo == 3).FirstOrDefault();
+                    db.Mensajes.Add(new Mensajes
+                    {
+                        paad = paad.id_paad,
+                        tipo = 2,
+                        mensaje=message_modif
+                    });
                 }
                 else if (action_paad == 4)
                 {
                     paad.estado = 3;
+                    mssg = db.Mensajes.Where(p => p.paad == id_paad && p.tipo == 2).FirstOrDefault();
                 }
+                if (mssg!=null)
+                    db.Mensajes.Remove(mssg);
                 db.SaveChanges();
             }
             return Json(new
@@ -390,18 +400,23 @@ namespace ISProject.Controllers
             }
             return periods;
         }
-        public MessagesPAADCLS GetMessages(int id)
+        public MessageCLS GetMessages(int id,int tipo)
         {
-            MessagesPAADCLS msg;
+            MessageCLS msg;
             using(var db=new DB_PAAD_IADEntities())
             {
-                msg = (from paad in db.PAADs
-                       where paad.id_paad == id
-                       select new MessagesPAADCLS
+                msg = (from message in db.Mensajes
+                       where message.paad == id && message.tipo == tipo
+                       join type in db.TiposDeMensaje
+                       on message.tipo equals type.id_tipo_mensaje
+                       select new MessageCLS
                        {
-                           reject_paad = paad.razones_rechazo,
-                           request_modificaction = paad.razones_modificacion,
-                           reject_modificaction = paad.razones_rechazo_solicitud
+                           id_message = message.id_mensaje,
+                           paad = message.paad ?? default(int),
+                           iad = message.iad ?? default(int),
+                           tipo = message.tipo,
+                           tipo_nombre = type.tipo,
+                           mensaje = message.mensaje
                        }).FirstOrDefault();
             }
             return msg;

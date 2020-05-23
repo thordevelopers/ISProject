@@ -83,28 +83,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PAADs">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
-        <MappingFragment StoreEntitySet="PAADs">
-          <ScalarProperty Name="razones_rechazo_solicitud" ColumnName="razones_rechazo_solicitud" />
-          <ScalarProperty Name="razones_modificacion" ColumnName="razones_modificacion" />
-          <ScalarProperty Name="razones_rechazo" ColumnName="razones_rechazo" />
-          <ScalarProperty Name="id_paad" ColumnName="id_paad" />
-          <ScalarProperty Name="estado" ColumnName="estado" />
-          <ScalarProperty Name="periodo" ColumnName="periodo" />
-          <ScalarProperty Name="carrera" ColumnName="carrera" />
-          <ScalarProperty Name="docente" ColumnName="docente" />
-          <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
-          <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
-          <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
-          <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
-          <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
-          <ScalarProperty Name="cargo" ColumnName="cargo" />
-          <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
-          <ScalarProperty Name="firma_director" ColumnName="firma_director" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Periodos">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Periodos">
         <MappingFragment StoreEntitySet="Periodos">
@@ -153,6 +131,44 @@
           <ScalarProperty Name="rol" ColumnName="rol" />
           <ScalarProperty Name="carrera" ColumnName="carrera" />
           <ScalarProperty Name="id_docente" ColumnName="id_docente" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Mensajes">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Mensajes">
+        <MappingFragment StoreEntitySet="Mensajes">
+          <ScalarProperty Name="mensaje" ColumnName="mensaje" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="iad" ColumnName="iad" />
+          <ScalarProperty Name="paad" ColumnName="paad" />
+          <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PAADs">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
+        <MappingFragment StoreEntitySet="PAADs">
+          <ScalarProperty Name="firma_director" ColumnName="firma_director" />
+          <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
+          <ScalarProperty Name="cargo" ColumnName="cargo" />
+          <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
+          <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
+          <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
+          <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
+          <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
+          <ScalarProperty Name="docente" ColumnName="docente" />
+          <ScalarProperty Name="carrera" ColumnName="carrera" />
+          <ScalarProperty Name="periodo" ColumnName="periodo" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="id_paad" ColumnName="id_paad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TiposDeMensaje">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.TiposDeMensaje">
+        <MappingFragment StoreEntitySet="TiposDeMensaje">
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="id_tipo_mensaje" ColumnName="id_tipo_mensaje" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

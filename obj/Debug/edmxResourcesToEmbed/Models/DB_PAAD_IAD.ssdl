@@ -87,6 +87,16 @@
     <Property Name="firma_director" Type="nvarchar(max)" />
     <Property Name="comentarios" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="Mensajes">
+    <Key>
+      <PropertyRef Name="id_mensaje" />
+    </Key>
+    <Property Name="id_mensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="paad" Type="int" />
+    <Property Name="iad" Type="int" />
+    <Property Name="tipo" Type="int" Nullable="false" />
+    <Property Name="mensaje" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
   <EntityType Name="PAADs">
     <Key>
       <PropertyRef Name="id_paad" />
@@ -104,9 +114,6 @@
     <Property Name="cargo" Type="int" Nullable="false" />
     <Property Name="firma_docente" Type="nvarchar(max)" />
     <Property Name="firma_director" Type="nvarchar(max)" />
-    <Property Name="razones_rechazo" Type="nvarchar(max)" />
-    <Property Name="razones_modificacion" Type="nvarchar(max)" />
-    <Property Name="razones_rechazo_solicitud" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="Periodos">
     <Key>
@@ -132,6 +139,13 @@
     <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="version" Type="int" />
     <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TiposDeMensaje">
+    <Key>
+      <PropertyRef Name="id_tipo_mensaje" />
+    </Key>
+    <Property Name="id_tipo_mensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tipo" Type="nvarchar" MaxLength="150" Nullable="false" />
   </EntityType>
   <EntityType Name="USERS">
     <Key>
@@ -274,6 +288,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Mensajes_IADs">
+    <End Role="IADs" Type="Self.IADs" Multiplicity="0..1" />
+    <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IADs">
+        <PropertyRef Name="id_iad" />
+      </Principal>
+      <Dependent Role="Mensajes">
+        <PropertyRef Name="iad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Mensajes_PAADs">
+    <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
+    <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PAADs">
+        <PropertyRef Name="id_paad" />
+      </Principal>
+      <Dependent Role="Mensajes">
+        <PropertyRef Name="paad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Mensajes_TiposDeMensaje">
+    <End Role="TiposDeMensaje" Type="Self.TiposDeMensaje" Multiplicity="1" />
+    <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TiposDeMensaje">
+        <PropertyRef Name="id_tipo_mensaje" />
+      </Principal>
+      <Dependent Role="Mensajes">
+        <PropertyRef Name="tipo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PAADs_Cargos">
     <End Role="Cargos" Type="Self.Cargos" Multiplicity="1" />
     <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
@@ -355,10 +405,12 @@
     <EntitySet Name="Estados" EntityType="Self.Estados" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Fechas" EntityType="Self.Fechas" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IADs" EntityType="Self.IADs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Mensajes" EntityType="Self.Mensajes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PAADs" EntityType="Self.PAADs" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Periodos" EntityType="Self.Periodos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TiposDeMensaje" EntityType="Self.TiposDeMensaje" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Actividades_IADs" Association="Self.FK_Actividades_IADs">
       <End Role="IADs" EntitySet="IADs" />
@@ -403,6 +455,18 @@
     <AssociationSet Name="FK_IADs_Periodos" Association="Self.FK_IADs_Periodos">
       <End Role="Periodos" EntitySet="Periodos" />
       <End Role="IADs" EntitySet="IADs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Mensajes_IADs" Association="Self.FK_Mensajes_IADs">
+      <End Role="IADs" EntitySet="IADs" />
+      <End Role="Mensajes" EntitySet="Mensajes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Mensajes_PAADs" Association="Self.FK_Mensajes_PAADs">
+      <End Role="PAADs" EntitySet="PAADs" />
+      <End Role="Mensajes" EntitySet="Mensajes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Mensajes_TiposDeMensaje" Association="Self.FK_Mensajes_TiposDeMensaje">
+      <End Role="TiposDeMensaje" EntitySet="TiposDeMensaje" />
+      <End Role="Mensajes" EntitySet="Mensajes" />
     </AssociationSet>
     <AssociationSet Name="FK_PAADs_Cargos" Association="Self.FK_PAADs_Cargos">
       <End Role="Cargos" EntitySet="Cargos" />

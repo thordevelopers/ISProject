@@ -54,6 +54,8 @@ namespace ISProject.Controllers
             }
             using (var db = new DB_PAAD_IADEntities())
             {
+                Mensajes mssg = null;
+                
                 PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad).FirstOrDefault();
                 bool isdirector = (from docente in db.Docentes where docente.id_docente == paad.docente select docente.isdirector).FirstOrDefault();
                 if (paad == null || isdirector)
@@ -70,7 +72,12 @@ namespace ISProject.Controllers
                 {
                     paad.estado = 1;
                     paad.firma_docente = null;
-                    paad.razones_rechazo = reject_message;
+                    db.Mensajes.Add(new Mensajes
+                    {
+                        paad = paad.id_paad,
+                        tipo = 1,
+                        mensaje = reject_message
+                    });
                 }
                 else if (action_paad == 2)
                 {
@@ -80,18 +87,23 @@ namespace ISProject.Controllers
                 else if (action_paad == 3)
                 {
                     paad.estado = 3;
-                    paad.razones_rechazo_solicitud = reject_message;
-                    paad.razones_modificacion = null;
+                    db.Mensajes.Add(new Mensajes
+                    {
+                        paad = paad.id_paad,
+                        tipo = 3,
+                        mensaje = reject_message
+                    });
+                    mssg = db.Mensajes.Single(p => p.paad == id_paad && p.tipo == 2);
                 }
                 else if (action_paad == 4)
                 {
                     paad.estado = 1;
                     paad.firma_docente = null;
                     paad.firma_director = null;
-                    paad.razones_rechazo_solicitud = null;
-                    paad.razones_modificacion = null;
-                    paad.razones_rechazo = null;
+                    mssg = db.Mensajes.Where(p => p.paad == id_paad && p.tipo == 2).FirstOrDefault();
                 }
+                if (mssg != null)
+                    db.Mensajes.Remove(mssg);
                 db.SaveChanges();
             }
             return Json(new
@@ -388,18 +400,23 @@ namespace ISProject.Controllers
             }
             return accounts;
         }
-        public MessagesPAADCLS GetMessages(int id)
+        public MessageCLS GetMessages(int id)
         {
-            MessagesPAADCLS msg;
+            MessageCLS msg;
             using (var db = new DB_PAAD_IADEntities())
             {
-                msg = (from paad in db.PAADs
-                       where paad.id_paad == id
-                       select new MessagesPAADCLS
+                msg = (from message in db.Mensajes
+                       where message.paad == id && message.tipo == 2
+                       join type in db.TiposDeMensaje
+                       on message.tipo equals type.id_tipo_mensaje
+                       select new MessageCLS
                        {
-                           reject_paad = paad.razones_rechazo,
-                           request_modificaction = paad.razones_modificacion,
-                           reject_modificaction = paad.razones_rechazo_solicitud
+                           id_message = message.id_mensaje,
+                           paad = message.paad ?? default(int),
+                           iad = message.iad ?? default(int),
+                           tipo = message.tipo,
+                           tipo_nombre = type.tipo,
+                           mensaje = message.mensaje
                        }).FirstOrDefault();
             }
             return msg;
