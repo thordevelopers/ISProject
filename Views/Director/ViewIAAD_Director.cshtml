@@ -1,6 +1,6 @@
 ﻿@using ISProject.Models
 @{
-    ViewBag.Title = "ViewPAAD_Director";
+    ViewBag.Title = "ViewIAAD_Director";
     Layout = "~/Views/Director/_LayoutDirector.cshtml";
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
@@ -74,7 +74,7 @@
                 <div id="mdlAuthCredentialsContent">
                     @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
                 </div>
-                @Html.Hidden("id_paad", info.id_paad)
+                @Html.Hidden("id_iad", info.id_iad)
                 @Html.Hidden("action_paad")
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
@@ -110,11 +110,11 @@
     function authCredentials(action) {
         $("#action_paad").val(action);
         if (action == 1) {
-            $("#mdlAuthTitle").text("Rechazar Formato PAAD");
+            $("#mdlAuthTitle").text("Rechazar Formato IAAD");
             $("#divRejectMessage").show();
         }
         else if (action == 2) {
-            $("#mdlAuthTitle").text("Aprobar Formato PAAD");
+            $("#mdlAuthTitle").text("Aprobar Formato IAAD");
             $("#divRejectMessage").hide();
         }
         else if (action == 3) {
@@ -135,7 +135,7 @@
             $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
         }
         else {
-            window.location ="@Url.Action("ViewPAAD","Director",new { id = info.id_paad })";
+            window.location ="@Url.Action("ViewIAAD","Director",new { id = info.id_iad })";
         }
     }
     function showMessage(message) {

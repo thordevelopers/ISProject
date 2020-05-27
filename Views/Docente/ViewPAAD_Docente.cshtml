@@ -5,13 +5,13 @@
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
-    MessageCLS msg = (MessageCLS)ViewBag.msg;
+    MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
-@if (msg != null)
+@if (msg.reject_modificaction != null)
 {
     <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center">
         <label style="font-size: 15px; font-family: Helvetica; text-align:center;font-weight:bold">Solicitud de Modificación del Formato PAAD Rechazada</label>
-        <a href="#" onclick="showMessage()" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
+        <a href="#" onclick="showMessage('@msg.reject_modificaction')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
     </div>
 }
 <br>
@@ -98,7 +98,7 @@
             <div>
                 <div id="divRejectMessage" style="width :95%">
                     <div style="text-align:center">
-                        @Html.TextArea("reject_message", msg == null ? "" : msg.mensaje, new { placeholder = "Razones del rechazo", rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                        @Html.TextArea("reject_message", new { placeholder = "Razones del rechazo", rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -124,7 +124,8 @@
             window.location ="@Url.Action("ModifyPAAD","Docente")";
         }
     }
-    function showMessage() {
+    function showMessage(message) {
+        $("#reject_message").text(message);
         $("#mdlShowMessage").modal("show");
     }
     function goBack() {

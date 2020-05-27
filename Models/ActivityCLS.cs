@@ -34,5 +34,6 @@ namespace ISProject.Models
         public bool iso { get; set; }
         public int id_paad { get; set; }
         public int id_iad { get; set; }
+       
     }
 }

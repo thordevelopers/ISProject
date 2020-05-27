@@ -1,18 +1,18 @@
 ﻿@using ISProject.Models
 @{
-    ViewBag.Title = "ViewPAAD_Subdirector";
+    ViewBag.Title = "ViewIAAD_Subdirector";
     Layout = "~/Views/Subdirector/_LayoutSubdirector.cshtml";
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
-    MessageCLS msg = (MessageCLS)ViewBag.msg;
+    MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
 }
 
-@if (msg != null)
+@if (msg.request_modificaction != null)
 {
     <div style="background: #DDAD23; padding: 8px 60px; ">
         <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>
-        <a href="#" onclick="showMessage()" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
+        <a href="#" onclick="showMessage('@msg.request_modificaction')" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
     </div>
 }
 <br />
@@ -96,7 +96,7 @@
             <div>
                 <div id="divRejectMessage" style="width :95%">
                     <div style="text-align:center">
-                        @Html.TextArea("Testeo", msg == null ? "" : msg.mensaje, new { rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                        @Html.TextArea("Testeo", new { rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -110,11 +110,11 @@
     function authCredentials(action) {
         $("#action_paad").val(action);
         if (action == 1) {
-            $("#mdlAuthTitle").text("Rechazar Formato PAAD");
+            $("#mdlAuthTitle").text("Rechazar Formato IAAD");
             $("#divRejectMessage").show();
         }
         else if (action == 2) {
-            $("#mdlAuthTitle").text("Aprobar Formato PAAD");
+            $("#mdlAuthTitle").text("Aprobar Formato IAAD");
             $("#divRejectMessage").hide();
         }
         else if (action == 3) {
@@ -135,10 +135,11 @@
             $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
         }
         else {
-            window.location ="@Url.Action("ViewPAAD","Director",new { id = info.id_paad })";
+            window.location ="@Url.Action("ViewIAAD","Director",new { id = info.id_iad })";
         }
     }
-    function showMessage() {
+    function showMessage(message) {
+        $("#Testeo").text(message);
         $("#mdlShowMessage").modal("show");
     }
     function goBack() {

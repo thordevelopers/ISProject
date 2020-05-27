@@ -18,8 +18,8 @@ namespace ISProject.Models
         public Carreras()
         {
             this.IADs = new HashSet<IADs>();
-            this.Docentes = new HashSet<Docentes>();
             this.PAADs = new HashSet<PAADs>();
+            this.Docentes = new HashSet<Docentes>();
         }
     
         public int id_carrera { get; set; }
@@ -29,8 +29,8 @@ namespace ISProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IADs> IADs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Docentes> Docentes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PAADs> PAADs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Docentes> Docentes { get; set; }
     }
 }

@@ -1,0 +1,39 @@
+﻿@using ISProject.Models
+@model List<RegistroIAD>
+@{
+    ViewBag.Title = "ListRecordIAADs_Subdirector";
+    Layout = "~/Views/Subdirector/_LayoutSubdirector.cshtml";
+    List<RegistroIAD> list = (List<RegistroIAD>)ViewBag.list;
+    List<SelectListItem> period = (List<SelectListItem>)ViewBag.period;
+    List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
+}
+
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Listar Historial de Formatos: IAAD</h1>
+</div>
+<br />
+<div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
+
+    @using (Ajax.BeginForm("FilterRecordIADs", null, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "ListIAADsTable",
+        InsertionMode = InsertionMode.Replace
+    }, new { id = "frmFilterRecord" }))
+    {
+        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Periodo: </p>
+        @Html.DropDownList("filter_period", period)
+    }
+</div>
+<div id="ListPAADsTable">
+    @Html.Partial("_ListIAADs", list)
+</div>
+
+<script>
+    document.getElementById("filter_period").onchange = function () {
+        $("#frmFilterRecord").submit();
+    }
+</script>
+
+
+

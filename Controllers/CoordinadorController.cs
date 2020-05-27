@@ -9,48 +9,37 @@ using System.Web.Mvc;
 
 namespace ISProject.Controllers
 {
-    //Esta etiqueta liga todas las acciones de la clase al filtro "FilterSubdirector", lo que significa que antes de la ejecucion del cualquier accion en la clase primero se va ejectuar las
-    //acciones del filtro.
     [FilterCoordinador]
     public class CoordinadorController : Controller
     {
-        //Acciones de la vista ------------------------------------------------ HomeCoordinador ------------------------------------------------
-        //Vista de inicio para el coordinador
+        // GET: Coordinador
         public ActionResult Home()
         {
             return View("HomeCoordinador");
         }
-        //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
-        /* Esta accion corresponde a la vista ViewPAAD
-         * Recibe el id del paad 
-         * Devuelve la vista*/
         public ActionResult ViewPAAD(int id)
         {
             InfoPAADCLS info = GetInfoPAAD(id);
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
+            ViewBag.msg = GetMessages(info.id_paad);
             return View("ViewPAAD_Coordinador");
         }
-        //Acciones de la vista ------------------------------------------------ ListActivePAADs ------------------------------------------------
-        /* Esta accion muestra la vista de ListActivePAADs*/
+        // ListActivePAADs Actions
         public ActionResult ListActivePAADs()
         {
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
+            ViewBag.careers = GetCareers();
             return View("ListActivePAADs_Coordinador");
         }
-        /* Esta accion se dispara cuando el valor seleccionado del dropdownlist cambia
-         * Filtra la lista segun el valor seleccionado del dropdownlist
-         * Recibe el id del estado
-         * Regresa una vista parcial de la tabla con los paads filtrados */
         public ActionResult FilterActivePAADs(string filter_state)
         {
             List<RegistroPAAD> list = GetActivePAADs(Convert.ToInt32(filter_state));
             return PartialView("_ListPAADs", list);
         }
-        //Acciones de la vista ------------------------------------------------ ListRecordPAADs ------------------------------------------------
-        /* Esta accion muestra la vista de ListRecordPAADs*/
+        //ListRecordPAADs Actions
         public ActionResult ListRecordPAADs()
         {
             ViewBag.list = GetRecordPAADs();
@@ -58,20 +47,13 @@ namespace ISProject.Controllers
             ViewBag.careers = GetCareers();
             return View("ListRecordPAADs_Coordinador");
         }
-        /* Esta accion se dispara cuando se el valor seleccionado de cualquier dropdownlist cambie
-         * Filtra la lista segun el valor seleccionado del dropdownlist
-         * Recibe el id del periodo, el id de la carrera 
-         * Regresa una vista parcial de la tabla con los paads filtrados */
         public ActionResult FilterRecordPAADs(string filter_period)
         {
             List<RegistroPAAD> list = GetRecordPAADs(Convert.ToInt32(filter_period));
             return PartialView("_ListPAADs", list);
         }
-        //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
-        /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
-         * Recibe el id del paad 
-         * Regresa el modelo lleno*/
-        public InfoPAADCLS GetInfoPAAD(int id )
+        // Utilities actions 
+        public InfoPAADCLS GetInfoPAAD(int id)
         {
             InfoPAADCLS info = new InfoPAADCLS();
             Docentes doc = (Docentes)Session["user"];
@@ -93,9 +75,6 @@ namespace ISProject.Controllers
             }
             return info;
         }
-        /* Obtiene la informacion del encabezado del PAAD de la base de datos
-         * Recibe el id del paad
-         * Regresa el modelo lleno */
         public HeaderPAADCLS GetHeader(int id)
         {
             HeaderPAADCLS header = null;
@@ -132,9 +111,6 @@ namespace ISProject.Controllers
             }
             return header;
         }
-        /* Esta accion recupera las actividades de un paad de la base de datos 
-         * Recibe el id del paad 
-         * Regresa una lista con los modelos de la actividades*/
         public List<ActivityCLS> GetActivities(int id)
         {
             List<ActivityCLS> activities = null;
@@ -158,9 +134,6 @@ namespace ISProject.Controllers
             }
             return activities;
         }
-        /* Esta accion recupera todos los paads activos de la base de datos segun carrera del coordinador
-         * Recibe de forma opcional el id del estado si vienen vacios se omiten en el filtrado
-         * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetActivePAADs(int state = 0)
         {
             Docentes doc = (Docentes)Session["user"];
@@ -193,9 +166,6 @@ namespace ISProject.Controllers
             }
             return list;
         }
-        /* Esta accion recupera todos los paads aprobados de la base de datos segun la carrera del coordinador
-         * Recibe de forma opcional el id del periodo y el id de la carrera, si vienen vacios se omiten en el filtrado
-         * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetRecordPAADs(int period = 0)
         {
             Docentes doc = (Docentes)Session["user"];
@@ -226,9 +196,6 @@ namespace ISProject.Controllers
             }
             return list;
         }
-        /* Esta accion recupera los estados 
-         * No recibe argumentos
-         * Regresa una lista con los modelos de los estados*/
         public List<SelectListItem> GetStates()
         {
             List<SelectListItem> periods = null;
@@ -244,9 +211,6 @@ namespace ISProject.Controllers
             }
             return periods;
         }
-        /* Esta accion recupera las carreras 
-         * No recibe argumentos
-         * Regresa una lista con los modelos de las carreras*/
         public List<SelectListItem> GetCareers()
         {
             List<SelectListItem> periods = null;
@@ -262,9 +226,6 @@ namespace ISProject.Controllers
             }
             return periods;
         }
-        /* Esta accion recupera los periodos 
-         * No recibe argumentos
-         * Regresa una lista con los modelos de los periodos*/
         public List<SelectListItem> GetPeriods()
         {
             List<SelectListItem> periods = null;
@@ -280,10 +241,22 @@ namespace ISProject.Controllers
             }
             return periods;
         }
-        /* Esta accion transforma una vista en string
-         * Recibe el nombre de la vista y el modelo con el cual llenar la vista
-         * Regresa un string con la vista 
-         * Esta funcion fue obtenida de stackoverflow: https://stackoverflow.com/questions/17554734/mvc-render-partialviewresult-to-string */
+        public MessagesPAADCLS GetMessages(int id)
+        {
+            MessagesPAADCLS msg;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                msg = (from paad in db.PAADs
+                       where paad.id_paad == id
+                       select new MessagesPAADCLS
+                       {
+                           reject_paad = paad.razones_rechazo,
+                           request_modificaction = paad.razones_modificacion,
+                           reject_modificaction = paad.razones_rechazo_solicitud
+                       }).FirstOrDefault();
+            }
+            return msg;
+        }
         public string RenderRazorViewToString(string viewName, object model)
         {
             ViewData.Model = model;
@@ -298,6 +271,154 @@ namespace ISProject.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
-        
+        ////IAAD
+        ///
+        public ActionResult ViewIAAD(int id)
+        {
+            InfoPAADCLS info = GetInfoIAAD(id);
+            ViewBag.info = info;
+            ViewBag.header = GetHeader(info.id_iad);
+            ViewBag.activities = GetActivitiesIAD(info.id_iad);
+            ViewBag.msg = GetMessages(info.id_iad);
+            return View("ViewIAAD_Coordinador");
+        }
+        // ListActiveIAADs Actions
+        public ActionResult ListActiveIAADs()
+        {
+            ViewBag.list = GetActiveIAADs();
+            ViewBag.states = GetStates();
+            ViewBag.careers = GetCareers();
+            return View("ListActiveIAADs_Coordinador");
+        }
+
+        public List<RegistroIAD> GetActiveIAADs(int state = 0)
+        {
+            Docentes doc = (Docentes)Session["user"];
+            List<RegistroIAD> list = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                list = (from docente in db.Docentes
+                        join paad in db.IADs
+                        on docente.id_docente equals paad.docente into gpaad
+                        from paad in gpaad.DefaultIfEmpty()
+                        join estado in db.Estados
+                        on paad.estado equals estado.id_estado into gestado
+                        from estado in gestado.DefaultIfEmpty()
+                        where state > 0 && !(estado == null && state == 1) ? estado.id_estado == state && estado.id_estado != 3 : estado.id_estado != 3
+                        join carrera in db.Carreras
+                        on docente.carrera equals carrera.id_carrera
+                        where carrera.id_carrera == doc.carrera
+                        from periodo in db.Periodos
+                        where periodo.activo == true
+                        select new RegistroIAD
+                        {
+                            id_iad = paad != null ? paad.id_iad : 0,
+                           // estado = int.Parse(estado != null ? estado.estado : (from e in db.Estados where e.id_estado == 1 select e.estado).FirstOrDefault()),
+                            //estado = estado != null ? estado.id_estado : 1,
+                            periodo = periodo.periodo,
+                            carrera = carrera.carrera,
+                            // numero_empleado = docente.numero_empleado,
+                            nombre_docente = docente.nombre,
+                        }).ToList();
+            }
+            return list;
+        }
+
+        public List<RegistroIAD> GetRecordIAADs(int period = 0)
+        {
+            Docentes doc = (Docentes)Session["user"];
+            List<RegistroIAD> list = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                list = (from paad in db.IADs
+                        join estado in db.Estados
+                        on paad.estado equals estado.id_estado
+                        where estado.id_estado == 3
+                        join periodo in db.Periodos
+                        on paad.periodo equals periodo.id_periodo
+                        where period > 0 ? periodo.id_periodo == period : true
+                        join carrera in db.Carreras
+                        on paad.carrera equals carrera.id_carrera
+                        where carrera.id_carrera == doc.carrera
+                        join docente in db.Docentes
+                        on paad.docente equals docente.id_docente
+                        select new RegistroIAD
+                        {
+                            id_iad = paad.id_iad,
+                            estado = estado.estado,
+                            periodo = periodo.periodo,
+                            carrera = carrera.carrera,
+
+                            nombre_docente = docente.nombre
+                        }).ToList();
+            }
+            return list;
+        }
+
+
+        public ActionResult FilterRecordIAADs(string filter_period)
+        {
+            List<RegistroIAD> list = GetRecordIAADs(Convert.ToInt32(filter_period));
+            return PartialView("_ListIAADs", list);
+        }
+        public InfoPAADCLS GetInfoIAAD(int id)
+        {
+            InfoPAADCLS info = new InfoPAADCLS();
+            Docentes doc = (Docentes)Session["user"];
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                info = (from paad in db.IADs
+                        where paad.id_iad == id
+                        join estado in db.Estados
+                        on paad.estado equals estado.id_estado
+                        join periodo in db.Periodos
+                        on paad.periodo equals periodo.id_periodo
+                        select new InfoPAADCLS
+                        {
+                            id_paad = paad.id_iad,
+                            status_value = paad.estado,
+                            status_name = estado.estado,
+                            active = periodo.activo
+                        }).FirstOrDefault();
+            }
+            return info;
+        }
+
+
+        public List<ActivityCLS> GetActivitiesIAD(int id)
+        {
+            List<ActivityCLS> activities = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                activities = (from activity in db.Actividades
+                              where activity.id_iad == id
+                              select new ActivityCLS
+                              {
+                                  id = activity.id_actividad,
+                                  actividad = activity.actividad,
+                                  produccion = activity.produccion,
+                                  lugar = activity.lugar,
+                                  porcentaje_inicial = activity.porcentaje_inicial,
+                                  porcentaje_final = activity.porcentaje_final,
+                                  cacei = activity.cacei,
+                                  cuerpo_academico = activity.cuerpo_academico,
+                                  iso = activity.iso,
+                                  id_iad = activity.id_paad
+                              }).ToList();
+            }
+            return activities;
+        }
+        //ListRecordIAADs Actions
+        public ActionResult ListRecordIAADs()
+        {
+            ViewBag.list = GetRecordIAADs();
+            ViewBag.period = GetPeriods();
+            ViewBag.careers = GetCareers();
+            return View("ListRecordIAADs_Coordinador");
+        }
+
+
+
     }
+    
 }

@@ -12,8 +12,7 @@ namespace ISProject.Controllers
 {
     public class UtilitiesController : Controller
     {
-        //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
-        //Esta accion no funciona por que no se cuenta con un certificado ssl valido
+        // GET: Utilities
         public ActionResult SendEmail()
         {
             MailMessage mailMessage = new MailMessage("test.account.machine@gmail.com", "test.account.machine@gmail.com");
@@ -24,29 +23,22 @@ namespace ISProject.Controllers
             smtpClient.Credentials = new System.Net.NetworkCredential()
             {
                 UserName = "test.account.machine@gmail.com",
-                Password = "KuZ5!2QKvbdUjnzz7pkmfY"
+                Password = "KuZ5!2QKvbUjnz7pkmfY"
             };
             smtpClient.EnableSsl = true;
             smtpClient.Send(mailMessage);
             return RedirectToAction("Home","Director");
         }
-        /* Esta accion es llamada cuando se presiona la opcion de ver paad en cualquier listado paad
-         * Esta accion genera un document pdf del paad
-         * Recibe el id del paad
-         * Regresa una vista como pdf*/
         public ActionResult ViewPDF(int id)
         {
             ViewPDFCLS paad = GetViewPDFInfo(id);
-            //El view as paad regresa la vista espeficada llenada con el modelo dado como un documento pdf segun los argumentos mandado entre las llaves
             return new ViewAsPdf("ViewPDF",paad)
             {
                 PageOrientation = Rotativa.Options.Orientation.Landscape,
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
             };
         }
-        /* Esta funcion devuelve el modelo para la vista de ViewPDF
-         * Recibe el id del paad
-         * Regresa el modelo llenado*/
+
         public ViewPDFCLS GetViewPDFInfo(int id)
         {
             ViewPDFCLS info;

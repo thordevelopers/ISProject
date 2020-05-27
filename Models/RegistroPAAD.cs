@@ -10,6 +10,7 @@ namespace ISProject.Models
         public int id_paad { get; set; }
         public string estado { get; set; }
         public int estado_valor { get; set; }
+        public int id_iad { get; set; }
         public string periodo { get; set; }
         public string carrera { get; set; }
         public int numero_empleado { get; set; }

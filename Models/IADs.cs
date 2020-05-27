@@ -18,7 +18,6 @@ namespace ISProject.Models
         public IADs()
         {
             this.Actividades = new HashSet<Actividades>();
-            this.Mensajes = new HashSet<Mensajes>();
         }
     
         public int id_iad { get; set; }
@@ -44,7 +43,5 @@ namespace ISProject.Models
         public virtual Estados Estados { get; set; }
         public virtual Periodos Periodos { get; set; }
         public virtual Docentes Docentes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Mensajes> Mensajes { get; set; }
     }
 }

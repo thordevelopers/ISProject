@@ -1,7 +1,4 @@
-﻿<!--
-    Esta es la pagina maestra o layout de usuario coordinador, aqui se encuentra el menu asi como sus redirecciones
-    Usa de pagina maestra o layout _Layout que contiene todas las importaciones
--->
+﻿
 @{
     ViewBag.Title = "_LayoutSubdirector";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -29,14 +26,14 @@
                         <button class="dropbtn">Formatos Activos</button>
                         <div class="dropdown-content">
                             <a href="@Url.Action("ListActivePAADs", "Subdirector", Request.Url.Scheme)">PAAD</a>
-                            <a href="#">IAD</a>
+                            <a href="@Url.Action("ListActiveIAADs", "Subdirector", Request.Url.Scheme)">IAD</a>
                         </div>
                     </div>
                     <div class="dropdown">
                         <button class="dropbtn">Historial de Formatos</button>
                         <div class="dropdown-content">
                             <a href="@Url.Action("ListRecordPAADs", "Subdirector", Request.Url.Scheme)">PAAD</a>
-                            <a href="#">IAD</a>
+                            <a href="@Url.Action("ListRecordIAADs", "Subdirector", Request.Url.Scheme)">IAD</a>
                         </div>
                     </div>
                     <div class="dropdown">

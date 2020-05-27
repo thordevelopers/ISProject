@@ -1,23 +1,23 @@
 ﻿@using ISProject.Models
-@model List<RegistroPAAD>
+@model List<RegistroIAD>
 @{
-    ViewBag.Title = "ListActivePAADs_Coordinador";
-    Layout = "~/Views/Coordinador/_LayoutCoordinador.cshtml";
-    List<RegistroPAAD> list = (List<RegistroPAAD>)ViewBag.list;
+    ViewBag.Title = "ListActiveIAADs_Director";
+    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    List<RegistroIAD> list = (List<RegistroIAD>)ViewBag.list;
     List<SelectListItem> states = (List<SelectListItem>)ViewBag.states;
     List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
 }
 
 <div style="text-align:center">
-    <h1 style="font-weight:bold;font-size:26px">Listar Formatos Activos: PAAD</h1>
+    <h1 style="font-weight:bold;font-size:26px">Listar Formatos Activos: IAAD</h1>
 </div>
 <br />
 <div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
 
-    @using (Ajax.BeginForm("FilterActivePAADs", null, new AjaxOptions
+    @using (Ajax.BeginForm("FilterActiveIAADs", null, new AjaxOptions
     {
         HttpMethod = "POST",
-        UpdateTargetId = "ListPAADsTable",
+        UpdateTargetId = "ListIAADsTable",
         InsertionMode = InsertionMode.Replace
     }, new { id = "frmFilterActive" }))
     {
@@ -26,7 +26,7 @@
     }
 </div>
 <div id="ListPAADsTable">
-    @Html.Partial("_ListPAADs", list)
+    @Html.Partial("_ListIAADs", list)
 </div>
 
 <script>
