@@ -9,37 +9,48 @@ using System.Web.Mvc;
 
 namespace ISProject.Controllers
 {
+    //Esta etiqueta liga todas las acciones de la clase al filtro "FilterSubdirector", lo que significa que antes de la ejecucion del cualquier accion en la clase primero se va ejectuar las
+    //acciones del filtro.
     [FilterCoordinador]
     public class CoordinadorController : Controller
     {
-        // GET: Coordinador
+        //Acciones de la vista ------------------------------------------------ HomeCoordinador ------------------------------------------------
+        //Vista de inicio para el coordinador
         public ActionResult Home()
         {
             return View("HomeCoordinador");
         }
+        //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
+        /* Esta accion corresponde a la vista ViewPAAD
+         * Recibe el id del paad 
+         * Devuelve la vista*/
         public ActionResult ViewPAAD(int id)
         {
             InfoPAADCLS info = GetInfoPAAD(id);
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
-            ViewBag.msg = GetMessages(info.id_paad);
             return View("ViewPAAD_Coordinador");
         }
-        // ListActivePAADs Actions
+        //Acciones de la vista ------------------------------------------------ ListActivePAADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListActivePAADs*/
         public ActionResult ListActivePAADs()
         {
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
-            ViewBag.careers = GetCareers();
             return View("ListActivePAADs_Coordinador");
         }
+        /* Esta accion se dispara cuando el valor seleccionado del dropdownlist cambia
+         * Filtra la lista segun el valor seleccionado del dropdownlist
+         * Recibe el id del estado
+         * Regresa una vista parcial de la tabla con los paads filtrados */
         public ActionResult FilterActivePAADs(string filter_state)
         {
             List<RegistroPAAD> list = GetActivePAADs(Convert.ToInt32(filter_state));
             return PartialView("_ListPAADs", list);
         }
-        //ListRecordPAADs Actions
+        //Acciones de la vista ------------------------------------------------ ListRecordPAADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListRecordPAADs*/
         public ActionResult ListRecordPAADs()
         {
             ViewBag.list = GetRecordPAADs();
@@ -47,12 +58,19 @@ namespace ISProject.Controllers
             ViewBag.careers = GetCareers();
             return View("ListRecordPAADs_Coordinador");
         }
+        /* Esta accion se dispara cuando se el valor seleccionado de cualquier dropdownlist cambie
+         * Filtra la lista segun el valor seleccionado del dropdownlist
+         * Recibe el id del periodo, el id de la carrera 
+         * Regresa una vista parcial de la tabla con los paads filtrados */
         public ActionResult FilterRecordPAADs(string filter_period)
         {
             List<RegistroPAAD> list = GetRecordPAADs(Convert.ToInt32(filter_period));
             return PartialView("_ListPAADs", list);
         }
-        // Utilities actions 
+        //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
+        /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
+         * Recibe el id del paad 
+         * Regresa el modelo lleno*/
         public InfoPAADCLS GetInfoPAAD(int id )
         {
             InfoPAADCLS info = new InfoPAADCLS();
@@ -75,6 +93,9 @@ namespace ISProject.Controllers
             }
             return info;
         }
+        /* Obtiene la informacion del encabezado del PAAD de la base de datos
+         * Recibe el id del paad
+         * Regresa el modelo lleno */
         public HeaderPAADCLS GetHeader(int id)
         {
             HeaderPAADCLS header = null;
@@ -111,6 +132,9 @@ namespace ISProject.Controllers
             }
             return header;
         }
+        /* Esta accion recupera las actividades de un paad de la base de datos 
+         * Recibe el id del paad 
+         * Regresa una lista con los modelos de la actividades*/
         public List<ActivityCLS> GetActivities(int id)
         {
             List<ActivityCLS> activities = null;
@@ -134,6 +158,9 @@ namespace ISProject.Controllers
             }
             return activities;
         }
+        /* Esta accion recupera todos los paads activos de la base de datos segun carrera del coordinador
+         * Recibe de forma opcional el id del estado si vienen vacios se omiten en el filtrado
+         * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetActivePAADs(int state = 0)
         {
             Docentes doc = (Docentes)Session["user"];
@@ -166,6 +193,9 @@ namespace ISProject.Controllers
             }
             return list;
         }
+        /* Esta accion recupera todos los paads aprobados de la base de datos segun la carrera del coordinador
+         * Recibe de forma opcional el id del periodo y el id de la carrera, si vienen vacios se omiten en el filtrado
+         * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetRecordPAADs(int period = 0)
         {
             Docentes doc = (Docentes)Session["user"];
@@ -196,6 +226,9 @@ namespace ISProject.Controllers
             }
             return list;
         }
+        /* Esta accion recupera los estados 
+         * No recibe argumentos
+         * Regresa una lista con los modelos de los estados*/
         public List<SelectListItem> GetStates()
         {
             List<SelectListItem> periods = null;
@@ -211,6 +244,9 @@ namespace ISProject.Controllers
             }
             return periods;
         }
+        /* Esta accion recupera las carreras 
+         * No recibe argumentos
+         * Regresa una lista con los modelos de las carreras*/
         public List<SelectListItem> GetCareers()
         {
             List<SelectListItem> periods = null;
@@ -226,6 +262,9 @@ namespace ISProject.Controllers
             }
             return periods;
         }
+        /* Esta accion recupera los periodos 
+         * No recibe argumentos
+         * Regresa una lista con los modelos de los periodos*/
         public List<SelectListItem> GetPeriods()
         {
             List<SelectListItem> periods = null;
@@ -241,22 +280,10 @@ namespace ISProject.Controllers
             }
             return periods;
         }
-        public MessagesPAADCLS GetMessages(int id)
-        {
-            MessagesPAADCLS msg;
-            using (var db = new DB_PAAD_IADEntities())
-            {
-                msg = (from paad in db.PAADs
-                       where paad.id_paad == id
-                       select new MessagesPAADCLS
-                       {
-                           reject_paad = paad.razones_rechazo,
-                           request_modificaction = paad.razones_modificacion,
-                           reject_modificaction = paad.razones_rechazo_solicitud
-                       }).FirstOrDefault();
-            }
-            return msg;
-        }
+        /* Esta accion transforma una vista en string
+         * Recibe el nombre de la vista y el modelo con el cual llenar la vista
+         * Regresa un string con la vista 
+         * Esta funcion fue obtenida de stackoverflow: https://stackoverflow.com/questions/17554734/mvc-render-partialviewresult-to-string */
         public string RenderRazorViewToString(string viewName, object model)
         {
             ViewData.Model = model;

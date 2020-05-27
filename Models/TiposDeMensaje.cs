@@ -12,25 +12,18 @@ namespace ISProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Carreras
+    public partial class TiposDeMensaje
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Carreras()
+        public TiposDeMensaje()
         {
-            this.IADs = new HashSet<IADs>();
-            this.Docentes = new HashSet<Docentes>();
-            this.PAADs = new HashSet<PAADs>();
+            this.Mensajes = new HashSet<Mensajes>();
         }
     
-        public int id_carrera { get; set; }
-        public string carrera { get; set; }
-        public bool visible { get; set; }
+        public int id_tipo_mensaje { get; set; }
+        public string tipo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IADs> IADs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Docentes> Docentes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PAADs> PAADs { get; set; }
+        public virtual ICollection<Mensajes> Mensajes { get; set; }
     }
 }

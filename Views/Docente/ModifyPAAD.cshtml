@@ -6,13 +6,13 @@
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
-    MessagesPAADCLS msg = (MessagesPAADCLS)ViewBag.msg;
+    MessageCLS msg = (MessageCLS)ViewBag.msg;
 }
-@if (msg.reject_paad != null)
+@if (msg != null)
 {
     <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
             <label style="font-size: 15px; font-family: Helvetica;font-weight:bold">Formato PAAD Rechazado</label>
-            <a href="#" onclick="showMessage('@msg.reject_paad')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
+            <a href="#" onclick="showMessage('@msg.mensaje')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
     </div>
 }
 <br>
