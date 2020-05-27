@@ -208,6 +208,7 @@
     <Compile Include="Models\Periodos.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegistroIAD.cs" />
     <Compile Include="Models\RegistroPAAD.cs" />
     <Compile Include="Models\Roles.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -319,6 +320,9 @@
     <Content Include="Views\Director\ChangeDirectorAccount.cshtml" />
     <Content Include="Views\Docente\_ModifyHeaderPAAD.cshtml" />
     <Content Include="Views\Login\_LayoutGuess.cshtml" />
+    <Content Include="Views\Docente\ViewIAD_Docente.cshtml" />
+    <Content Include="Views\Docente\ListRecordIADs_Docente.cshtml" />
+    <Content Include="Views\Docente\_ModalActivityIAD.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
