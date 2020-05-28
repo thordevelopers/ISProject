@@ -26,7 +26,7 @@ namespace ISProject.Models
         public Nullable<int> id_paad { get; set; }
         public Nullable<int> id_iad { get; set; }
     
-        public virtual PAADs PAADs { get; set; }
         public virtual IADs IADs { get; set; }
+        public virtual PAADs PAADs { get; set; }
     }
 }

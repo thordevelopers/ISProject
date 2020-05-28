@@ -105,6 +105,145 @@ namespace ISProject.Controllers
             }
             return info;
         }
-
+        /* Esta funcion regresa un modelo con la info del periodo activo
+         * Recibe el nombre de la vista y el modelo con el cual llenar la vista
+         * Regresa un string con la vista */
+        public InfoPeriodCLS GetInfoPeriod()
+        {
+            InfoPeriodCLS info = new InfoPeriodCLS();
+            info.is_close = IsClose();
+            info.is_close_paad = info.is_close ? true : IsClosePAAD();
+            info.on_time_paad = info.is_close_paad ? false : IsOnTimePAAD();
+            info.on_time_iad = info.is_close ? false : IsOnTimeIAD();
+            
+            return info;
+        }
+        /* Esta funcion revisa si la fecha actual es valida dentro del periodo activo para el llenado del paad
+         * No recibe nada
+         * Regresa un boleano con el resultado*/
+        public bool IsOnTimePAAD()
+        {
+            bool isOnTime = false;
+            if (IsClose())
+                return isOnTime;
+            using(var db=new DB_PAAD_IADEntities())
+            {
+                SetDateCLS dates = (from periodo in db.Periodos
+                                    where periodo.activo == true
+                                    select new SetDateCLS
+                                    {
+                                        begining = periodo.paad_inicio ?? default(DateTime),
+                                        ending = periodo.paad_fin ?? default(DateTime)
+                                    }).FirstOrDefault();
+                if (dates != null)
+                {
+                    if (dates.begining.Date != null && dates.ending.Date != null)
+                    {
+                        DateTime today = DateTime.Today;
+                        if (today.Date >= dates.begining.Date && today.Date <= dates.ending.Date)
+                            isOnTime = true;
+                    }
+                }
+                return isOnTime;
+            }
+        }
+        /* Esta funcion revisa si la fecha actual es valida dentro del periodo activo para el llenado del paad
+         * No recibe nada
+         * Regresa un boleano con el resultado*/
+        public bool IsClosePAAD()
+        {
+            bool isClose = true;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                SetDateCLS dates = (from periodo in db.Periodos
+                                    where periodo.activo == true
+                                    select new SetDateCLS
+                                    {
+                                        begining = periodo.paad_inicio ?? default(DateTime),
+                                        ending = periodo.iad_inicio ?? default(DateTime)
+                                    }).FirstOrDefault();
+                if (dates != null)
+                {
+                    if (dates.begining != default(DateTime))
+                    {
+                        if (dates.ending != default(DateTime))
+                        {
+                            if (dates.begining.Date <= DateTime.Today.Date && DateTime.Today.Date < dates.ending.Date)
+                                isClose = false;
+                        }
+                        else if(dates.begining.Date <= DateTime.Today.Date)
+                            isClose = false;
+                    }
+                    
+                }
+            }
+            return isClose;
+        }
+        /* Esta funcion revisa si la fecha actual es valida dentro del periodo activo para el llenado del iad
+         * No recibe nada
+         * Regresa un boleano con el resultado*/
+        public bool IsOnTimeIAD()
+        {
+            bool isOnTime = false;
+            if (IsClose())
+                return isOnTime;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                SetDateCLS dates = (from periodo in db.Periodos
+                                    where periodo.activo == true
+                                    select new SetDateCLS
+                                    {
+                                        begining = periodo.iad_inicio ?? default(DateTime),
+                                        ending = periodo.iad_inicio ?? default(DateTime)
+                                    }).FirstOrDefault();
+                if (dates != null)
+                {
+                    if (dates.begining.Date != null && dates.ending.Date != null)
+                    {
+                        DateTime today = DateTime.Today;
+                        if (today.Date >= dates.begining.Date && today.Date <= dates.ending.Date)
+                            isOnTime = true;
+                    }
+                }
+                return isOnTime;
+            }
+        }
+        /* Esta funcion revisa y desactiva el periodo si la fecha de cierre iad ya paso
+         * No recibe nada
+         * Regresa un boleano, true si el sistema se cerro false si no*/
+        public bool IsClose()
+        {
+            bool isClose = true;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Periodos period = ( from periodo in db.Periodos
+                                    where periodo.activo == true
+                                    select periodo).FirstOrDefault();
+                if (period != null)
+                {
+                    if (period.iad_fin != null && DateTime.Today > period.iad_fin)
+                    {
+                        period.activo = false;
+                        db.SaveChanges();
+                    }
+                    else
+                        isClose = false;
+                }
+            }
+            return isClose;
+        }
+        /* Esta accion se manda llamar cuando se quiere validar las credenciales de una cuenta
+         * Esta cuenta validad que la contrasena corresponda correctamente al correo
+         * Recibe las credenciales
+         * Regresa un booleano con el resultado de la autenticacion*/
+        public bool AuthenticateCredentials(string email, string password)
+        {
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                if (db.USERS.Where(p => p.EMAIL == email && p.PASSWORD == password).Count() <= 0)
+                    return false;
+            }
+            return true;
+        }
     }
 }

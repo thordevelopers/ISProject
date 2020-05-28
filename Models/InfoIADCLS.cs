@@ -13,5 +13,6 @@ namespace ISProject.Models
         public string status_name { set; get; }
         public bool active { set; get; }
         public bool isdirector { set; get; }
+        public bool is_extemporaneous { set; get; }
     }
 }

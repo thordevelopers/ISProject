@@ -20,10 +20,11 @@ namespace ISProject.Controllers
     public class DocenteController : Controller
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
-        AuthenticationController auth = new AuthenticationController();
+        UtilitiesController util = new UtilitiesController();
         //Vista de inicio para el docente
         public ActionResult Home()
         {
+            util.IsClose();
             return View("HomeDocente");
         }
         #region Metodos del PAAD
@@ -33,7 +34,24 @@ namespace ISProject.Controllers
         public ActionResult ModifyPAAD()
         {
             //Se obtiene la info basica del paad
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
+            if (info_period.is_close)
+                return View("NotActivePeriod_Docente"); //No hay periodo activo
             InfoPAADCLS info = GetInfoPAAD();
+            if (info_period.is_close_paad)
+            {
+                if(info==null || info.status_value<3)
+                    return View("NotActivePeriod_Docente"); //No se lleno el formato paad o no se aprobo y ya no se puede hacer nada
+                else
+                    return RedirectToAction("ViewPAAD", new { id = info.id_paad }); //Se lleno el paad correctamente y esta aprobado
+            }
+            if (!info_period.on_time_paad)
+            {
+                if (info==null)
+                    return View("NotActivePeriod_Docente"); //Ya no es periodo de entrega y no creo ningun paad
+                else if (!info.is_extemporaneous)
+                    return RedirectToAction("ViewPAAD", new { id = info.id_paad }); //Se creo un paad pero ya no es periodo de entrega y no es extemporaneo
+            }
             // Se valida si el paad no esta en edicion que lo redirija vista de visualizacion.
             if (info != null && info.status_value != 1)
                 return RedirectToAction("ViewPAAD", new { id = info.id_paad });
@@ -197,11 +215,19 @@ namespace ISProject.Controllers
         /* Esta funcion devuelve la vista de ver paad*/
         public ActionResult ViewPAAD(int id)
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
             InfoPAADCLS info = GetInfoPAAD(id);
-            // Verifica si el paad activo no esta en edicion, si lo esta redirije la vista a vista ModifyPaad
-            if (info == null && info.status_value == 1)
-                return RedirectToAction("ModifyPAAD");
+            if (info == null)
+                return View("NotFoundError_Docente");
+            if (info_period.on_time_paad || (!info_period.is_close_paad && info.is_extemporaneous)) 
+            {
+                if (info.status_value == 1 && info.active)
+                    return RedirectToAction("ModifyPAAD");
+            }
+            // Verifica si el paad activo esta en edicion, si lo esta redirije la vista a vista ModifyPaad
+            
             ViewBag.info = info;
+            ViewBag.info_period=info_period;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
             ViewBag.msg = GetMessages(info.id_paad,3);
@@ -223,7 +249,7 @@ namespace ISProject.Controllers
             //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
             //Valida que la autenticacion sea correcta y que el correo de la autenticacion se el mismo que el de la sesion
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -252,6 +278,7 @@ namespace ISProject.Controllers
                 {
                     //Acciones para el caso de Entregar PAAD
                     paad.estado = 2;
+                    paad.extemporaneo = false;
                     mssg = db.Mensajes.Where(p => p.paad == id_paad && p.tipo == 1).FirstOrDefault();
                     paad.firma_docente = Guid.NewGuid().ToString("N");
                 }
@@ -319,35 +346,54 @@ namespace ISProject.Controllers
             Docentes doc = (Docentes)Session["user"];
             using (var db = new DB_PAAD_IADEntities())
             {
-                if (id>0)
-                    info = (from paad in db.PAADs
-                            where paad.id_paad == id
-                            join estado in db.Estados
-                            on paad.estado equals estado.id_estado
-                            join periodo in db.Periodos
-                            on paad.periodo equals periodo.id_periodo
-                            select new InfoPAADCLS
-                            {
-                                id_paad = paad.id_paad,
-                                status_value = paad.estado,
-                                status_name = estado.estado,
-                                active=periodo.activo
-                            }).FirstOrDefault();
-                else
+                info = (from paad in db.PAADs
+                        where id > 0 ? paad.id_paad == id : paad.docente == doc.id_docente
+                        join estado in db.Estados
+                        on paad.estado equals estado.id_estado
+                        join periodo in db.Periodos
+                        on paad.periodo equals periodo.id_periodo
+                        where id > 0 ? true : periodo.activo == true
+                        select new InfoPAADCLS
+                        {
+                            id_paad = paad.id_paad,
+                            status_value = paad.estado,
+                            status_name = estado.estado,
+                            active = periodo.activo,
+                            is_extemporaneous = paad.extemporaneo
+                        }).FirstOrDefault();
+                if (info == null && id == 0)
+                {
+                    db.PAADs.Add(new PAADs
+                    {
+                        estado = 1,
+                        periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
+                        carrera = 1,
+                        docente = doc.id_docente,
+                        categoria_docente = 1,
+                        horas_clase = 10,
+                        horas_investigacion = 10,
+                        horas_gestion = 10,
+                        horas_tutorias = 10,
+                        cargo = 1, 
+                        extemporaneo = false
+                    });
+                    db.SaveChanges();
                     info = (from paad in db.PAADs
                             where paad.docente == doc.id_docente
                             join estado in db.Estados
                             on paad.estado equals estado.id_estado
                             join periodo in db.Periodos
                             on paad.periodo equals periodo.id_periodo
-                            where periodo.activo==true
+                            where periodo.activo == true
                             select new InfoPAADCLS
                             {
                                 id_paad = paad.id_paad,
                                 status_value = paad.estado,
                                 status_name = estado.estado,
-                                active = periodo.activo
+                                active = periodo.activo,
+                                is_extemporaneous = paad.extemporaneo
                             }).FirstOrDefault();
+                }
             }
             return info;
         }
@@ -434,12 +480,13 @@ namespace ISProject.Controllers
          * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetRecordPAADs(int period=0)
         {
+            bool onTime = util.IsOnTimePAAD();
             List<RegistroPAAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
                 Docentes doc = ((Docentes)Session["user"]);
                 list = (from paad in db.PAADs
-                        where paad.docente == doc.id_docente 
+                        where paad.docente == doc.id_docente && paad.estado==3
                         join estado in db.Estados
                         on paad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -551,14 +598,26 @@ namespace ISProject.Controllers
         //ModifyIAD actions
         public ActionResult ModifyIAD()
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
+            if (info_period.is_close)
+                return View("NotActivePeriod_Docente"); //No hay periodo activo
+            InfoIADCLS info_iad = GetInfoIAD();
+            if (!info_period.on_time_iad)
+            {
+                if (info_iad == null)
+                    return View("NotActivePeriod_Docente"); //Ya no es periodo de entrega y no creo ningun paad
+                else if (!info_iad.is_extemporaneous)
+                    return RedirectToAction("ViewIAD", new { id = info_iad.id_iad }); //Se creo un paad pero ya no es periodo de entrega y no es extemporaneo
+            }
+            
             InfoPAADCLS info_paad = GetInfoPAAD();
             if (info_paad != null && info_paad.status_value < 3)
             {
                 return View("ErrorIAD");
             }
-            InfoIADCLS info_iad = GetInfoIAD();
+            // Se valida si el paad no esta en edicion que lo redirija vista de visualizacion.
             if (info_iad != null && info_iad.status_value != 1)
-                return RedirectToAction("ViewIAD", new { id = info_iad.id_paad });
+                return RedirectToAction("ViewIAD", new { id = info_iad.id_iad });
             JoinActivities(info_iad.id_iad, info_paad.id_paad);
             ViewBag.info_iad = info_iad;
             ViewBag.header = GetHeaderIAD(info_iad.id_iad);
@@ -694,9 +753,15 @@ namespace ISProject.Controllers
         //Cuando entre a viewIAD si hay un PAAD aprobado y activo va a llamar al metodo GetInfoPAAD y si no lo har
         public ActionResult ViewIAD(int id)
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
             InfoIADCLS info = GetInfoIAD(id);
-            if (info == null || info.status_value == 1)
-                return RedirectToAction("ModifyIAD");
+            if (info == null)
+                return View("NotFoundError_Docente");
+            if (info_period.on_time_iad || (!info_period.is_close && info.is_extemporaneous))
+            {
+                if (info.status_value == 1 && info.active)
+                    return RedirectToAction("ModifyIAD");
+            }
             ViewBag.info = info;
             ViewBag.header = GetHeaderIAD(info.id_iad);
             ViewBag.activities = GetActivitiesIAD(info.id_iad);
@@ -716,7 +781,7 @@ namespace ISProject.Controllers
             //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
             //Valida que la autenticacion sea correcta y que el correo de la autenticacion se el mismo que el de la sesion
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -852,6 +917,7 @@ namespace ISProject.Controllers
                             status_value = iad.estado,
                             status_name = estado.estado,
                             active = periodo.activo,
+                            is_extemporaneous=iad.extemporaneo
                         }).FirstOrDefault();
                 if (info == null && id == 0)
                 {
@@ -882,6 +948,7 @@ namespace ISProject.Controllers
                                 status_value = iad.estado,
                                 status_name = estado.estado,
                                 active = periodo.activo,
+                                is_extemporaneous = iad.extemporaneo
                             }).FirstOrDefault();
                 }
             }

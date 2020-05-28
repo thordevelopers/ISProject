@@ -15,11 +15,12 @@ namespace ISProject.Controllers
     public class DirectorController : Controller
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
-        AuthenticationController auth = new AuthenticationController();
+        UtilitiesController util = new UtilitiesController();
         //Acciones de la vista ------------------------------------------------ HomeDirector ------------------------------------------------
         //Vista de inicio para el director
         public ActionResult Home()
         {
+            util.IsClose();
             return View("HomeDirector");
         }
         #region PAAD Actions
@@ -29,10 +30,12 @@ namespace ISProject.Controllers
          * Devuelve la vista*/
         public ActionResult ViewPAAD(int id)
         {
+            util.IsClose();
             //Valida que el id del paad se valido si no redirecciona a home
             if (id < 1)
                 return RedirectToAction("Home");
             InfoPAADCLS info = GetInfoPAAD(id);
+            //~~~~~~~Poner redirecion a error not found
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
@@ -40,7 +43,7 @@ namespace ISProject.Controllers
             if (!info.isdirector)
                 ViewBag.msg = GetMessages(info.id_paad);
             else
-                ViewBag.msg = new MessageCLS();
+                ViewBag.msg = null;
             return View("ViewPAAD_Director");
         }
         /* Esta accion aplica las acciones sobre el paad como rechazar paad, aprobar paad, aprobar modificacion y rechazar modificacion
@@ -59,7 +62,7 @@ namespace ISProject.Controllers
             //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo!=credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo!=credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -139,6 +142,10 @@ namespace ISProject.Controllers
         /* Esta accion muestra la vista de ListActivePAADs*/
         public ActionResult ListActivePAADs()
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
+            if (info_period.is_close)
+                return View("NotActivePeriod");
+            ViewBag.info_period = info_period;
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
             ViewBag.careers = GetCareers();
@@ -153,12 +160,83 @@ namespace ISProject.Controllers
             List<RegistroPAAD> list = GetActivePAADs(Convert.ToInt32(filter_state), Convert.ToInt32(filter_career));
             return PartialView("_ListPAADs", list);
         }
+        public ActionResult AllowExtemporaneous(AuthenticationCLS credentials, int id_paad, int id_docente)
+        {
+            //Valida los campos del modelo de las credenciales
+            if (!ModelState.IsValid)
+                return Json(new
+                {
+                    Status = 2,
+                    Message = "Invalid",
+                    AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                });
+            //Obtiene los datos de la sesion del usuario
+            Docentes doc = ((Docentes)Session["user"]);
+            //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            {
+                credentials.message = "Correo y/o contraseña incorrectos";
+                return Json(new
+                {
+                    Status = 3,
+                    Message = "Error",
+                    AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                });
+            }
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                if (id_paad != 0)
+                {
+                    PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad).FirstOrDefault();
+                    bool isdirector = (from docente in db.Docentes where docente.id_docente == id_docente select docente.isdirector).FirstOrDefault();
+                    //Valida que el paad sea del director
+                    if (paad != null || !isdirector)
+                    {
+                        paad.extemporaneo = true;
+                    }
+                    else
+                    {
+                        credentials.message = "Correo y/o contraseña incorrectos";
+                        return Json(new
+                        {
+                            Status = 3,
+                            Message = "Error",
+                            AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                        });
+                    }
+                }
+                else
+                {
+                    db.PAADs.Add(new PAADs
+                    {
+                        estado = 1,
+                        periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
+                        carrera = 1,
+                        docente = id_docente,
+                        categoria_docente = 1,
+                        horas_clase = 10,
+                        horas_investigacion = 10,
+                        horas_gestion = 10,
+                        horas_tutorias = 10,
+                        cargo = 1,
+                        extemporaneo = true
+                    });
+                }
+                db.SaveChanges();
+            }
+            return Json(new
+            {
+                Status = 1,
+                Message = "Success"
+            });
+        }
         //Acciones de la vista ------------------------------------------------ ListRecordPAADs ------------------------------------------------
         /* Esta accion muestra la vista de ListRecordPAADs*/
         public ActionResult ListRecordPAADs()
         {
+            util.IsClose();
             ViewBag.list = GetRecordPAADs();
-            ViewBag.period = GetPeriods();
+            ViewBag.period = GetPeriods("Todos");
             ViewBag.careers = GetCareers();
             return View("ListRecordPAADs_Director");
         }
@@ -179,10 +257,12 @@ namespace ISProject.Controllers
          * Devuelve la vista*/
         public ActionResult ViewIAD(int id)
         {
+            util.IsClose();
             //Valida que el id del paad se valido si no redirecciona a home
             if (id < 1)
                 return RedirectToAction("Home");
             InfoIADCLS info = GetInfoIAD(id);
+            //~~~~~~~Poner redirecion a error not found
             ViewBag.info = info;
             ViewBag.header = GetHeaderIAD(info.id_iad);
             ViewBag.activities = GetActivitiesIAD(info.id_iad);
@@ -209,7 +289,7 @@ namespace ISProject.Controllers
             //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -289,6 +369,9 @@ namespace ISProject.Controllers
         /* Esta accion muestra la vista de ListActiveIADs*/
         public ActionResult ListActiveIADs()
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
+            if (info_period.is_close)
+                return View("NotActivePeriod");
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();
             ViewBag.careers = GetCareers();
@@ -308,7 +391,7 @@ namespace ISProject.Controllers
         public ActionResult ListRecordIADs()
         {
             ViewBag.list = GetRecordIADs();
-            ViewBag.period = GetPeriods();
+            ViewBag.period = GetPeriods("Todos");
             ViewBag.careers = GetCareers();
             return View("ListRecordIADs_Director");
         }
@@ -347,7 +430,7 @@ namespace ISProject.Controllers
             //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
             //Valida que la autenticacion sea correcto, que el correo de la autenticacion se el mismo que el de la sesion y que se tengan los permisos necesario para realizar esa accion
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -382,6 +465,130 @@ namespace ISProject.Controllers
                 Status = 1,
                 Message = "Success"
             });
+        }
+        //Acciones de la vista ------------------------------------------------ SetDatePAAD ------------------------------------------------
+        /* Esta accion muestra la vista de SetDatePAAD*/
+        public ActionResult SetDatePAAD()
+        {
+            SetDateCLS dates = null;
+            List<SelectListItem> periods = GetPeriods("Seleccione");
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Periodos period = db.Periodos.Where(p => p.activo == true).FirstOrDefault();
+                if (period != null)
+                {
+                    periods.Where(p => p.Value == period.id_periodo.ToString()).FirstOrDefault().Selected = true;
+                    if (period.paad_inicio != null && period.paad_fin != null)
+                        dates = new SetDateCLS { begining = period.paad_inicio ?? default(DateTime), ending = period.paad_fin ?? default(DateTime) };
+                        
+                }
+            }
+            ViewBag.periods = periods;
+            return View(dates);
+        }
+        [HttpPost]
+        public ActionResult SetDatePAAD(SetDateCLS dateToSet,string id_periodo)
+        {
+            ViewBag.error = "";
+            ViewBag.success = "";
+            ViewBag.periods = GetPeriods("Seleccione");
+            int periodo = Int32.Parse(id_periodo);
+            if (!ModelState.IsValid)
+                return View(dateToSet);
+            else if (periodo <= 0)
+                ViewBag.error = "Escoja un periodo valido";
+            else if (dateToSet.ending < dateToSet.begining)
+                ViewBag.error = "La fecha de final es menor que la de incio";
+            else
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Periodos new_period = db.Periodos.Where(p => p.id_periodo == periodo).FirstOrDefault();
+                    if (new_period != null)
+                    {
+                        Periodos old_period = db.Periodos.Where(p => p.activo == true).FirstOrDefault();
+                        if (old_period != null)
+                            old_period.activo = false;
+                        new_period.paad_inicio = dateToSet.begining;
+                        new_period.paad_fin = dateToSet.ending;
+                        new_period.iad_inicio = null;
+                        new_period.iad_fin = null;
+                        new_period.activo = true;
+                        db.SaveChanges();
+                        ViewBag.success = "Se ha guardado exitosamente";
+                    }
+                    else
+                    {
+                        ViewBag.error = "Error al tratar de relizar esta accion";
+                    }
+                }
+            }
+            return View(dateToSet);
+        }
+        //Acciones de la vista ------------------------------------------------ SetDateIAD ------------------------------------------------
+        /* Esta accion muestra la vista de SetDateIAD*/
+        public ActionResult SetDateIAD()
+        {
+            SetDateCLS dates = null;
+            List<SelectListItem> periods = GetPeriods("Seleccione");
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Periodos period = db.Periodos.Where(p => p.activo == true).FirstOrDefault();
+                if (period != null)
+                {
+                    periods.Where(p => p.Value == period.id_periodo.ToString()).FirstOrDefault().Selected = true;
+                    if (period.iad_inicio != null && period.iad_fin != null && period.fecha_cierre!=null)
+                        dates = new SetDateCLS { begining = period.iad_inicio ?? default(DateTime), ending = period.iad_fin ?? default(DateTime), close_date = period.fecha_cierre ?? default(DateTime) };
+                }
+            }
+            ViewBag.periods = periods;
+            return View(dates);
+        }
+        [HttpPost]
+        public ActionResult SetDateIAD(SetDateCLS dateToSet, string id_periodo)
+        {
+            ViewBag.error = "";
+            ViewBag.success = "";
+            ViewBag.periods = GetPeriods("Seleccione");
+            int periodo = Int32.Parse(id_periodo);
+            if (!ModelState.IsValid)
+                return View(dateToSet);
+            else if (periodo <= 0)
+                ViewBag.error = "Escoja un periodo valido";
+            else if (dateToSet.ending < dateToSet.begining)
+                ViewBag.error = "La fecha de final es menor que la de incio";
+            else if (dateToSet.close_date < dateToSet.ending)
+                ViewBag.error = "La fecha de cierre es menor que la fecha final de entrega IAD";
+            else
+            {
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Periodos new_period = db.Periodos.Where(p => p.id_periodo == periodo).FirstOrDefault();
+                    if (new_period != null && new_period.paad_fin !=null)
+                    {
+                        DateTime fin_paad = new_period.paad_fin.GetValueOrDefault();
+                        if (fin_paad.Date < dateToSet.begining)
+                        {
+                            Periodos old_period = db.Periodos.Where(p => p.activo == true).FirstOrDefault();
+                            if (old_period != null)
+                                old_period.activo = false;
+                            new_period.iad_inicio = dateToSet.begining;
+                            new_period.iad_fin = dateToSet.ending;
+                            new_period.fecha_cierre = dateToSet.close_date;
+                            new_period.activo = true;
+                            db.SaveChanges();
+                            ViewBag.success = "Se ha guardado exitosamente";
+                        }
+                        else
+                            ViewBag.error = "La fecha de inicio del IAD debe ser maypr a la del fin del PAAD ( Fin del PAAD: "+fin_paad.ToString("dd/MM/yyyy")+" )";
+                    }
+                    else
+                    {
+                        ViewBag.error = "Error al tratar de relizar esta accion";
+                    }
+                }
+            }
+            return View(dateToSet);
         }
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
@@ -749,7 +956,7 @@ namespace ISProject.Controllers
         /* Esta accion recupera los periodos 
          * No recibe argumentos
          * Regresa una lista con los modelos de los periodos*/
-        public List<SelectListItem> GetPeriods()
+        public List<SelectListItem> GetPeriods(string text)
         {
             List<SelectListItem> periods = null;
             using (var db = new DB_PAAD_IADEntities())
@@ -760,7 +967,7 @@ namespace ISProject.Controllers
                                Text = periodo.periodo,
                                Value = periodo.id_periodo.ToString()
                            }).ToList();
-                periods.Insert(0, new SelectListItem { Text = "Todos", Value = "0" });
+                periods.Insert(0, new SelectListItem { Text = text, Value = "0" });
             }
             return periods;
         }
@@ -845,7 +1052,7 @@ namespace ISProject.Controllers
             }
             return director;
         }
-        /* Esta accion transforma una vista en string
+        /* Esta funcion transforma una vista en string
          * Recibe el nombre de la vista y el modelo con el cual llenar la vista
          * Regresa un string con la vista 
          * Esta funcion fue obtenida de stackoverflow: https://stackoverflow.com/questions/17554734/mvc-render-partialviewresult-to-string */

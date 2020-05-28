@@ -190,6 +190,7 @@
     <Compile Include="Models\Docentes.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ErrorMessageCLS.cs" />
     <Compile Include="Models\Estados.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
@@ -200,6 +201,7 @@
     </Compile>
     <Compile Include="Models\InfoIADCLS.cs" />
     <Compile Include="Models\InfoPAADCLS.cs" />
+    <Compile Include="Models\InfoPeriodCLS.cs" />
     <Compile Include="Models\Mensajes.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
@@ -215,6 +217,7 @@
     <Compile Include="Models\Roles.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SetDateCLS.cs" />
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
@@ -253,6 +256,7 @@
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="App_Browsers\qt.browser" />
     <EntityDeploy Include="Models\DB_PAAD_IAD.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DB_PAAD_IAD.Designer.cs</LastGenOutput>
@@ -260,7 +264,6 @@
     <Content Include="Models\DB_PAAD_IAD.edmx.diagram">
       <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
     </Content>
-    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
@@ -324,6 +327,12 @@
     <Content Include="Views\Director\ChangeDirectorAccount.cshtml" />
     <Content Include="Views\Docente\_ModifyHeaderPAAD.cshtml" />
     <Content Include="Views\Login\_LayoutGuess.cshtml" />
+    <Content Include="Views\Director\SetDatePAAD.cshtml" />
+    <Content Include="Views\Director\NotActivePeriod.cshtml" />
+    <Content Include="Views\Director\SetDateIAD.cshtml" />
+    <Content Include="Views\Docente\NotActivePeriod_Docente.cshtml" />
+    <Content Include="Views\Docente\NotFoundError_Docente.cshtml" />
+    <Content Include="Views\Shared\_ListActivePAADs.cshtml" />
     <Content Include="Views\Docente\ViewIAD_Docente.cshtml" />
     <Content Include="Views\Docente\ListRecordIADs_Docente.cshtml" />
     <Content Include="Views\Docente\_ModalActivityIAD.cshtml" />
@@ -342,6 +351,9 @@
     <Content Include="Views\Subdirector\ListActiveIADs_Subdirector.cshtml" />
     <Content Include="Views\Subdirector\ListRecordIADs_Subdirector.cshtml" />
     <Content Include="Views\Subdirector\ViewIAD_Subdirector.cshtml" />
+    <Content Include="Views\Docente\ErrorMessage_Docente.cshtml" />
+    <Content Include="Views\Shared\_ListActiveIADs.cshtml" />
+    <Content Include="Views\Subdirector\ErrorMessage_Subdirector.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

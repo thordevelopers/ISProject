@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "ListActivePAADs_Director";
     Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    InfoPeriodCLS info_period = (InfoPeriodCLS)ViewBag.info_period;
     List<RegistroPAAD> list = (List<RegistroPAAD>)ViewBag.list;
     List<SelectListItem> states = (List<SelectListItem>)ViewBag.states;
     List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
@@ -28,15 +29,60 @@
     }
 </div>
 <div id="ListPAADsTable">
-    @Html.Partial("_ListPAADs", list)
+    @Html.Partial("_ListActivePAADs", list,new ViewDataDictionary { { "on_time_paad", info_period.on_time_paad },{ "is_close_paad", info_period.is_close_paad } })
 </div>
 
+<div id="mdlAuthCredentials" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label id="mdlAuthTitle" class="lbl-30" style="padding-top:20px">Verifique sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("AllowExtemporaneous", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "authResponse"
+            }, new { id = "frmAllowExtemporaneous" }))
+            {
+                <div id="mdlAuthCredentialsContent">
+                    @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
+                </div>
+                @Html.Hidden("id_paad")
+                @Html.Hidden("id_docente")
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
 <script>
     document.getElementById("filter_state").onchange = function () {
         $("#frmFilterActive").submit();
     }
     document.getElementById("filter_career").onchange = function () {
         $("#frmFilterActive").submit();
+    }
+    function authCredentials(id_paad,id_docente) {
+        $("#id_paad").val(id_paad);
+        $("#id_docente").val(id_docente);
+        $("#mdlAuthTitle").text("Permitir entrega extemporanea");
+        $("#mdlAuthCredentials").modal("show");
+    }
+    function sendPAAD() {
+        $("#frmAllowExtemporaneous").submit();
+    }
+    function authResponse(response) {
+        if (response.Status != 1) {
+            $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
+        }
+        else {
+            location.reload()
+        }
     }
 </script>
 

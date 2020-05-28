@@ -1,0 +1,48 @@
+﻿@using ISProject.Models
+@model SetDateCLS
+@{
+    ViewBag.Title = "SetDateIAD";
+    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+
+    List<SelectListItem> periods = (List<SelectListItem>)ViewBag.periods;
+    string error = (string)ViewBag.error;
+    string success = (string)ViewBag.success;
+}
+
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Asignar fechas de entrega: IAD</h1>
+</div>
+<div class="container">
+    <div class="renglon-3">
+        <button type="button" class="btn btn-azul-claro" name="button">Regresar</button>
+    </div> <br><br>
+    <table>
+        <tr>
+            <td style="text-align:center">
+                <label style="font-size: 15px; font-family: Helvetica; font-weight: bold;">Seleccione Fechas de entrega del IAD para un Periodo </label><br><br><br>
+
+                @using (Html.BeginForm("SetDatePAAD"))
+                {
+                    <div class="d-flex justify-content-around" style="width:100%;">
+                        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:17px">Periodo: </p>
+                        @Html.DropDownList("id_periodo", periods, new { style = "margin-right:20px" })
+                        @Html.LabelFor(p => p.begining)
+                        @Html.EditorFor(p => p.begining, new { @style = "width:100%" })
+                        @Html.LabelFor(p => p.ending)
+                        @Html.EditorFor(p => p.ending, new { style = "margin-right:20px" })
+                        @Html.LabelFor(p => p.close_date)
+                        @Html.EditorFor(p => p.close_date, new { style = "margin-right:20px" })
+                    </div>
+                    <br>
+                    @Html.ValidationMessage("begining", new { style = "color:red" })
+                    <br>
+                    @Html.ValidationMessage("ending", new { style = "color:red" })
+                    <br>
+                    <p style="color:red">@error</p>
+                    <p style="color:green">@success</p>
+                    <br><button type="submit" class="btn btn-verde-light btn-margin-left col-3" name="button">Guardar</button>
+                }
+            </td>
+        </tr>
+    </table>
+</div>

@@ -5,9 +5,10 @@
     HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
     InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+    InfoPeriodCLS info_period = (InfoPeriodCLS)ViewBag.info_period;
     MessageCLS msg = (MessageCLS)ViewBag.msg;
 }
-@if (msg != null)
+@if (msg != null && info.active)
 {
     <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center">
         <label style="font-size: 15px; font-family: Helvetica; text-align:center;font-weight:bold">Solicitud de Modificación del Formato PAAD Rechazada</label>
@@ -30,7 +31,7 @@
     @Html.Partial("_ViewActivitiesTable", activities)
 </div>
 <div class="" style="width:100%;text-align:right;margin-top:30px">
-    @if (info.active)
+    @if (info_period.on_time_paad&&info.active)
     {
         if (info.status_value == 2)
         {

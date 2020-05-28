@@ -14,6 +14,7 @@ namespace ISProject.Controllers
     [FilterCoordinador]
     public class CoordinadorController : Controller
     {
+        UtilitiesController util = new UtilitiesController();
         //Acciones de la vista ------------------------------------------------ HomeCoordinador ------------------------------------------------
         //Vista de inicio para el coordinador
         public ActionResult Home()
@@ -485,6 +486,30 @@ namespace ISProject.Controllers
                 periods.Insert(0, new SelectListItem { Text = "Todos", Value = "0" });
             }
             return periods;
+        }
+        /* Esta funcion revisa y desactiva el periodo si la fecha de cierre iad ya paso
+         * No recibe nada
+         * Regresa un boleano, true si el sistema se cerro false si no*/
+        public bool IsClose()
+        {
+            bool isClose = true;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Periodos period = ( from periodo in db.Periodos
+                                    where periodo.activo == true
+                                    select periodo).FirstOrDefault();
+                if (period != null)
+                {
+                    if (period.iad_fin != null && DateTime.Today > period.iad_fin)
+                    {
+                        period.activo = false;
+                        db.SaveChanges();
+                    }
+                    else
+                        isClose = false;
+                }
+            }
+            return isClose;
         }
         /* Esta accion transforma una vista en string
          * Recibe el nombre de la vista y el modelo con el cual llenar la vista
