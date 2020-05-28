@@ -339,6 +339,9 @@
     <Content Include="Views\Coordinador\ListActiveIADs_Coordinador.cshtml" />
     <Content Include="Views\Coordinador\ListRecordIADs_Coordinador.cshtml" />
     <Content Include="Views\Coordinador\ViewIAD_Coordinador.cshtml" />
+    <Content Include="Views\Subdirector\ListActiveIADs_Subdirector.cshtml" />
+    <Content Include="Views\Subdirector\ListRecordIADs_Subdirector.cshtml" />
+    <Content Include="Views\Subdirector\ViewIAD_Subdirector.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

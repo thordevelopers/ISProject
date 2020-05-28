@@ -173,9 +173,9 @@ namespace ISProject.Controllers
         }
         #endregion
         #region IAD Actions
-        //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
-        /* Esta accion corresponde a la vista ViewPAAD
-         * Recibe el id del paad 
+        //Acciones de la vista ------------------------------------------------ ViewIAD ------------------------------------------------
+        /* Esta accion corresponde a la vista ViewIAD
+         * Recibe el id del iad 
          * Devuelve la vista*/
         public ActionResult ViewIAD(int id)
         {
@@ -303,8 +303,8 @@ namespace ISProject.Controllers
             List<RegistroIAD> list = GetActiveIADs(Convert.ToInt32(filter_state), Convert.ToInt32(filter_career));
             return PartialView("_ListIADs", list);
         }
-        //Acciones de la vista ------------------------------------------------ ListRecordPAADs ------------------------------------------------
-        /* Esta accion muestra la vista de ListRecordPAADs*/
+        //Acciones de la vista ------------------------------------------------ ListRecordIADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListRecordIADs*/
         public ActionResult ListRecordIADs()
         {
             ViewBag.list = GetRecordIADs();
