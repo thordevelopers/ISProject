@@ -25,13 +25,10 @@ namespace ISProject.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Actividades> Actividades { get; set; }
         public virtual DbSet<Cargos> Cargos { get; set; }
         public virtual DbSet<Carreras> Carreras { get; set; }
         public virtual DbSet<Categorias> Categorias { get; set; }
         public virtual DbSet<Estados> Estados { get; set; }
-        public virtual DbSet<Fechas> Fechas { get; set; }
-        public virtual DbSet<IADs> IADs { get; set; }
         public virtual DbSet<Periodos> Periodos { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<USERS> USERS { get; set; }
@@ -40,5 +37,7 @@ namespace ISProject.Models
         public virtual DbSet<Mensajes> Mensajes { get; set; }
         public virtual DbSet<PAADs> PAADs { get; set; }
         public virtual DbSet<TiposDeMensaje> TiposDeMensaje { get; set; }
+        public virtual DbSet<Actividades> Actividades { get; set; }
+        public virtual DbSet<IADs> IADs { get; set; }
     }
 }

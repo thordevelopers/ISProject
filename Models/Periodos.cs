@@ -17,20 +17,22 @@ namespace ISProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Periodos()
         {
-            this.Fechas = new HashSet<Fechas>();
-            this.IADs = new HashSet<IADs>();
             this.PAADs = new HashSet<PAADs>();
+            this.IADs = new HashSet<IADs>();
         }
     
         public int id_periodo { get; set; }
         public string periodo { get; set; }
         public bool activo { get; set; }
+        public Nullable<System.DateTime> paad_inicio { get; set; }
+        public Nullable<System.DateTime> paad_fin { get; set; }
+        public Nullable<System.DateTime> iad_inicio { get; set; }
+        public Nullable<System.DateTime> iad_fin { get; set; }
+        public Nullable<System.DateTime> fecha_cierre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Fechas> Fechas { get; set; }
+        public virtual ICollection<PAADs> PAADs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IADs> IADs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PAADs> PAADs { get; set; }
     }
 }

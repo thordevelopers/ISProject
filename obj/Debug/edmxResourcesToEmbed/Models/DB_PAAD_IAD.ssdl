@@ -13,7 +13,7 @@
     <Property Name="cacei" Type="bit" Nullable="false" />
     <Property Name="cuerpo_academico" Type="bit" Nullable="false" />
     <Property Name="iso" Type="bit" Nullable="false" />
-    <Property Name="id_paad" Type="int" Nullable="false" />
+    <Property Name="id_paad" Type="int" />
     <Property Name="id_iad" Type="int" />
   </EntityType>
   <EntityType Name="Cargos">
@@ -59,20 +59,11 @@
     <Property Name="id_estado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="estado" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
-  <EntityType Name="Fechas">
-    <Key>
-      <PropertyRef Name="id_fechas" />
-    </Key>
-    <Property Name="id_fechas" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="periodo" Type="int" Nullable="false" />
-    <Property Name="inicio" Type="date" Nullable="false" />
-    <Property Name="fin" Type="date" Nullable="false" />
-  </EntityType>
   <EntityType Name="IADs">
     <Key>
       <PropertyRef Name="id_iad" />
     </Key>
-    <Property Name="id_iad" Type="int" Nullable="false" />
+    <Property Name="id_iad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="estado" Type="int" Nullable="false" />
     <Property Name="periodo" Type="int" Nullable="false" />
     <Property Name="carrera" Type="int" Nullable="false" />
@@ -86,6 +77,7 @@
     <Property Name="firma_docente" Type="nvarchar(max)" />
     <Property Name="firma_director" Type="nvarchar(max)" />
     <Property Name="comentarios" Type="nvarchar(max)" />
+    <Property Name="extemporaneo" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Mensajes">
     <Key>
@@ -114,6 +106,7 @@
     <Property Name="cargo" Type="int" Nullable="false" />
     <Property Name="firma_docente" Type="nvarchar(max)" />
     <Property Name="firma_director" Type="nvarchar(max)" />
+    <Property Name="extemporaneo" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Periodos">
     <Key>
@@ -122,6 +115,11 @@
     <Property Name="id_periodo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="periodo" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="activo" Type="bit" Nullable="false" />
+    <Property Name="paad_inicio" Type="date" />
+    <Property Name="paad_fin" Type="date" />
+    <Property Name="iad_inicio" Type="date" />
+    <Property Name="iad_fin" Type="date" />
+    <Property Name="fecha_cierre" Type="date" />
   </EntityType>
   <EntityType Name="Roles">
     <Key>
@@ -169,7 +167,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Actividades_PAADs">
-    <End Role="PAADs" Type="Self.PAADs" Multiplicity="1" />
+    <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
     <End Role="Actividades" Type="Self.Actividades" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PAADs">
@@ -201,18 +199,6 @@
       </Principal>
       <Dependent Role="Docentes">
         <PropertyRef Name="rol" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Fechas_Periodos">
-    <End Role="Periodos" Type="Self.Periodos" Multiplicity="1" />
-    <End Role="Fechas" Type="Self.Fechas" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Periodos">
-        <PropertyRef Name="id_periodo" />
-      </Principal>
-      <Dependent Role="Fechas">
-        <PropertyRef Name="periodo" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -403,7 +389,6 @@
     <EntitySet Name="Categorias" EntityType="Self.Categorias" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Docentes" EntityType="Self.Docentes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Estados" EntityType="Self.Estados" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Fechas" EntityType="Self.Fechas" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IADs" EntityType="Self.IADs" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Mensajes" EntityType="Self.Mensajes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PAADs" EntityType="Self.PAADs" Schema="dbo" store:Type="Tables" />
@@ -427,10 +412,6 @@
     <AssociationSet Name="FK_Docentes_Roles" Association="Self.FK_Docentes_Roles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Docentes" EntitySet="Docentes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Fechas_Periodos" Association="Self.FK_Fechas_Periodos">
-      <End Role="Periodos" EntitySet="Periodos" />
-      <End Role="Fechas" EntitySet="Fechas" />
     </AssociationSet>
     <AssociationSet Name="FK_IADs_Cargos" Association="Self.FK_IADs_Cargos">
       <End Role="Cargos" EntitySet="Cargos" />

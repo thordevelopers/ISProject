@@ -315,12 +315,11 @@ namespace ISProject.Controllers
                                   actividad = activity.actividad,
                                   produccion = activity.produccion,
                                   lugar = activity.lugar,
-                                  porcentaje_inicial = activity.porcentaje_inicial,
-                                  porcentaje_final = activity.porcentaje_final,
+                                  porcentaje = activity.porcentaje_inicial,
                                   cacei = activity.cacei,
                                   cuerpo_academico = activity.cuerpo_academico,
                                   iso = activity.iso,
-                                  id_paad = activity.id_paad
+                                  id_paad = activity.id_paad??default(int)
                               }).ToList();
             }
             return activities;
@@ -333,27 +332,30 @@ namespace ISProject.Controllers
             List<RegistroPAAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
-                list = (from docente in db.Docentes
+                list = (from periodo in db.Periodos
+                        where periodo.activo == true
+                        from docente in db.Docentes
                         where docente.rol == 1
                         join paad in db.PAADs
-                        on docente.id_docente equals paad.docente into gpaad
+                        on new { id = docente.id_docente, activo = periodo.id_periodo } equals new { id = paad.docente, activo = paad.periodo } into gpaad
                         from paad in gpaad.DefaultIfEmpty()
                         join estado in db.Estados
                         on paad.estado equals estado.id_estado into gestado
                         from estado in gestado.DefaultIfEmpty()
-                        where state > 0 && !(estado==null&&state==1)? estado.id_estado == state && estado.id_estado != 3 : estado.id_estado!=3
+                        where state > 0 && !(estado == null && state == 1) ? estado.id_estado == state && estado.id_estado != 3 : estado.id_estado != 3
                         join carrera in db.Carreras
                         on docente.carrera equals carrera.id_carrera
                         where career > 0 ? carrera.id_carrera == career : true
-                        from periodo in db.Periodos
-                        where periodo.activo == true
+
                         select new RegistroPAAD
                         {
                             id_paad = paad != null ? paad.id_paad : 0,
-                            estado = estado !=null? estado.estado: (from e in db.Estados where e.id_estado==1 select e.estado).FirstOrDefault(),
-                            estado_valor = estado != null? estado.id_estado:1,
+                            extemporaneous = paad != null ? paad.extemporaneo : false,
+                            estado = estado != null ? estado.estado : (from e in db.Estados where e.id_estado == 1 select e.estado).FirstOrDefault(),
+                            estado_valor = estado != null ? estado.id_estado : 1,
                             periodo = periodo.periodo,
                             carrera = carrera.carrera,
+                            id_docente = docente.id_docente,
                             numero_empleado = docente.numero_empleado,
                             nombre_docente = docente.nombre,
                         }).ToList();

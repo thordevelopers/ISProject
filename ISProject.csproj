@@ -193,13 +193,12 @@
     <Compile Include="Models\Estados.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Fechas.cs">
-      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\HeaderIADCLS.cs" />
     <Compile Include="Models\HeaderPAADCLS.cs" />
     <Compile Include="Models\IADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\InfoIADCLS.cs" />
     <Compile Include="Models\InfoPAADCLS.cs" />
     <Compile Include="Models\Mensajes.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -212,6 +211,7 @@
     <Compile Include="Models\Periodos.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegistroIAD.cs" />
     <Compile Include="Models\RegistroPAAD.cs" />
     <Compile Include="Models\Roles.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -325,6 +325,15 @@
     <Content Include="Views\Director\ChangeDirectorAccount.cshtml" />
     <Content Include="Views\Docente\_ModifyHeaderPAAD.cshtml" />
     <Content Include="Views\Login\_LayoutGuess.cshtml" />
+    <Content Include="Views\Docente\ViewIAD_Docente.cshtml" />
+    <Content Include="Views\Docente\ListRecordIADs_Docente.cshtml" />
+    <Content Include="Views\Docente\_ModalActivityIAD.cshtml" />
+    <Content Include="Views\Docente\ModifyIAD.cshtml" />
+    <Content Include="Views\Shared\_StatusIAD.cshtml" />
+    <Content Include="Views\Docente\_ModifyHeaderIAD.cshtml" />
+    <Content Include="Views\Shared\_ListIADs.cshtml" />
+    <Content Include="Views\Shared\_HeaderIAD.cshtml" />
+    <Content Include="Views\Docente\ErrorIAD.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

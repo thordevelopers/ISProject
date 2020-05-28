@@ -1,0 +1,21 @@
+﻿@using ISProject.Models
+@model InfoIADCLS
+
+<label id="lblStatus" class="lbl-estado">@Model.status_name</label>
+
+<script>
+    window.onload = function () {
+        if (@Model.status_value== 1) {
+            document.getElementById("lblStatus").className = "lbl-estado-sin-entregar"
+        }
+        else if (@Model.status_value== 2) {
+            document.getElementById("lblStatus").className = "lbl-estado-entregado"
+        }
+        else if (@Model.status_value== 3) {
+            document.getElementById("lblStatus").className = "lbl-estado-aprobado"
+        }
+        else if (@Model.status_value== 4) {
+            document.getElementById("lblStatus").className = "lbl-estado-solicitado"
+        }
+    }
+</script>

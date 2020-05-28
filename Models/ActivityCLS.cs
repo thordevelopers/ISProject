@@ -23,12 +23,8 @@ namespace ISProject.Models
         public string lugar { get; set; }
         [Display(Name = "Avance")]
         [Required]
-        [Range(0,99,ErrorMessage = "Fuera de rango (0 - 99)")]
-        public int porcentaje_inicial { get; set; }
-        [Display(Name = "Avance")]
-        [Required]
-        [Range(0, 100, ErrorMessage = "Fuera de rango (0 - 100)")]
-        public int porcentaje_final { get; set; }
+        [Range(0,99,ErrorMessage = "Fuera de rango (0 - 100)")]
+        public int porcentaje { get; set; }
         public bool cacei { get; set; }
         public bool cuerpo_academico { get; set; }
         public bool iso { get; set; }
