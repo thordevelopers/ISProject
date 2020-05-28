@@ -30,7 +30,7 @@
             }, new { id = "frmChangeCargo" }))
             {
                 <td> @Html.DropDownList("id_cargo", Model.cargos)</td>
-                @Html.Hidden("id_iad", Model.id_iad)
+                @Html.Hidden("id_iad", Model.id_iad,new {id="cargo_id_iad"})
             }
             <td>Horas de investigación:</td>
             <td style="width:80px;"> @Model.horas_investigacion horas</td>

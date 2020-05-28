@@ -65,8 +65,7 @@ namespace ISProject.Controllers
                                  actividad = activity.actividad,
                                  produccion = activity.produccion,
                                  lugar = activity.lugar,
-                                 porcentaje_inicial = activity.porcentaje_inicial,
-                                 porcentaje_final = activity.porcentaje_final,
+                                 porcentaje = activity.porcentaje_inicial,
                                  cacei = activity.cacei,
                                  cuerpo_academico = activity.cuerpo_academico,
                                  iso = activity.iso,
@@ -81,11 +80,10 @@ namespace ISProject.Controllers
             //Aqui se regresa la vista pertial, especificando el nombre de la vista asi como el modelo que usara para rellenarse
             return PartialView("_ModalActivityPAAD",modal);
         }
-        //esta etiqueta especifica que solo recibira peticiones de tipo post
-        [HttpPost]
         /*Esta accion es llamada cuando se da el boton de guardar actividad del modal 
           Recibe el modelo que contiene toda la info de la actividad
           Devuelve Json con un estado de respuesta, un mensaje de respuesta y opcionalmente una vista parcial. */
+        [HttpPost]
         public ActionResult SaveActivity(ActivityCLS model)
         {
             //Verifica que las validaciones puestas en el modelo se cumplan si no regresa Json junto con una vista parcial 
@@ -112,7 +110,8 @@ namespace ISProject.Controllers
                         act_db.actividad = model.actividad;
                         act_db.produccion = model.produccion;
                         act_db.lugar = model.lugar;
-                        act_db.porcentaje_inicial = model.porcentaje_inicial;
+                        act_db.porcentaje_inicial = model.porcentaje;
+                        act_db.porcentaje_final = model.porcentaje;
                         act_db.cacei = model.cacei;
                         act_db.cuerpo_academico = model.cuerpo_academico;
                         act_db.iso = model.iso;
@@ -130,7 +129,7 @@ namespace ISProject.Controllers
                             actividad = model.actividad,
                             produccion = model.produccion,
                             lugar = model.lugar,
-                            porcentaje_inicial = model.porcentaje_inicial,
+                            porcentaje_inicial = model.porcentaje,
                             cacei = model.cacei,
                             cuerpo_academico = model.cuerpo_academico,
                             iso = model.iso,
@@ -420,8 +419,7 @@ namespace ISProject.Controllers
                                   actividad = activity.actividad,
                                   produccion = activity.produccion,
                                   lugar = activity.lugar,
-                                  porcentaje_inicial = activity.porcentaje_inicial,
-                                  porcentaje_final = activity.porcentaje_final,
+                                  porcentaje = activity.porcentaje_inicial,
                                   cacei = activity.cacei,
                                   cuerpo_academico = activity.cuerpo_academico,
                                   iso = activity.iso,
@@ -561,12 +559,12 @@ namespace ISProject.Controllers
                                  actividad = activity.actividad,
                                  produccion = activity.produccion,
                                  lugar = activity.lugar,
-                                 porcentaje_inicial = activity.porcentaje_inicial,
-                                 porcentaje_final = activity.porcentaje_final,
+                                 porcentaje = activity.porcentaje_final,
                                  cacei = activity.cacei,
                                  cuerpo_academico = activity.cuerpo_academico,
                                  iso = activity.iso,
-                                 id_iad = activity.id_iad??default(int)
+                                 id_paad=activity.id_paad ?? default(int),
+                                 id_iad = activity.id_iad ?? default(int)
                              }).FirstOrDefault();
                 }
             }
@@ -595,14 +593,17 @@ namespace ISProject.Controllers
                     using (var db = new DB_PAAD_IADEntities())
                     {
                         Actividades act_db = db.Actividades.Single(p => p.id_actividad == model.id);
-                        act_db.actividad = model.actividad;
-                        act_db.actividad = model.actividad;
-                        act_db.produccion = model.produccion;
-                        act_db.lugar = model.lugar;
-                        act_db.porcentaje_inicial = model.porcentaje_inicial;
-                        act_db.cacei = model.cacei;
-                        act_db.cuerpo_academico = model.cuerpo_academico;
-                        act_db.iso = model.iso;
+                        if (act_db.id_paad == 0)
+                        {
+                            act_db.actividad = model.actividad;
+                            act_db.actividad = model.actividad;
+                            act_db.produccion = model.produccion;
+                            act_db.lugar = model.lugar;
+                            act_db.cacei = model.cacei;
+                            act_db.cuerpo_academico = model.cuerpo_academico;
+                            act_db.iso = model.iso;
+                        }
+                        act_db.porcentaje_final = model.porcentaje;
                         db.SaveChanges();
                     }
                 }
@@ -615,7 +616,7 @@ namespace ISProject.Controllers
                             actividad = model.actividad,
                             produccion = model.produccion,
                             lugar = model.lugar,
-                            porcentaje_inicial = model.porcentaje_inicial,
+                            porcentaje_inicial = model.porcentaje,
                             cacei = model.cacei,
                             cuerpo_academico = model.cuerpo_academico,
                             iso = model.iso,
@@ -938,11 +939,11 @@ namespace ISProject.Controllers
                                   actividad = activity.actividad,
                                   produccion = activity.produccion,
                                   lugar = activity.lugar,
-                                  porcentaje_inicial = activity.porcentaje_inicial,
-                                  porcentaje_final = activity.porcentaje_final,
+                                  porcentaje = activity.porcentaje_final,
                                   cacei = activity.cacei,
                                   cuerpo_academico = activity.cuerpo_academico,
                                   iso = activity.iso,
+                                  id_paad = activity.id_paad ?? default(int),
                                   id_iad = activity.id_iad ?? default(int)
                               }).ToList();
             }
