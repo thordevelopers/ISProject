@@ -1,0 +1,56 @@
+﻿@using ISProject.Models
+@model List<RegistroIAD>
+@{
+    bool on_time_iad = (bool)ViewData["on_time_iad"];
+    bool is_close = (bool)ViewData["is_close"];
+}
+<table>
+    <thead>
+        <tr>
+            <td width="80px" style="text-align:center">Emp.</td>
+            <td> Nombre</td>
+            <td> Carrera</td>
+            <td> Periodo</td>
+            <td> Estado</td>
+            <td> Opciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align:right">@item.numero_empleado</td>
+                <td>@item.nombre_docente</td>
+                <td>@item.carrera</td>
+                <td>@item.periodo</td>
+                <td>@item.estado</td>
+                <td style="text-align:center">
+                    @if (item.estado_valor != 1)
+                    {
+                        @Html.ActionLink("Ver detalles", "ViewIAD", new { id = item.id_iad }, new { @class = "btn btn-verde-light" })
+                        @Html.ActionLink("PDF", "ViewPDF", "Utilities", new { id = item.id_iad }, new { @class = "btn btn-amarillo", @style = "margin-left:10%", @target = "_blank" })
+                    }
+                    else
+                    {
+                        if (!on_time_iad && !is_close)
+                        {
+                            if (!item.extemporaneous)
+                            {
+                                <button onclick="authCredentials(@item.id_iad,@item.id_docente)" class="btn btn-verde-light">Permitir entrega extemporanea</button>
+                            }
+                            else
+                            {
+                                <p>Entrega extemporanea permitida</p>
+                            }
+                        }
+                        else
+                        {
+                            <p>No disponibles</p>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

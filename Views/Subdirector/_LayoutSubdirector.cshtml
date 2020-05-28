@@ -29,14 +29,14 @@
                         <button class="dropbtn">Formatos Activos</button>
                         <div class="dropdown-content">
                             <a href="@Url.Action("ListActivePAADs", "Subdirector", Request.Url.Scheme)">PAAD</a>
-                            <a href="#">IAD</a>
+                            <a href="@Url.Action("ListActiveIADs", "Subdirector", Request.Url.Scheme)">IAD</a>
                         </div>
                     </div>
                     <div class="dropdown">
                         <button class="dropbtn">Historial de Formatos</button>
                         <div class="dropdown-content">
                             <a href="@Url.Action("ListRecordPAADs", "Subdirector", Request.Url.Scheme)">PAAD</a>
-                            <a href="#">IAD</a>
+                            <a href="@Url.Action("ListRecordIADs", "Subdirector", Request.Url.Scheme)">IAD</a>
                         </div>
                     </div>
                     <div class="dropdown">

@@ -13,7 +13,7 @@
     <Property Name="cacei" Type="bit" Nullable="false" />
     <Property Name="cuerpo_academico" Type="bit" Nullable="false" />
     <Property Name="iso" Type="bit" Nullable="false" />
-    <Property Name="id_paad" Type="int" Nullable="false" />
+    <Property Name="id_paad" Type="int" />
     <Property Name="id_iad" Type="int" />
   </EntityType>
   <EntityType Name="Cargos">
@@ -63,7 +63,7 @@
     <Key>
       <PropertyRef Name="id_iad" />
     </Key>
-    <Property Name="id_iad" Type="int" Nullable="false" />
+    <Property Name="id_iad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="estado" Type="int" Nullable="false" />
     <Property Name="periodo" Type="int" Nullable="false" />
     <Property Name="carrera" Type="int" Nullable="false" />
@@ -167,7 +167,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Actividades_PAADs">
-    <End Role="PAADs" Type="Self.PAADs" Multiplicity="1" />
+    <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
     <End Role="Actividades" Type="Self.Actividades" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PAADs">

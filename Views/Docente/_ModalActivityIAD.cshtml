@@ -1,0 +1,73 @@
+﻿
+@using ISProject.Models
+@model ActivityCLS
+@{
+    string editable = Model.id_paad == 0 ? "true" : "false";
+}
+
+<!-- Inicio del cuerpo del Modal-->
+<div class="renglon" style="padding-bottom:13px">
+    <div class="" style="width :95%">
+        <div class="renglon-3">
+            <label class="mdllab">Actividad </label>
+            @Html.TextAreaFor(p => p.actividad, new { @rows = 6, @class = "mdltxta editable-txt"})
+        </div><br>
+        <div>
+            @Html.ValidationMessage("actividad", new { @style = "color:red" })
+        </div><br>
+        <div class="renglon-3">
+            <label class="mdllab">Producción </label>
+            @Html.TextAreaFor(p => p.produccion, new { @class = "mdltxta editable-txt", @rows = 6})
+        </div><br>
+        <div>
+            @Html.ValidationMessage("produccion", new { @style = "color:red" })
+        </div><br>
+        <div class="renglon-3">
+            <label class="mdllab text-right">Lugar </label>
+            @Html.TextAreaFor(p => p.lugar, new { @class = "mdltxta editable-txt" })
+        </div><br>
+        <div>
+            @Html.ValidationMessage("lugar", new { @style = "color:red" })
+        </div><br>
+        <div class="renglon-3">
+            <label class="text-right" style="width:88px;padding-right:9px;padding-top:2px">% Avance</label>
+            @Html.TextBoxFor(p => p.porcentaje, new { @style = "width:45px;padding-left:3px" })
+        </div><br>
+        <div>
+            @Html.ValidationMessage("porcentaje", new { @style = "color:red" })
+        </div><br>
+        <div class="renglon-center">
+            <div class="mdlchkbox">
+                <label>CACEI</label>
+                @Html.CheckBoxFor(p => p.cacei, new { @id = "mdl_cacei", @class= "editable-chbx" })
+            </div><br>
+            <div class="mdlchkbox">
+                <label> Cuerpo Academico</label>
+                @Html.CheckBoxFor(p => p.cuerpo_academico, new { @id = "mdl_academico", @class = "editable-chbx" })
+            </div><br>
+            <div class="mdlchkbox">
+                <label>ISO 9000</label>
+                @Html.CheckBoxFor(p => p.iso, new { @id = "mdl_iso", @class = "editable-chbx" })
+            </div>
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(p => p.id, new { @id = "mdl_id" })
+@Html.HiddenFor(p => p.id_iad, new { @id = "mdl_iad" })
+@Html.HiddenFor(p => p.id_paad, new { })
+
+<script>
+    function IsEditable() {
+        let editable = @editable;
+        if (!editable) {
+            let texts = document.getElementsByClassName("editable-txt");
+            let boxes = document.getElementsByClassName("editable-chbx");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].setAttribute("readonly", "readonly");
+            }
+            for (let i = 0; i < boxes.length; i++) {
+                boxes[i].setAttribute("onclick" , "return false");
+            }
+        }
+    }
+</script>

@@ -20,8 +20,8 @@ namespace ISProject.Models
         public int tipo { get; set; }
         public string mensaje { get; set; }
     
-        public virtual TiposDeMensaje TiposDeMensaje { get; set; }
         public virtual IADs IADs { get; set; }
         public virtual PAADs PAADs { get; set; }
+        public virtual TiposDeMensaje TiposDeMensaje { get; set; }
     }
 }

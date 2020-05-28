@@ -23,7 +23,7 @@ namespace ISProject.Models
         public bool cacei { get; set; }
         public bool cuerpo_academico { get; set; }
         public bool iso { get; set; }
-        public int id_paad { get; set; }
+        public Nullable<int> id_paad { get; set; }
         public Nullable<int> id_iad { get; set; }
     
         public virtual IADs IADs { get; set; }
