@@ -1,0 +1,35 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ListRecordIADs_Coordinador";
+    Layout = "~/Views/Coordinador/_LayoutCoordinador.cshtml";
+    List<RegistroIAD> list = (List<RegistroIAD>)ViewBag.list;
+    List<SelectListItem> period = (List<SelectListItem>)ViewBag.period;
+    List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
+}
+
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Listar Historial de Formatos: PAAD</h1>
+</div>
+<br />
+<div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
+
+    @using (Ajax.BeginForm("FilterRecordIADs", null, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "ListIADsTable",
+        InsertionMode = InsertionMode.Replace
+    }, new { id = "frmFilterRecord" }))
+    {
+        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Periodo: </p>
+        @Html.DropDownList("filter_period", period)
+    }
+</div>
+<div id="ListIADsTable">
+    @Html.Partial("_ListIADs", list)
+</div>
+
+<script>
+    document.getElementById("filter_period").onchange = function () {
+        $("#frmFilterRecord").submit();
+    }
+</script>

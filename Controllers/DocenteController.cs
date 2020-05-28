@@ -506,6 +506,27 @@ namespace ISProject.Controllers
             }
             return msg;
         }
+        public MessageCLS GetMessagesIAD(int id, int tipo)
+        {
+            MessageCLS msg;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                msg = (from message in db.Mensajes
+                       where message.iad == id && message.tipo == tipo
+                       join type in db.TiposDeMensaje
+                       on message.tipo equals type.id_tipo_mensaje
+                       select new MessageCLS
+                       {
+                           id_message = message.id_mensaje,
+                           paad = message.paad ?? default(int),
+                           iad = message.iad ?? default(int),
+                           tipo = message.tipo,
+                           tipo_nombre = type.tipo,
+                           mensaje = message.mensaje
+                       }).FirstOrDefault();
+            }
+            return msg;
+        }
         /* Esta accion transforma una vista en string
          * Recibe el nombre de la vista y el modelo con el cual llenar la vista
          * Regresa un string con la vista 
@@ -536,12 +557,14 @@ namespace ISProject.Controllers
                 return View("ErrorIAD");
             }
             InfoIADCLS info_iad = GetInfoIAD();
+            if (info_iad != null && info_iad.status_value != 1)
+                return RedirectToAction("ViewIAD", new { id = info_iad.id_paad });
             JoinActivities(info_iad.id_iad, info_paad.id_paad);
             ViewBag.info_iad = info_iad;
             ViewBag.header = GetHeaderIAD(info_iad.id_iad);
             List<ActivityCLS> activities = GetActivitiesIAD(info_iad.id_iad);
             ViewBag.activities = activities;
-            ViewBag.msg = GetMessages(info_iad.id_iad,1);
+            ViewBag.msg = GetMessagesIAD(info_iad.id_iad,1);
             return View();
         }
         public ActionResult ModalActivity_IAD(int mdl_id_iad, int mdl_id_activity)
@@ -677,7 +700,7 @@ namespace ISProject.Controllers
             ViewBag.info = info;
             ViewBag.header = GetHeaderIAD(info.id_iad);
             ViewBag.activities = GetActivitiesIAD(info.id_iad);
-            ViewBag.msg = GetMessages(info.id_iad,3);
+            ViewBag.msg = GetMessagesIAD(info.id_iad,3);
             return View("ViewIAD_Docente");
         }
         public ActionResult ApplyActionIAD(AuthenticationCLS credentials, int id_iad, int action_iad, string message_modif = null)

@@ -1,0 +1,40 @@
+﻿@using ISProject.Models
+@{
+    ViewBag.Title = "ListActiveIADs_Director";
+    Layout = "~/Views/Director/_LayoutDirector.cshtml";
+    List<RegistroIAD> list = (List<RegistroIAD>)ViewBag.list;
+    List<SelectListItem> states = (List<SelectListItem>)ViewBag.states;
+    List<SelectListItem> careers = (List<SelectListItem>)ViewBag.careers;
+}
+
+<div style="text-align:center">
+    <h1 style="font-weight:bold;font-size:26px">Listar Formatos Activos: IAD</h1>
+</div>
+<br />
+<div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
+
+    @using (Ajax.BeginForm("FilterActiveIADs", null, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "ListIADsTable",
+        InsertionMode = InsertionMode.Replace
+    }, new { id = "frmFilterActive" }))
+    {
+        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Estado: </p>
+        @Html.DropDownList("filter_state", states)
+        <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Carrera: </p>
+        @Html.DropDownList("filter_career", careers)
+    }
+</div>
+<div id="ListIADsTable">
+    @Html.Partial("_ListIADs", list)
+</div>
+
+<script>
+    document.getElementById("filter_state").onchange = function () {
+        $("#frmFilterActive").submit();
+    }
+    document.getElementById("filter_career").onchange = function () {
+        $("#frmFilterActive").submit();
+    }
+</script>
