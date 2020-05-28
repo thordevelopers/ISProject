@@ -20,6 +20,7 @@ namespace ISProject.Controllers
         {
             return View("HomeCoordinador");
         }
+        #region PAAD Actions
         //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
         /* Esta accion corresponde a la vista ViewPAAD
          * Recibe el id del paad 
@@ -67,6 +68,56 @@ namespace ISProject.Controllers
             List<RegistroPAAD> list = GetRecordPAADs(Convert.ToInt32(filter_period));
             return PartialView("_ListPAADs", list);
         }
+        #endregion
+        #region IAD Actions
+        //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
+        /* Esta accion corresponde a la vista ViewPAAD
+         * Recibe el id del paad 
+         * Devuelve la vista*/
+        public ActionResult ViewIAD(int id)
+        {
+            InfoIADCLS info = GetInfoIAD(id);
+            ViewBag.info = info;
+            ViewBag.header = GetHeaderIAD(info.id_iad);
+            ViewBag.activities = GetActivitiesIAD(info.id_iad);
+            return View("ViewIAD_Coordinador");
+        }
+        //Acciones de la vista ------------------------------------------------ ListActiveIADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListActiveIADs*/
+        public ActionResult ListActiveIADs()
+        {
+            ViewBag.list = GetActiveIADs();
+            ViewBag.states = GetStates();
+            return View("ListActiveIADs_Coordinador");
+        }
+        /* Esta accion se dispara cuando el valor seleccionado del dropdownlist cambia
+         * Filtra la lista segun el valor seleccionado del dropdownlist
+         * Recibe el id del estado
+         * Regresa una vista parcial de la tabla con los paads filtrados */
+        public ActionResult FilterActiveIADs(string filter_state)
+        {
+            List<RegistroIAD> list = GetActiveIADs(Convert.ToInt32(filter_state));
+            return PartialView("_ListIADs", list);
+        }
+        //Acciones de la vista ------------------------------------------------ ListRecordIADs ------------------------------------------------
+        /* Esta accion muestra la vista de ListRecordIADs*/
+        public ActionResult ListRecordIADs()
+        {
+            ViewBag.list = GetRecordIADs();
+            ViewBag.period = GetPeriods();
+            ViewBag.careers = GetCareers();
+            return View("ListRecordIADs_Coordinador");
+        }
+        /* Esta accion se dispara cuando se el valor seleccionado de cualquier dropdownlist cambie
+         * Filtra la lista segun el valor seleccionado del dropdownlist
+         * Recibe el id del periodo, el id de la carrera 
+         * Regresa una vista parcial de la tabla con los paads filtrados */
+        public ActionResult FilterRecordIADs(string filter_period)
+        {
+            List<RegistroIAD> list = GetRecordIADs(Convert.ToInt32(filter_period));
+            return PartialView("_ListIADs", list);
+        }
+        #endregion
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
          * Recibe el id del paad 
@@ -87,6 +138,31 @@ namespace ISProject.Controllers
                         {
                             id_paad = paad.id_paad,
                             status_value = paad.estado,
+                            status_name = estado.estado,
+                            active = periodo.activo
+                        }).FirstOrDefault();
+            }
+            return info;
+        }
+        /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
+         * Recibe el id del paad 
+         * Regresa el modelo lleno*/
+        public InfoIADCLS GetInfoIAD(int id)
+        {
+            InfoIADCLS info = new InfoIADCLS();
+            Docentes doc = (Docentes)Session["user"];
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                info = (from iad in db.IADs
+                        where iad.id_iad == id
+                        join estado in db.Estados
+                        on iad.estado equals estado.id_estado
+                        join periodo in db.Periodos
+                        on iad.periodo equals periodo.id_periodo
+                        select new InfoIADCLS
+                        {
+                            id_iad = iad.id_iad,
+                            status_value = iad.estado,
                             status_name = estado.estado,
                             active = periodo.activo
                         }).FirstOrDefault();
@@ -132,6 +208,41 @@ namespace ISProject.Controllers
             }
             return header;
         }
+        public HeaderIADCLS GetHeaderIAD(int id)
+        {
+            HeaderIADCLS header = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                header = (from iad in db.IADs
+                          where iad.id_iad == id
+                          join estado in db.Estados
+                          on iad.estado equals estado.id_estado
+                          join periodo in db.Periodos
+                          on iad.periodo equals periodo.id_periodo
+                          join carrera in db.Carreras
+                          on iad.carrera equals carrera.id_carrera
+                          join docente in db.Docentes
+                          on iad.docente equals docente.id_docente
+                          join categoria in db.Categorias
+                          on iad.categoria_docente equals categoria.id_categoria
+                          join cargo in db.Cargos
+                          on iad.cargo equals cargo.id_cargo
+                          select new HeaderIADCLS
+                          {
+                              periodo = periodo.periodo,
+                              nombre = docente.nombre,
+                              numero_empleado = docente.numero_empleado,
+                              categoria = categoria.categoria,
+                              cargo = cargo.cargo,
+                              horas_clase = iad.horas_clase,
+                              horas_gestion = iad.horas_gestion,
+                              horas_investigacion = iad.horas_investigacion,
+                              horas_tutorias = iad.horas_tutorias
+                          }).First();
+
+            }
+            return header;
+        }
         /* Esta accion recupera las actividades de un paad de la base de datos 
          * Recibe el id del paad 
          * Regresa una lista con los modelos de la actividades*/
@@ -157,6 +268,32 @@ namespace ISProject.Controllers
             }
             return activities;
         }
+        /* Esta accion recupera las actividades de un paad de la base de datos 
+         * Recibe el id del paad 
+         * Regresa una lista con los modelos de la actividades*/
+        public List<ActivityCLS> GetActivitiesIAD(int id)
+        {
+            List<ActivityCLS> activities = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                activities = (from activity in db.Actividades
+                              where activity.id_iad == id
+                              select new ActivityCLS
+                              {
+                                  id = activity.id_actividad,
+                                  actividad = activity.actividad,
+                                  produccion = activity.produccion,
+                                  lugar = activity.lugar,
+                                  porcentaje = activity.porcentaje_final,
+                                  cacei = activity.cacei,
+                                  cuerpo_academico = activity.cuerpo_academico,
+                                  iso = activity.iso,
+                                  id_paad = activity.id_paad ?? default(int),
+                                  id_iad = activity.id_iad ?? default(int)
+                              }).ToList();
+            }
+            return activities;
+        }
         /* Esta accion recupera todos los paads activos de la base de datos segun carrera del coordinador
          * Recibe de forma opcional el id del estado si vienen vacios se omiten en el filtrado
          * Regresa una lista con los modelos de los paad*/
@@ -167,6 +304,7 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 list = (from docente in db.Docentes
+                        where docente.rol == 1
                         join paad in db.PAADs
                         on docente.id_docente equals paad.docente into gpaad
                         from paad in gpaad.DefaultIfEmpty()
@@ -182,6 +320,42 @@ namespace ISProject.Controllers
                         select new RegistroPAAD
                         {
                             id_paad = paad != null ? paad.id_paad : 0,
+                            estado = estado != null ? estado.estado : (from e in db.Estados where e.id_estado == 1 select e.estado).FirstOrDefault(),
+                            estado_valor = estado != null ? estado.id_estado : 1,
+                            periodo = periodo.periodo,
+                            carrera = carrera.carrera,
+                            numero_empleado = docente.numero_empleado,
+                            nombre_docente = docente.nombre,
+                        }).ToList();
+            }
+            return list;
+        }
+        /* Esta accion recupera todos los paads activos de la base de datos segun carrera del coordinador
+         * Recibe de forma opcional el id del estado si vienen vacios se omiten en el filtrado
+         * Regresa una lista con los modelos de los paad*/
+        public List<RegistroIAD> GetActiveIADs(int state = 0)
+        {
+            Docentes doc = (Docentes)Session["user"];
+            List<RegistroIAD> list = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                list = (from docente in db.Docentes
+                        where docente.rol==1
+                        join iad in db.IADs
+                        on docente.id_docente equals iad.docente into gpaad
+                        from paad in gpaad.DefaultIfEmpty()
+                        join estado in db.Estados
+                        on paad.estado equals estado.id_estado into gestado
+                        from estado in gestado.DefaultIfEmpty()
+                        where state > 0 && !(estado == null && state == 1) ? estado.id_estado == state && estado.id_estado != 3 : estado.id_estado != 3
+                        join carrera in db.Carreras
+                        on docente.carrera equals carrera.id_carrera
+                        where carrera.id_carrera == doc.carrera
+                        from periodo in db.Periodos
+                        where periodo.activo == true
+                        select new RegistroIAD
+                        {
+                            id_iad = paad != null ? paad.id_iad : 0,
                             estado = estado != null ? estado.estado : (from e in db.Estados where e.id_estado == 1 select e.estado).FirstOrDefault(),
                             estado_valor = estado != null ? estado.id_estado : 1,
                             periodo = periodo.periodo,
@@ -216,6 +390,39 @@ namespace ISProject.Controllers
                         select new RegistroPAAD
                         {
                             id_paad = paad.id_paad,
+                            estado = estado.estado,
+                            periodo = periodo.periodo,
+                            carrera = carrera.carrera,
+                            numero_empleado = docente.numero_empleado,
+                            nombre_docente = docente.nombre
+                        }).ToList();
+            }
+            return list;
+        }
+        /* Esta accion recupera todos los paads aprobados de la base de datos segun la carrera del coordinador
+         * Recibe de forma opcional el id del periodo y el id de la carrera, si vienen vacios se omiten en el filtrado
+         * Regresa una lista con los modelos de los paad*/
+        public List<RegistroIAD> GetRecordIADs(int period = 0)
+        {
+            Docentes doc = (Docentes)Session["user"];
+            List<RegistroIAD> list = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                list = (from iad in db.IADs
+                        join estado in db.Estados
+                        on iad.estado equals estado.id_estado
+                        where estado.id_estado == 3
+                        join periodo in db.Periodos
+                        on iad.periodo equals periodo.id_periodo
+                        where period > 0 ? periodo.id_periodo == period : true
+                        join carrera in db.Carreras
+                        on iad.carrera equals carrera.id_carrera
+                        where carrera.id_carrera == doc.carrera
+                        join docente in db.Docentes
+                        on iad.docente equals docente.id_docente
+                        select new RegistroIAD
+                        {
+                            id_iad = iad.id_iad,
                             estado = estado.estado,
                             periodo = periodo.periodo,
                             carrera = carrera.carrera,

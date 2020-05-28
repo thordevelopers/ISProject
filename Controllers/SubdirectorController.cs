@@ -39,7 +39,7 @@ namespace ISProject.Controllers
             if (info.isdirector)
                 ViewBag.msg = GetMessages(info.id_paad);
             else
-                ViewBag.msg = new MessagesPAADCLS();
+                ViewBag.msg = new MessageCLS();
             return View("ViewPAAD_Subdirector");
         }
         /* Esta accion aplica las acciones sobre el paad como rechazar paad, aprobar paad, aprobar modificacion y rechazar modificacion

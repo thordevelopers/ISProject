@@ -204,7 +204,6 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MessageCLS.cs" />
-    <Compile Include="Models\MessagesPAADCLS.cs" />
     <Compile Include="Models\PAADs.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
@@ -334,6 +333,12 @@
     <Content Include="Views\Shared\_ListIADs.cshtml" />
     <Content Include="Views\Shared\_HeaderIAD.cshtml" />
     <Content Include="Views\Docente\ErrorIAD.cshtml" />
+    <Content Include="Views\Director\ListActiveIADs_Director.cshtml" />
+    <Content Include="Views\Director\ListRecordIADs_Director.cshtml" />
+    <Content Include="Views\Director\ViewIAD_Director.cshtml" />
+    <Content Include="Views\Coordinador\ListActiveIADs_Coordinador.cshtml" />
+    <Content Include="Views\Coordinador\ListRecordIADs_Coordinador.cshtml" />
+    <Content Include="Views\Coordinador\ViewIAD_Coordinador.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
