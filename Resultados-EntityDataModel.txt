@@ -1,0 +1,15 @@
+﻿Archivo de modelo generado: DB_PAAD_IAD.edmx.
+La carga de los metadatos desde la base de datos tardó 00:00:00.7467927.
+La generación del modelo tardó 00:00:01.4243730.
+Archivo de modelo generado: DB_PAAD_IAD.edmx.
+La carga de los metadatos desde la base de datos tardó 00:00:00.6255859.
+La generación del modelo tardó 00:00:01.0916972.
+Archivo de modelo generado: DB_PAAD_IAD.edmx.
+La carga de los metadatos desde la base de datos tardó 00:00:00.5975684.
+La generación del modelo tardó 00:00:01.1941871.
+Archivo de modelo generado: DB_PAAD_IAD.edmx.
+La carga de los metadatos desde la base de datos tardó 00:00:00.6060328.
+La generación del modelo tardó 00:00:01.1324236.
+Archivo de modelo generado: DB_PAAD_IAD.edmx.
+La carga de los metadatos desde la base de datos tardó 00:00:00.5603098.
+La generación del modelo tardó 00:00:01.0893120.

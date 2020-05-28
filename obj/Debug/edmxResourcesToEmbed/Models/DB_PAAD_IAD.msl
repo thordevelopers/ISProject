@@ -53,45 +53,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Fechas">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Fechas">
-        <MappingFragment StoreEntitySet="Fechas">
-          <ScalarProperty Name="id_fechas" ColumnName="id_fechas" />
-          <ScalarProperty Name="periodo" ColumnName="periodo" />
-          <ScalarProperty Name="inicio" ColumnName="inicio" />
-          <ScalarProperty Name="fin" ColumnName="fin" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="IADs">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.IADs">
-        <MappingFragment StoreEntitySet="IADs">
-          <ScalarProperty Name="id_iad" ColumnName="id_iad" />
-          <ScalarProperty Name="estado" ColumnName="estado" />
-          <ScalarProperty Name="periodo" ColumnName="periodo" />
-          <ScalarProperty Name="carrera" ColumnName="carrera" />
-          <ScalarProperty Name="docente" ColumnName="docente" />
-          <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
-          <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
-          <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
-          <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
-          <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
-          <ScalarProperty Name="cargo" ColumnName="cargo" />
-          <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
-          <ScalarProperty Name="firma_director" ColumnName="firma_director" />
-          <ScalarProperty Name="comentarios" ColumnName="comentarios" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Periodos">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Periodos">
-        <MappingFragment StoreEntitySet="Periodos">
-          <ScalarProperty Name="activo" ColumnName="activo" />
-          <ScalarProperty Name="id_periodo" ColumnName="id_periodo" />
-          <ScalarProperty Name="periodo" ColumnName="periodo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="sysdiagrams">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.sysdiagrams">
         <MappingFragment StoreEntitySet="sysdiagrams">
@@ -145,9 +106,39 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TiposDeMensaje">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.TiposDeMensaje">
+        <MappingFragment StoreEntitySet="TiposDeMensaje">
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="id_tipo_mensaje" ColumnName="id_tipo_mensaje" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IADs">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.IADs">
+        <MappingFragment StoreEntitySet="IADs">
+          <ScalarProperty Name="extemporaneo" ColumnName="extemporaneo" />
+          <ScalarProperty Name="comentarios" ColumnName="comentarios" />
+          <ScalarProperty Name="firma_director" ColumnName="firma_director" />
+          <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
+          <ScalarProperty Name="cargo" ColumnName="cargo" />
+          <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
+          <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
+          <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
+          <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
+          <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
+          <ScalarProperty Name="docente" ColumnName="docente" />
+          <ScalarProperty Name="carrera" ColumnName="carrera" />
+          <ScalarProperty Name="periodo" ColumnName="periodo" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="id_iad" ColumnName="id_iad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="PAADs">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
         <MappingFragment StoreEntitySet="PAADs">
+          <ScalarProperty Name="extemporaneo" ColumnName="extemporaneo" />
           <ScalarProperty Name="firma_director" ColumnName="firma_director" />
           <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
           <ScalarProperty Name="cargo" ColumnName="cargo" />
@@ -164,11 +155,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TiposDeMensaje">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.TiposDeMensaje">
-        <MappingFragment StoreEntitySet="TiposDeMensaje">
-          <ScalarProperty Name="tipo" ColumnName="tipo" />
-          <ScalarProperty Name="id_tipo_mensaje" ColumnName="id_tipo_mensaje" />
+    <EntitySetMapping Name="Periodos">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Periodos">
+        <MappingFragment StoreEntitySet="Periodos">
+          <ScalarProperty Name="fecha_cierre" ColumnName="fecha_cierre" />
+          <ScalarProperty Name="iad_fin" ColumnName="iad_fin" />
+          <ScalarProperty Name="iad_inicio" ColumnName="iad_inicio" />
+          <ScalarProperty Name="paad_fin" ColumnName="paad_fin" />
+          <ScalarProperty Name="paad_inicio" ColumnName="paad_inicio" />
+          <ScalarProperty Name="activo" ColumnName="activo" />
+          <ScalarProperty Name="periodo" ColumnName="periodo" />
+          <ScalarProperty Name="id_periodo" ColumnName="id_periodo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -35,16 +35,17 @@ namespace ISProject.Models
         public string firma_docente { get; set; }
         public string firma_director { get; set; }
         public string comentarios { get; set; }
+        public bool extemporaneo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Actividades> Actividades { get; set; }
         public virtual Cargos Cargos { get; set; }
         public virtual Carreras Carreras { get; set; }
         public virtual Categorias Categorias { get; set; }
-        public virtual Estados Estados { get; set; }
-        public virtual Periodos Periodos { get; set; }
         public virtual Docentes Docentes { get; set; }
+        public virtual Estados Estados { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mensajes> Mensajes { get; set; }
+        public virtual Periodos Periodos { get; set; }
     }
 }

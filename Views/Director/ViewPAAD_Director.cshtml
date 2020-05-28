@@ -8,11 +8,18 @@
     MessageCLS msg = (MessageCLS)ViewBag.msg;
 }
 
-@if (msg != null)
-{
+@if (msg != null && info.active) 
+{ 
     <div style="background-color: #f4e04d; padding: 8px 60px; width:100%;text-align:center">
-        <label style="font-size: 15px; font-family: Helvetica;font-weight:bold">Se ha Solicitado una Modificación del Formato PAAD</label>
-        <a href="#" onclick="showMessage()" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
+        @if (msg.tipo == 2)
+        {
+            <label style="font-size: 15px; font-family: Helvetica;font-weight:bold"> Se ha Solicitado una Modificación del Formato PAAD </label>
+        }
+        else if (msg.tipo == 4)
+        {
+            <label style="font-size: 15px; font-family: Helvetica;font-weight:bold"> Se ha Entregado el Formato PAAD Fuera de la Fechas Establecidas </label>
+        }
+        <a href="#" onclick="showMessage(1)" style="font-size: 15px; font-family: Helvetica; color: darkblue;">Ver más</a>
     </div>
 }
 <br />
@@ -33,7 +40,7 @@
 <div class="" style="width:100%;text-align:right;margin-top:30px">
     @if (info.active && !info.isdirector)
     {
-        if (info.status_value == 2)
+        if (info.status_value == 2 || info.status_value == 5)
         {
             <button type="button" onclick="authCredentials(1)" class="btn btn-rojo btnAction">Rechazar formato</button>
             <button type="button" onclick="authCredentials(2)" class="btn btn-verde-light btnAction">Aprobar formato</button>
@@ -45,8 +52,6 @@
         }
     }
 </div>
-
-
 <div id="mdlAuthCredentials" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -88,7 +93,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" style="margin-bottom:10px">
-                <label class="lbl-30" style="padding-top:20px">Razones de la Solicitud de Modificacion</label>
+                <label id="msgTitle" class="lbl-30" style="padding-top:20px">@(msg!=null?msg.tipo_nombre:"")</label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -96,7 +101,7 @@
             <div>
                 <div id="divRejectMessage" style="width :95%">
                     <div style="text-align:center">
-                        @Html.TextArea("Testeo",msg==null?"":msg.mensaje, new { rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
+                        @Html.TextArea("Testeo", msg == null ? "" : msg.mensaje, new { rows = 6, value = "", @readonly = true, @class = "tb-dato", style = "width:95%;margin-left:5%" })
                     </div>
                 </div>
                 <div class="modal-footer">

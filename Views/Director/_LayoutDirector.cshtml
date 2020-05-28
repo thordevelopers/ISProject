@@ -41,13 +41,20 @@
                         </div>
                     </div>
                     <div class="dropdown">
-                        <a class="dropbtn" href="@Url.Action("ChangeDirectorAccount", "Director", Request.Url.Scheme)">Cambiar director</a>
+                        <button class="dropbtn">Asignar Fechas</button>
+                        <div class="dropdown-content">
+                            <a href="@Url.Action("SetDatePAAD", "Director", Request.Url.Scheme)">PAAD</a>
+                            <a href="@Url.Action("SetDateIAD", "Director", Request.Url.Scheme)">IAD</a>
+                        </div>
                     </div>
                     <div class="dropdown">
-                        <a class="dropbtn" href="https://www.youtube.com/channel/UC1KmIMsAJBCv7_2AjWpkDyQ/playlists" target="_blank">Ayuda</a>
+                        <button class="dropbtn" onclick="location.href='@Url.Action("ChangeDirectorAccount", "Director", Request.Url.Scheme)'">Cambiar director</button>
                     </div>
                     <div class="dropdown">
-                        <a class="dropbtn" href="@Url.Action("LogOut", "Login", Request.Url.Scheme)">Cerrar Sesion</a>
+                        <button class="dropbtn"onclick="openHelp()" target="_blank">Ayuda</button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="location.href='@Url.Action("LogOut", "Login", Request.Url.Scheme)'">Cerrar Sesion</button>
                     </div>
                 </div>
             </div>
@@ -62,3 +69,8 @@
     @RenderBody() <!-- Esto invoca el codigo html de cada vista-->
 
 </div>
+<script>
+    function openHelp() {
+        window.open('https://www.youtube.com/channel/UC1KmIMsAJBCv7_2AjWpkDyQ/playlists', '_blank');
+    }
+</script>

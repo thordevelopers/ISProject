@@ -15,7 +15,7 @@ namespace ISProject.Controllers
     public class SubdirectorController : Controller
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
-        AuthenticationController auth = new AuthenticationController();
+        UtilitiesController util = new  UtilitiesController();
         //Acciones de la vista ------------------------------------------------ HomeSubdirector ------------------------------------------------
         //Vista de inicio para el subdirector
         public ActionResult Home()
@@ -58,7 +58,7 @@ namespace ISProject.Controllers
             //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol <3 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol <3 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
