@@ -9,23 +9,23 @@
 }
 
 <div style="text-align:center">
-    <h1 style="font-weight:bold;font-size:26px">Listar Historial de Formatos: PAAD</h1>
+    <h1 style="font-weight:bold;font-size:26px">Listar Historial de Formatos: IAD</h1>
 </div>
 <br />
 <div class="renglon-4" style="display:inline-flex;margin-bottom:30px">
     <p style="margin-right: 10px; text-align: center;display:inline-flex;font-size:20px">Periodo: </p>
-    @using (Ajax.BeginForm("FilterRecordPAADs", null, new AjaxOptions
+    @using (Ajax.BeginForm("FilterRecordIADs", null, new AjaxOptions
     {
         HttpMethod = "POST",
-        UpdateTargetId = "ListPAADsTable",
+        UpdateTargetId = "ListIADsTable",
         InsertionMode = InsertionMode.Replace
     }, new { id = "frmFilterRecord" }))
     {
         @Html.DropDownList("id_period", periods)
     }
 </div>
-<div id="ListPAADsTable">
-    @Html.Partial("_ListPAADs", list)
+<div id="ListIADsTable">
+    @Html.Partial("_ListIADs", list)
 </div>
 
 <script>

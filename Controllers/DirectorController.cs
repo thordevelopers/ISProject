@@ -320,7 +320,7 @@ namespace ISProject.Controllers
                                   cacei = activity.cacei,
                                   cuerpo_academico = activity.cuerpo_academico,
                                   iso = activity.iso,
-                                  id_paad = activity.id_paad
+                                  id_paad = activity.id_paad??default(int)
                               }).ToList();
             }
             return activities;

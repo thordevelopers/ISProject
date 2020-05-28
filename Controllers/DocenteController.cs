@@ -70,7 +70,7 @@ namespace ISProject.Controllers
                                  cacei = activity.cacei,
                                  cuerpo_academico = activity.cuerpo_academico,
                                  iso = activity.iso,
-                                 id_paad = activity.id_paad
+                                 id_paad = activity.id_paad??default(int)
                              }).FirstOrDefault();
                 }
             }
@@ -309,7 +309,7 @@ namespace ISProject.Controllers
             return PartialView("_ListPAADs", list);
         }
         #endregion
-        #region Utility functions
+        #region Utility functions PAAD
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
          * Recibe de manera opcional un id del paad 
@@ -425,7 +425,7 @@ namespace ISProject.Controllers
                                   cacei = activity.cacei,
                                   cuerpo_academico = activity.cuerpo_academico,
                                   iso = activity.iso,
-                                  id_paad = activity.id_paad
+                                  id_paad = activity.id_paad??default(int)
                               }).ToList();
             }
             return activities;
@@ -464,7 +464,8 @@ namespace ISProject.Controllers
             }
             return list;
         }
-
+        #endregion
+        #region General Utilities 
         /* Esta accion recupera los periodos 
          * No recibe argumentos
          * Regresa una lista con los modelos de los periodos*/
@@ -531,13 +532,18 @@ namespace ISProject.Controllers
         //ModifyIAD actions
         public ActionResult ModifyIAD()
         {
-            InfoPAADCLS info = GetInfoPAAD();
-            if (info != null && info.status_value != 1)
-                return RedirectToAction("ViewPAAD", new { id = info.id_paad });
-            ViewBag.info = info;
-            ViewBag.header = GetHeader(info.id_paad);
-            ViewBag.activities = GetActivities(info.id_paad);
-            ViewBag.msg = GetMessages(info.id_paad);
+            InfoPAADCLS info_paad = GetInfoPAAD();
+            if (info_paad != null && info_paad.status_value < 3)
+            {
+                return View("ErrorIAD");
+            }
+            InfoIADCLS info_iad = GetInfoIAD();
+            JoinActivities(info_iad.id_iad, info_paad.id_paad);
+            ViewBag.info_iad = info_iad;
+            ViewBag.header = GetHeaderIAD(info_iad.id_iad);
+            List<ActivityCLS> activities = GetActivitiesIAD(info_iad.id_iad);
+            ViewBag.activities = activities;
+            ViewBag.msg = GetMessages(info_iad.id_iad,1);
             return View();
         }
         public ActionResult ModalActivity_IAD(int mdl_id_iad, int mdl_id_activity)
@@ -560,15 +566,15 @@ namespace ISProject.Controllers
                                  cacei = activity.cacei,
                                  cuerpo_academico = activity.cuerpo_academico,
                                  iso = activity.iso,
-                                 id_paad = activity.id_paad
+                                 id_iad = activity.id_iad??default(int)
                              }).FirstOrDefault();
                 }
             }
             else
             {
-                modal = new ActivityCLS { id_paad = mdl_id_iad };
+                modal = new ActivityCLS { id_iad = mdl_id_iad };
             }
-            return PartialView("_ModalActivityPAAD", modal);
+            return PartialView("_ModalActivityIAD", modal);
         }
         [HttpPost]
         public ActionResult SaveActivity_IAD(ActivityCLS model)
@@ -613,12 +619,12 @@ namespace ISProject.Controllers
                             cacei = model.cacei,
                             cuerpo_academico = model.cuerpo_academico,
                             iso = model.iso,
-                            id_paad = model.id_paad
+                            id_iad = model.id_iad
                         });
                         db.SaveChanges();
                     }
                 }
-                List<ActivityCLS> list = GetActivities(model.id_paad);
+                List<ActivityCLS> list = GetActivitiesIAD(model.id_iad);
                 return Json(new
                 {
                     Status = 1,
@@ -627,53 +633,55 @@ namespace ISProject.Controllers
                 });
             }
         }
-        public ActionResult DeleteActivity_IAD(int del_id_paad, int del_id_activity)
+        public ActionResult DeleteActivity_IAD(int del_id_iad, int del_id_activity)
         {
             using (var db = new DB_PAAD_IADEntities())
             {
                 Actividades act_db = db.Actividades.Single(p => p.id_actividad == del_id_activity);
-                db.Actividades.Remove(act_db);
+                act_db.id_iad = null;
                 db.SaveChanges();
             }
-            List<ActivityCLS> list = GetActivities(del_id_paad);
+            List<ActivityCLS> list = GetActivitiesIAD(del_id_iad);
             return PartialView("_EditActivitiesTable", list);
         }
-        public ActionResult DropActivities_IAD(int drop_id_paad)
+        public ActionResult DropActivities_IAD(int drop_id_iad)
         {
             using (var db = new DB_PAAD_IADEntities())
             {
-                List<Actividades> act_db = db.Actividades.Where(p => p.id_paad == drop_id_paad).ToList();
+                List<Actividades> act_db = db.Actividades.Where(p => p.id_iad == drop_id_iad).ToList();
                 foreach (var item in act_db)
                 {
-                    db.Actividades.Remove(item);
+                    item.id_iad = null;
                 }
                 db.SaveChanges();
             }
             return PartialView("_EditActivitiesTable", new List<ActivityCLS>());
         }
-        public void ChangeCargo_IAD(string id_cargo, int id_paad)
+        public void ChangeCargo_IAD(string id_cargo, int id_iad)
         {
             using (var db = new DB_PAAD_IADEntities())
             {
-                PAADs doc_paad = (from paad in db.PAADs where paad.id_paad == id_paad select paad).FirstOrDefault();
-                doc_paad.cargo = Convert.ToInt32(id_cargo);
+                IADs doc_iad = (from iad in db.IADs where iad.id_iad == id_iad select iad).FirstOrDefault();
+                doc_iad.cargo = Convert.ToInt32(id_cargo);
                 db.SaveChanges();
             }
         }
         //ViewIAD_Docente Actions
+        //Cuando entre a viewIAD si hay un PAAD aprobado y activo va a llamar al metodo GetInfoPAAD y si no lo har
         public ActionResult ViewIAD(int id)
         {
-            InfoPAADCLS info = GetInfoPAAD(id);
-            if (info == null && info.status_value == 1)
-                return RedirectToAction("ModifyPAAD");
+            InfoIADCLS info = GetInfoIAD(id);
+            if (info == null || info.status_value == 1)
+                return RedirectToAction("ModifyIAD");
             ViewBag.info = info;
-            ViewBag.header = GetHeader(info.id_paad);
-            ViewBag.activities = GetActivities(info.id_paad);
-            ViewBag.msg = GetMessages(info.id_paad);
-            return View("ViewPAAD_Docente");
+            ViewBag.header = GetHeaderIAD(info.id_iad);
+            ViewBag.activities = GetActivitiesIAD(info.id_iad);
+            ViewBag.msg = GetMessages(info.id_iad,3);
+            return View("ViewIAD_Docente");
         }
-        public ActionResult ApplyActionIAD(AuthenticationCLS credentials, int id_paad, int action_paad, string message_modif = null)
+        public ActionResult ApplyActionIAD(AuthenticationCLS credentials, int id_iad, int action_iad, string message_modif = null)
         {
+            //Valida los campos del modelo de las credenciales
             if (!ModelState.IsValid)
                 return Json(new
                 {
@@ -681,7 +689,9 @@ namespace ISProject.Controllers
                     Message = "Invalid",
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
+            //Obtiene los datos de la sesion del usuario
             Docentes doc = ((Docentes)Session["user"]);
+            //Valida que la autenticacion sea correcta y que el correo de la autenticacion se el mismo que el de la sesion
             if (!auth.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
@@ -694,8 +704,10 @@ namespace ISProject.Controllers
             }
             using (var db = new DB_PAAD_IADEntities())
             {
-                PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad && p.docente == doc.id_docente).FirstOrDefault();
-                if (paad == null)
+                Mensajes mssg = null;
+
+                IADs iad = db.IADs.Where(p => p.id_iad == id_iad && p.docente == doc.id_docente).FirstOrDefault();
+                if (iad == null)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
                     return Json(new
@@ -705,27 +717,40 @@ namespace ISProject.Controllers
                         AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                     });
                 }
-                if (action_paad == 1)
+                if (action_iad == 1)
                 {
-                    paad.estado = 2;
-                    paad.razones_rechazo = null;
-                    paad.firma_docente = Guid.NewGuid().ToString("N");
+                    //Acciones para el caso de Entregar PAAD
+                    iad.estado = 2;
+                    mssg = db.Mensajes.Where(p => p.iad == id_iad && p.tipo == 1).FirstOrDefault();
+                    iad.firma_docente = Guid.NewGuid().ToString("N");
                 }
-                else if (action_paad == 2)
+                else if (action_iad == 2)
                 {
-                    paad.estado = 1;
-                    paad.firma_docente = null;
+                    //Acciones para el caso de Cancelar Entrega de PAAD
+                    iad.estado = 1;
+                    iad.firma_docente = null;
                 }
-                else if (action_paad == 3)
+                else if (action_iad == 3)
                 {
-                    paad.estado = 4;
-                    paad.razones_modificacion = message_modif;
-                    paad.razones_rechazo_solicitud = null;
+                    //Acciones para el caso de Solicitar Modificacion de PAAD
+                    iad.estado = 4;
+                    mssg = db.Mensajes.Where(p => p.iad == id_iad && p.tipo == 3).FirstOrDefault();
+                    db.Mensajes.Add(new Mensajes
+                    {
+                        iad = iad.id_iad,
+                        tipo = 2,
+                        mensaje = message_modif
+                    });
                 }
-                else if (action_paad == 4)
+                else if (action_iad == 4)
                 {
-                    paad.estado = 3;
+                    //Acciones para el caso de Cancelar Solicitud de Modificacion de PAAD
+                    iad.estado = 3;
+                    mssg = db.Mensajes.Where(p => p.iad == id_iad && p.tipo == 2).FirstOrDefault();
                 }
+                //Si hay mensajes que borrar los elimina, por lo generar por cada paad solo hay un mensaje activo que mostrar, en caso de eliminar varios al mismo tiempo se debera modificar.
+                if (mssg != null)
+                    db.Mensajes.Remove(mssg);
                 db.SaveChanges();
             }
             return Json(new
@@ -735,17 +760,195 @@ namespace ISProject.Controllers
             });
         }
         //ListRecordIADs_Docente Actions
-        public ActionResult ListRecordPAADs()
+        public ActionResult ListRecordIADs()
         {
-            ViewBag.list = GetRecordPAADs();
+            ViewBag.list = GetRecordIADs();
             ViewBag.periods = GetPeriods();
-            return View("ListRecordPAADs_Docente");
+            return View("ListRecordIADs_Docente");
         }
-        public ActionResult FilterRecordPAADs(string id_period)
+        public ActionResult FilterRecordIADs(string id_period)
         {
-            List<RegistroPAAD> list = GetRecordPAADs(Convert.ToInt32(id_period));
-            return PartialView("_ListPAADs", list);
+            List<RegistroIAD> list = GetRecordIADs(Convert.ToInt32(id_period));
+            return PartialView("_ListIADs", list);
         }
+        #endregion
+        #region Utilities for IAD
+
+        /* Esta accion recupera todos los iads del docente de la base de datos 
+        * Recibe de forma opcional el id del periodo por el cual filtrar si no es enviado regresa todos sin importar el periodo
+        * Regresa una lista con los modelos de los iad, si no encuentra iads valida si hay paads aprobados, si no
+        muestra un mensaje x*/
+        public List<RegistroIAD> GetRecordIADs(int period = 0)
+        {
+            List<RegistroIAD> list = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Docentes doc = ((Docentes)Session["user"]);
+                list = (from iad in db.IADs
+                        where iad.docente == doc.id_docente
+                        join estado in db.Estados
+                        on iad.estado equals estado.id_estado
+                        join periodo in db.Periodos
+                        on iad.periodo equals periodo.id_periodo
+                        where period > 0 ? periodo.id_periodo == period : true
+                        join carrera in db.Carreras
+                        on iad.carrera equals carrera.id_carrera
+                        join docente in db.Docentes
+                        on iad.docente equals docente.id_docente
+                        select new RegistroIAD
+                        {
+                            id_iad = iad.id_iad,
+                            estado = estado.estado,
+                            estado_valor = 0,
+                            periodo = periodo.periodo,
+                            carrera = carrera.carrera,
+                            numero_empleado = docente.numero_empleado,
+                            nombre_docente = docente.nombre
+                        }).ToList();
+            }
+            return list;
+        }
+
+        public InfoIADCLS GetInfoIAD(int id = 0)
+        {
+            InfoIADCLS info = new InfoIADCLS();
+            Docentes doc = (Docentes)Session["user"];
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                info = (from iad in db.IADs
+                        where id > 0 ? iad.id_iad == id : iad.docente == doc.id_docente
+                        join estado in db.Estados
+                        on iad.estado equals estado.id_estado
+                        join periodo in db.Periodos
+                        on iad.periodo equals periodo.id_periodo
+                        where id > 0 ? true : periodo.activo == true
+                        select new InfoIADCLS
+                        {
+                            id_iad = iad.id_iad,
+                            status_value = iad.estado,
+                            status_name = estado.estado,
+                            active = periodo.activo,
+                        }).FirstOrDefault();
+                if (info == null && id == 0)
+                {
+                    db.IADs.Add(new IADs
+                    {
+                        estado = 1,
+                        periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
+                        carrera = 1,
+                        docente = doc.id_docente,
+                        categoria_docente = 1,
+                        horas_clase = 10,
+                        horas_investigacion = 10,
+                        horas_gestion = 10,
+                        horas_tutorias = 10,
+                        cargo = 1,
+                    });
+                    db.SaveChanges();
+                    info = (from iad in db.IADs
+                            where iad.docente == doc.id_docente
+                            join estado in db.Estados
+                            on iad.estado equals estado.id_estado
+                            join periodo in db.Periodos
+                            on iad.periodo equals periodo.id_periodo
+                            where periodo.activo == true
+                            select new InfoIADCLS
+                            {
+                                id_iad = iad.id_iad,
+                                status_value = iad.estado,
+                                status_name = estado.estado,
+                                active = periodo.activo,
+                            }).FirstOrDefault();
+                }
+            }
+            return info;
+        }
+
+        public HeaderIADCLS GetHeaderIAD(int id)
+        {
+            HeaderIADCLS header = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                //Obtiene la informacion
+                header = (from iads in db.IADs
+                          where iads.id_iad == id
+                          join estado in db.Estados
+                          on iads.estado equals estado.id_estado
+                          join periodo in db.Periodos
+                          on iads.periodo equals periodo.id_periodo
+                          join carrera in db.Carreras
+                          on iads.carrera equals carrera.id_carrera
+                          join docente in db.Docentes
+                          on iads.docente equals docente.id_docente
+                          join categoria in db.Categorias
+                          on iads.categoria_docente equals categoria.id_categoria
+                          join cargo in db.Cargos
+                          on iads.cargo equals cargo.id_cargo
+                          select new HeaderIADCLS
+                          {
+                              periodo = periodo.periodo,
+                              nombre = docente.nombre,
+                              numero_empleado = docente.numero_empleado,
+                              categoria = categoria.categoria,
+                              cargo = cargo.cargo,
+                              horas_clase = iads.horas_clase,
+                              horas_gestion = iads.horas_gestion,
+                              horas_investigacion = iads.horas_investigacion,
+                              horas_tutorias = iads.horas_tutorias,
+                              id_iad = id
+                          }).First();
+                //Obtiene la lista de cargos
+                header.cargos = (from cargo in db.Cargos
+                                 select new SelectListItem
+                                 {
+                                     Text = cargo.cargo,
+                                     Value = cargo.id_cargo.ToString()
+                                 }).ToList();
+                //Obtiene el id del cargo que tiene seleccionado
+                int id_cargo = (from iad in db.IADs where iad.id_iad == id select iad.cargo).FirstOrDefault();
+                //Marca como seleccionado el cargo en la lista de cargos.
+                header.cargos.Where(p => p.Value == id_cargo.ToString()).FirstOrDefault().Selected = true;
+            }
+            return header;
+        }
+
+        public void JoinActivities (int id_iad, int id_paad)
+        {
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                List<Actividades> paad_act = db.Actividades.Where(p => p.id_paad == id_paad).ToList();
+                foreach(var item in paad_act)
+                {
+                    item.id_iad = id_iad;
+                }
+                db.SaveChanges();
+            }
+        }
+
+        public List<ActivityCLS> GetActivitiesIAD(int id)
+        {
+            List<ActivityCLS> activities = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                activities = (from activity in db.Actividades
+                              where activity.id_iad == id
+                              select new ActivityCLS
+                              {
+                                  id = activity.id_actividad,
+                                  actividad = activity.actividad,
+                                  produccion = activity.produccion,
+                                  lugar = activity.lugar,
+                                  porcentaje_inicial = activity.porcentaje_inicial,
+                                  porcentaje_final = activity.porcentaje_final,
+                                  cacei = activity.cacei,
+                                  cuerpo_academico = activity.cuerpo_academico,
+                                  iso = activity.iso,
+                                  id_iad = activity.id_iad ?? default(int)
+                              }).ToList();
+            }
+            return activities;
+        }
+
         #endregion
     }
 }

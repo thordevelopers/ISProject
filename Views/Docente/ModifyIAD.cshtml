@@ -1,30 +1,32 @@
 ﻿@using ISProject.Models
+
 @{
-    ViewBag.Title = "ModifyPAAD";
+    ViewBag.Title = "ModifyIAD";
     Layout = "~/Views/Docente/_LayoutDocente.cshtml";
-    HeaderPAADCLS header = (HeaderPAADCLS)ViewBag.header;
+    HeaderIADCLS header = (HeaderIADCLS)ViewBag.header;
     List<ActivityCLS> activities = (List<ActivityCLS>)ViewBag.activities;
-    InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+    InfoIADCLS info = (InfoIADCLS)ViewBag.info_iad;
     MessageCLS msg = (MessageCLS)ViewBag.msg;
 }
+
 @if (msg != null)
 {
     <div style="background: rgba(255,0,0,0.6); padding: 8px 60px;text-align:center ">
-            <label style="font-size: 15px; font-family: Helvetica;font-weight:bold">Formato PAAD Rechazado</label>
-            <a href="#" onclick="showMessage('@msg.mensaje')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
+        <label style="font-size: 15px; font-family: Helvetica;font-weight:bold">Formato IAD Rechazado</label>
+        <a href="#" onclick="showMessage('@msg.mensaje')" style="font-size: 15px; font-family: Helvetica; color: #035aa6;">Ver más</a>
     </div>
 }
 <br>
 <div style="text-align:center">
-    <h1 style="font-weight:bold;font-size:26px">Editar Formato: PAAD</h1>
+    <h1 style="font-weight:bold;font-size:26px">Editar Formato: IAD</h1>
 </div>
 <br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Docente", Request.Url.Scheme)">Regresar</a>
-    @Html.Partial("_StatusPAAD", info)
+    <a class="btn btn-azul-claro" href="@Url.Action("ListRecordIADs", "Docente", Request.Url.Scheme)">Regresar</a>
+    @Html.Partial("_StatusIAD", info)
 </div>
 <div>
-    @Html.Partial("_ModifyHeaderPAAD", header)
+    @Html.Partial("_ModifyHeaderIAD", header)
 </div>
 <div id="tblActivities">
     @Html.Partial("_EditActivitiesTable", activities)
@@ -42,7 +44,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            @using (Ajax.BeginForm("SaveActivity", "Docente", null, new AjaxOptions
+            @using (Ajax.BeginForm("SaveActivity_IAD", "Docente", null, new AjaxOptions
             {
                 HttpMethod = "POST",
                 InsertionMode = InsertionMode.Replace,
@@ -68,20 +70,20 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            @using (Ajax.BeginForm("ApplyActionPAAD", "Docente", null, new AjaxOptions
+            @using (Ajax.BeginForm("ApplyActionIAD", "Docente", null, new AjaxOptions
             {
                 HttpMethod = "POST",
                 OnSuccess = "authResponse"
-            }, new { id = "frmSendPAAD" }))
+            }, new { id = "frmSendIAD" }))
             {
                 <div id="mdlAuthCredentialsContent">
                     @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
                 </div>
-                @Html.Hidden("id_paad", info.id_paad)
-                @Html.Hidden("action_paad", 1)
+                @Html.Hidden("id_iad", info.id_iad)
+                @Html.Hidden("action_iad", 1)
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                    <button type="button" onclick="sendIAD()" class="btn btn-verde-light">Aceptar</button>
                 </div>
             }
         </div>
@@ -91,7 +93,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center" style="margin-bottom:10px">
-                <label class="lbl-30" style="padding-top:20px">Razones de Rechazo del Formato PAAAD</label>
+                <label class="lbl-30" style="padding-top:20px">Razones de Rechazo del Formato IAD</label>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -109,7 +111,7 @@
         </div>
     </div>
 </div>
-@using (Ajax.BeginForm("ModalActivity", "Docente", null, new AjaxOptions
+@using (Ajax.BeginForm("ModalActivity_IAD", "Docente", null, new AjaxOptions
 {
     HttpMethod = "POST",
     UpdateTargetId = "mdlActivityContent",
@@ -117,27 +119,27 @@
     OnSuccess = "showActivity"
 }, new { id = "frmModalActivity" }))
 {
-    @Html.Hidden("mdl_id_paad", info.id_paad)
+    @Html.Hidden("mdl_id_iad", info.id_iad)
     @Html.Hidden("mdl_id_activity")
 }
-@using (Ajax.BeginForm("DeleteActivity", "Docente", null, new AjaxOptions
+@using (Ajax.BeginForm("DeleteActivity_IAD", "Docente", null, new AjaxOptions
 {
     HttpMethod = "POST",
     UpdateTargetId = "tblActivities",
     InsertionMode = InsertionMode.Replace
 }, new { id = "frmDeleteActivity" }))
 {
-    @Html.Hidden("del_id_paad", info.id_paad)
+    @Html.Hidden("del_id_iad", info.id_iad)
     @Html.Hidden("del_id_activity")
 }
-@using (Ajax.BeginForm("DropActivities", "Docente", null, new AjaxOptions
+@using (Ajax.BeginForm("DropActivities_IAD", "Docente", null, new AjaxOptions
 {
     HttpMethod = "POST",
     UpdateTargetId = "tblActivities",
     InsertionMode = InsertionMode.Replace
 }, new { id = "frmDropActivities" }))
 {
-    @Html.Hidden("drop_id_paad", info.id_paad)
+    @Html.Hidden("drop_id_iad", info.id_iad)
 }
 <script type="text/javascript">
     function showActivity() {
@@ -174,15 +176,15 @@
     function authCredentials() {
         $("#mdlAuthCredentials").modal("show");
     }
-    function sendPAAD() {
-        $("#frmSendPAAD").submit();
+    function sendIAD() {
+        $("#frmSendIAD").submit();
     }
     function authResponse(response) {
         if (response.Status != 1) {
             $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
         }
         else {
-            window.location ="@Url.Action("ViewPAAD", "Docente",new { id = info.id_paad})";
+            window.location ="@Url.Action("ViewIAD", "Docente",new { id = info.id_iad})";
         }
     }
     function showMessage(message) {
