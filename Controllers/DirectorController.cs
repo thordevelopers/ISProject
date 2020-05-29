@@ -143,7 +143,7 @@ namespace ISProject.Controllers
         public ActionResult ListActivePAADs()
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
-            if (info_period.is_close)
+            if (info_period.is_close || info_period.is_close_paad)
                 return View("NotActivePeriod");
             ViewBag.info_period = info_period;
             ViewBag.list = GetActivePAADs();
@@ -208,6 +208,76 @@ namespace ISProject.Controllers
                 else
                 {
                     db.PAADs.Add(new PAADs
+                    {
+                        estado = 1,
+                        periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
+                        carrera = 1,
+                        docente = id_docente,
+                        categoria_docente = 1,
+                        horas_clase = 10,
+                        horas_investigacion = 10,
+                        horas_gestion = 10,
+                        horas_tutorias = 10,
+                        cargo = 1,
+                        extemporaneo = true
+                    });
+                }
+                db.SaveChanges();
+            }
+            return Json(new
+            {
+                Status = 1,
+                Message = "Success"
+            });
+        }
+        public ActionResult AllowExtemporaneousIAD(AuthenticationCLS credentials, int id_iad, int id_docente)
+        {
+            //Valida los campos del modelo de las credenciales
+            if (!ModelState.IsValid)
+                return Json(new
+                {
+                    Status = 2,
+                    Message = "Invalid",
+                    AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                });
+            //Obtiene los datos de la sesion del usuario
+            Docentes doc = ((Docentes)Session["user"]);
+            //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            {
+                credentials.message = "Correo y/o contraseña incorrectos";
+                return Json(new
+                {
+                    Status = 3,
+                    Message = "Error",
+                    AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                });
+            }
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                if (id_iad != 0)
+                {
+                    IADs iad = db.IADs.Where(p => p.id_iad == id_iad).FirstOrDefault();
+                    bool isdirector = (from docente in db.Docentes where docente.id_docente == id_docente select docente.isdirector).FirstOrDefault();
+                    //Valida que el paad sea del director
+                    if (iad != null || !isdirector)
+                    {
+                        iad.extemporaneo = true;
+                    }
+                    else
+                    {
+                        credentials.message = "Correo y/o contraseña incorrectos";
+                        return Json(new
+                        {
+                            Status = 3,
+                            Message = "Error",
+                            AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                        });
+                    }
+                }
+                else
+                {
+                    db.IADs.Add(new IADs
                     {
                         estado = 1,
                         periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
@@ -372,6 +442,7 @@ namespace ISProject.Controllers
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
                 return View("NotActivePeriod");
+            ViewBag.info_period = info_period;
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();
             ViewBag.careers = GetCareers();
@@ -513,6 +584,7 @@ namespace ISProject.Controllers
                         new_period.paad_fin = dateToSet.ending;
                         new_period.iad_inicio = null;
                         new_period.iad_fin = null;
+                        new_period.fecha_cierre = null;
                         new_period.activo = true;
                         db.SaveChanges();
                         ViewBag.success = "Se ha guardado exitosamente";

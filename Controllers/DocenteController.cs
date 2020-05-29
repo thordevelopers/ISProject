@@ -808,8 +808,9 @@ namespace ISProject.Controllers
                 }
                 if (action_iad == 1)
                 {
-                    //Acciones para el caso de Entregar PAAD
+                    //Acciones para el caso de Entregar IAD
                     iad.estado = 2;
+                    iad.extemporaneo = false;
                     mssg = db.Mensajes.Where(p => p.iad == id_iad && p.tipo == 1).FirstOrDefault();
                     iad.firma_docente = Guid.NewGuid().ToString("N");
                 }

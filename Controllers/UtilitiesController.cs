@@ -194,7 +194,7 @@ namespace ISProject.Controllers
                                     select new SetDateCLS
                                     {
                                         begining = periodo.iad_inicio ?? default(DateTime),
-                                        ending = periodo.iad_inicio ?? default(DateTime)
+                                        ending = periodo.iad_fin ?? default(DateTime)
                                     }).FirstOrDefault();
                 if (dates != null)
                 {
@@ -221,7 +221,7 @@ namespace ISProject.Controllers
                                     select periodo).FirstOrDefault();
                 if (period != null)
                 {
-                    if (period.iad_fin != null && DateTime.Today > period.iad_fin)
+                    if (period.fecha_cierre != null && DateTime.Today > period.fecha_cierre)
                     {
                         period.activo = false;
                         db.SaveChanges();

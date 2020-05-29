@@ -41,7 +41,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            @using (Ajax.BeginForm("AllowExtemporaneous", null, new AjaxOptions
+            @using (Ajax.BeginForm("AllowExtemporaneousIAD", null, new AjaxOptions
             {
                 HttpMethod = "POST",
                 OnSuccess = "authResponse"
@@ -54,7 +54,7 @@
                 @Html.Hidden("id_docente")
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                    <button type="button" onclick="sendIAD()" class="btn btn-verde-light">Aceptar</button>
                 </div>
             }
         </div>
@@ -73,7 +73,7 @@
         $("#mdlAuthTitle").text("Permitir entrega extemporanea");
         $("#mdlAuthCredentials").modal("show");
     }
-    function sendPAAD() {
+    function sendIAD() {
         $("#frmAllowExtemporaneous").submit();
     }
     function authResponse(response) {
