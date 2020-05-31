@@ -442,6 +442,8 @@ namespace ISProject.Controllers
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
                 return View("NotActivePeriod");
+            if (!info_period.is_close_paad)
+                return View("NotActivePeriod");
             ViewBag.info_period = info_period;
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();
@@ -630,7 +632,7 @@ namespace ISProject.Controllers
             else if (dateToSet.ending < dateToSet.begining)
                 ViewBag.error = "La fecha de final es menor que la de incio";
             else if (dateToSet.close_date < dateToSet.ending)
-                ViewBag.error = "La fecha de cierre es menor que la fecha final de entrega IAD";
+                ViewBag.error = "La fecha de cierre debe ser mayor que la fecha de entrega IAD";
             else
             {
                 using (var db = new DB_PAAD_IADEntities())
@@ -652,7 +654,7 @@ namespace ISProject.Controllers
                             ViewBag.success = "Se ha guardado exitosamente";
                         }
                         else
-                            ViewBag.error = "La fecha de inicio del IAD debe ser maypr a la del fin del PAAD ( Fin del PAAD: "+fin_paad.ToString("dd/MM/yyyy")+" )";
+                            ViewBag.error = "La fecha de inicio del IAD debe ser mayor a la del fin del PAAD ( Fin del PAAD: "+fin_paad.ToString("dd/MM/yyyy")+" )";
                     }
                     else
                     {

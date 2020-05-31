@@ -1,4 +1,5 @@
 ﻿@using ISProject.Models
+@model FormatsStatusCLS
 @{
     ViewBag.Title = "HomeDocente";
     Layout = "~/Views/Docente/_LayoutDocente.cshtml";
@@ -7,10 +8,15 @@
 <div style="text-align:center;margin-bottom:50px">
     <h1 style="font-weight:bold;font-size:26px">Inicio</h1>
 </div>
-<div class="site-body">
-    <div class="col-md-12">
-        <div class="center">
-            <h2>Bienvenido al modulo para el llenado de los formatos PAAD/IAD <br /> <br /> @(((Docentes)Session["user"]).nombre)</h2>
+<div>
+    <p class="lbl center">BIENVENIDO</p><br><br>
+    <p class="lbl center">@(((Docentes)Session["user"]).nombre)</p><br><br>
+    <p class="lbl center">Facultad de Ingeniería, Arquitectura y Diseño</p><br><br><br>
+
+    <div class="renglon ">
+        <div class="cuadro" style="background: @Model.colorBackground">
+            <br>
+            <label style="font-size: 16px; font-family: Helvetica; font-weight: bold;">@Model.statusMessage</label><br><br>
         </div>
     </div>
 </div>

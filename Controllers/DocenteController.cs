@@ -25,7 +25,109 @@ namespace ISProject.Controllers
         public ActionResult Home()
         {
             util.IsClose();
-            return View("HomeDocente");
+            FormatsStatusCLS model = GetFormatStatus();
+            return View("HomeDocente", model);
+        }
+        public FormatsStatusCLS GetFormatStatus()
+        {
+            FormatsStatusCLS status = new FormatsStatusCLS { statusMessage = "No tienes formatos por entregar", colorBackground = "#3bcc7c" };
+            InfoPeriodCLS info_periodo = util.GetInfoPeriod();
+            if (info_periodo.is_close)
+            {
+                status.statusMessage = "Actualmente no hay periodo activo";
+                status.colorBackground = "#FFFFFF";
+            }
+            else
+            {
+                PAADs doc_paad;
+                IADs doc_iad;
+                Periodos period;
+                string date;
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes docente = (Docentes)Session["user"];
+                    doc_paad = (from paad in db.PAADs
+                                where paad.docente == docente.id_docente
+                                join periodo in db.Periodos
+                                on paad.periodo equals periodo.id_periodo
+                                where periodo.activo == true
+                                select paad).FirstOrDefault();
+                    doc_iad = (from iad in db.IADs
+                               where iad.docente == docente.id_docente
+                               join periodo in db.Periodos
+                               on iad.periodo equals periodo.id_periodo
+                               where periodo.activo == true
+                               select iad).FirstOrDefault();
+                    period = (from periodo in db.Periodos
+                            where periodo.activo == true
+                            select periodo).FirstOrDefault();
+
+                }
+                if (!info_periodo.is_close_paad)
+                {
+                    if (info_periodo.on_time_paad)
+                    {
+                        if (doc_paad == null || doc_paad.estado == 1) 
+                        {
+                            date = period.paad_fin.GetValueOrDefault().ToShortDateString();
+                            status.statusMessage = "La fecha de entrega del PAAD ya esta activa y aun no has entregado tu formato fecha limite: " + date;
+                            status.colorBackground = "#fcb958";
+                        }
+                    }
+                    else
+                    {
+                        if (doc_paad == null || (doc_paad.estado == 1))
+                        {
+                            if (doc_paad.extemporaneo)
+                            {
+                                date = period.iad_inicio != null ? period.iad_inicio.GetValueOrDefault().AddDays(-1).ToShortDateString():"Indefinida";
+                                status.statusMessage = "Se te ha aprobado la entrega extemporanea del formato PAAD. Fecha limite de entrga: "+date;
+                                status.colorBackground = "#fcb958";
+                            }
+                            else
+                            {
+                                status.statusMessage = "La fecha de entrega del PAAD ha terminado y aun no has entregado tu formato, ponte en contacto con direccion para solicitar una entrega extemporanea ";
+                                status.colorBackground = "#ff5757";
+                            }
+                        }
+                    }
+                }
+                else if ( doc_paad.estado ==1)
+                {
+                    status.statusMessage = "El periodo de entrega del PAAD ya ha cerrado, el sistema ya no te permitira entrgarlo, comunicate con direccion para mas informacion";
+                    status.colorBackground = "#ff5757";
+                }
+                else
+                {
+                    if (info_periodo.on_time_iad)
+                    {
+                        if (doc_iad == null || doc_iad.estado == 1)
+                        {
+                            date = period.iad_fin.GetValueOrDefault().ToShortDateString();
+                            status.statusMessage = "La fecha de entrega del IAD ya esta activa y aun no has entregado tu formato fecha limite: " + date;
+                            status.colorBackground = "#fcb958";
+                        }
+                    }
+                    else
+                    {
+                        if (doc_iad == null || (doc_iad.estado == 1))
+                        {
+                            if (doc_iad.extemporaneo)
+                            {
+                                date = period.fecha_cierre.GetValueOrDefault().AddDays(-1).ToShortDateString();
+                                status.statusMessage = "Se te ha aprobado la entrega extemporanea del formato IAD. Fecha limite de entrga: " + date;
+                                status.colorBackground = "#fcb958";
+                            }
+                            else
+                            {
+                                status.statusMessage = "La fecha de entrega del IAD ha terminado y aun no has entregado tu formato, ponte en contacto con direccion para solicitar una entrega extemporanea ";
+                                status.colorBackground = "#ff5757";
+                            }
+                        }
+                    }
+                }
+            }
+            return status;
         }
         #region Metodos del PAAD
 
@@ -148,6 +250,7 @@ namespace ISProject.Controllers
                             produccion = model.produccion,
                             lugar = model.lugar,
                             porcentaje_inicial = model.porcentaje,
+                            porcentaje_final = model.porcentaje,
                             cacei = model.cacei,
                             cuerpo_academico = model.cuerpo_academico,
                             iso = model.iso,
@@ -600,6 +703,8 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
+                return View("NotActivePeriod_Docente"); //No hay periodo activo
+            if (!info_period.is_close_paad)
                 return View("NotActivePeriod_Docente"); //No hay periodo activo
             InfoIADCLS info_iad = GetInfoIAD();
             if (!info_period.on_time_iad)
