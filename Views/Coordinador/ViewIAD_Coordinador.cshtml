@@ -12,8 +12,15 @@
 </div>
 <br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button class="btn btn-azul-claro" onclick="goBack()">Regresar</button>
-    @Html.Partial("_StatusIAD", info)
+    @if (info.status_value != 3)
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListActiveIADs", "Coordinador", Request.Url.Scheme)">Regresar</a>
+    }
+    else
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListRecordIADs", "Coordinador", Request.Url.Scheme)">Regresar</a>
+    }
+@Html.Partial("_StatusIAD", info)
 </div>
 <div>
     @Html.Partial("_HeaderIAD", header)

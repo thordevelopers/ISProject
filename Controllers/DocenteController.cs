@@ -11,6 +11,7 @@ using ISProject.Controllers;
 using Microsoft.Ajax.Utilities;
 using System.Web.Routing;
 using ISProject.Filters;
+using System.EnterpriseServices;
 
 namespace ISProject.Controllers
 {
@@ -377,6 +378,27 @@ namespace ISProject.Controllers
                         AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                     });
                 }
+                int total_act = (from activity in db.Actividades where activity.id_paad == paad.id_paad select activity).Count();
+                if (total_act<1)
+                {
+                    credentials.message = "El PAAD debe contener al menos una actividad";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                if (action_paad == 3 && message_modif == "")
+                {
+                    credentials.message = "Las razones de la solicitud de modificacion son obligatorias";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
                 if (action_paad == 1)
                 {
                     //Acciones para el caso de Entregar PAAD
@@ -609,6 +631,29 @@ namespace ISProject.Controllers
                             numero_empleado = docente.numero_empleado,
                             nombre_docente = docente.nombre
                         }).ToList();
+                RegistroPAAD active = (from paad in db.PAADs
+                                       where paad.docente == doc.id_docente
+                                       join estado in db.Estados
+                                       on paad.estado equals estado.id_estado
+                                       join periodo in db.Periodos
+                                       on new { id=paad.periodo, active=true } equals new { id=periodo.id_periodo, active = periodo.activo }
+                                       where period > 0 ? periodo.id_periodo == period : true
+                                       join carrera in db.Carreras
+                                       on paad.carrera equals carrera.id_carrera
+                                       join docente in db.Docentes
+                                       on paad.docente equals docente.id_docente
+                                       select new RegistroPAAD
+                                       {
+                                           id_paad = paad.id_paad,
+                                           estado = estado.estado,
+                                           estado_valor = 0,
+                                           periodo = periodo.periodo,
+                                           carrera = carrera.carrera,
+                                           numero_empleado = docente.numero_empleado,
+                                           nombre_docente = docente.nombre
+                                       }).FirstOrDefault();
+                if (active != null)
+                    list.Insert(0, active);
             }
             return list;
         }
@@ -845,6 +890,23 @@ namespace ISProject.Controllers
             }
             return PartialView("_EditActivitiesTable", new List<ActivityCLS>());
         }
+        public ActionResult LoadActivities_IAD(int load_id_iad)
+        {
+            PAADs paad_source = null;
+            IADs iad_destiny = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                iad_destiny= (from iad in db.IADs where iad.id_iad == load_id_iad select iad).FirstOrDefault();
+                if (iad_destiny != null)
+                    paad_source = (from paad in db.PAADs where paad.docente == iad_destiny.docente select paad).FirstOrDefault();
+            }
+            if (paad_source != null)
+            {
+                JoinActivities(iad_destiny.id_iad, paad_source.id_paad);
+            }
+            List<ActivityCLS> activities = GetActivitiesIAD(iad_destiny.id_iad);
+            return PartialView("_EditActivitiesTable", activities);
+        }
         public void ChangeCargo_IAD(string id_cargo, int id_iad)
         {
             using (var db = new DB_PAAD_IADEntities())
@@ -904,6 +966,27 @@ namespace ISProject.Controllers
                 if (iad == null)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                int total_act = (from activity in db.Actividades where activity.id_iad == iad.id_iad select activity).Count();
+                if (total_act < 1)
+                {
+                    credentials.message = "El IAD debe contener al menos una actividad";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                if (action_iad == 3  && message_modif == "")
+                {
+                    credentials.message = "Las razones de la solicitud de modificacion son obligatorias";
                     return Json(new
                     {
                         Status = 3,
@@ -980,7 +1063,7 @@ namespace ISProject.Controllers
             {
                 Docentes doc = ((Docentes)Session["user"]);
                 list = (from iad in db.IADs
-                        where iad.docente == doc.id_docente
+                        where iad.docente == doc.id_docente && iad.estado == 3
                         join estado in db.Estados
                         on iad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -1000,6 +1083,29 @@ namespace ISProject.Controllers
                             numero_empleado = docente.numero_empleado,
                             nombre_docente = docente.nombre
                         }).ToList();
+                RegistroIAD active = (from iad in db.IADs
+                                     where iad.docente == doc.id_docente
+                                     join estado in db.Estados
+                                     on iad.estado equals estado.id_estado
+                                     join periodo in db.Periodos
+                                     on new { id = iad.periodo, active = true } equals new { id = periodo.id_periodo, active = periodo.activo }
+                                      where period > 0 ? periodo.id_periodo == period : true
+                                     join carrera in db.Carreras
+                                     on iad.carrera equals carrera.id_carrera
+                                     join docente in db.Docentes
+                                     on iad.docente equals docente.id_docente
+                                     select new RegistroIAD
+                                     {
+                                         id_iad = iad.id_iad,
+                                         estado = estado.estado,
+                                         estado_valor = 0,
+                                         periodo = periodo.periodo,
+                                         carrera = carrera.carrera,
+                                         numero_empleado = docente.numero_empleado,
+                                         nombre_docente = docente.nombre
+                                     }).FirstOrDefault();
+                if (active != null)
+                    list.Insert(0, active);
             }
             return list;
         }

@@ -89,6 +89,16 @@ namespace ISProject.Controllers
                         AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                     });
                 }
+                if ((action_paad == 1 || action_paad == 3) && reject_message == "")
+                {
+                    credentials.message = "Las razones del rechazo son obligatorias";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
                 else if (action_paad == 1)
                 {
                     //Acciones para el caso de Rechazar PAAD
@@ -379,6 +389,16 @@ namespace ISProject.Controllers
                 if (isDirectorOrNull)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                if ((action_iad == 1|| action_iad == 3) && reject_message == "")
+                {
+                    credentials.message = "Las razones del rechazo son obligatorias";
                     return Json(new
                     {
                         Status = 3,

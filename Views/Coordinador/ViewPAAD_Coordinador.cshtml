@@ -12,7 +12,14 @@
 </div>
 <br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button class="btn btn-azul-claro" onclick="goBack()">Regresar</button>
+    @if (info.status_value != 3)
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListActivePAADs", "Coordinador", Request.Url.Scheme)">Regresar</a>
+    }
+    else
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Coordinador", Request.Url.Scheme)">Regresar</a>
+    }
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
