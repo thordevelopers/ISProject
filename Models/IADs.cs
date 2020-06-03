@@ -42,10 +42,10 @@ namespace ISProject.Models
         public virtual Cargos Cargos { get; set; }
         public virtual Carreras Carreras { get; set; }
         public virtual Categorias Categorias { get; set; }
-        public virtual Docentes Docentes { get; set; }
         public virtual Estados Estados { get; set; }
         public virtual Periodos Periodos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mensajes> Mensajes { get; set; }
+        public virtual Docentes Docentes { get; set; }
     }
 }

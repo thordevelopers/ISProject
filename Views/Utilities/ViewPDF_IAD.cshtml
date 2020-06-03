@@ -1,7 +1,7 @@
 ﻿@using ISProject.Models
 @model ViewPDFCLS
 @{
-    ViewBag.Title = "PAAD PDF";
+    ViewBag.Title = "IAD PDF";
     Layout = null;
 }
 <html>
@@ -16,8 +16,8 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <h1 class="right">PAAD-03</h1>
-    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1><br/>
+    <h1 class="right">IAD-03</h1>
+    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1><br />
     <h1 class="center">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
     <br>
     <table>
@@ -64,9 +64,18 @@
                     <td>@item.produccion</td>
                     <td>@item.lugar</td>
                     <td>@item.porcentaje</td>
-                    <td style="text-align:center">@if (item.cacei){ <label>Si</label> } else { <label>No</label> }</td>
-                    <td style="text-align:center">@if (item.cuerpo_academico){ <label>Si</label> } else { <label>No</label> } </td>
-                    <td style="text-align:center">@if (item.iso){ <label>Si</label> } else { <label>No</label> }</td>
+                    <td style="text-align:center">@if (item.cacei)
+                    {<label>Si</label> }
+                    else
+                    { <label>No</label>}</td>
+                    <td style="text-align:center">@if (item.cuerpo_academico)
+                    {<label>Si</label> }
+                    else
+                    { <label>No</label>} </td>
+                    <td style="text-align:center">@if (item.iso)
+                    {<label>Si</label> }
+                    else
+                    { <label>No</label>}</td>
                 </tr>
             }
         </tbody>

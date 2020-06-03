@@ -79,7 +79,7 @@ namespace ISProject.Controllers
                     {
                         if (doc_paad == null || (doc_paad.estado == 1))
                         {
-                            if (doc_paad.extemporaneo)
+                            if (doc_paad != null && doc_paad.extemporaneo)
                             {
                                 date = period.iad_inicio != null ? period.iad_inicio.GetValueOrDefault().AddDays(-1).ToShortDateString():"Indefinida";
                                 status.statusMessage = "Se te ha aprobado la entrega extemporanea del formato PAAD. Fecha limite de entrga: "+date;

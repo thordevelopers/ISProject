@@ -190,6 +190,9 @@
     <Compile Include="Models\Docentes.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Docente_Rol.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ErrorMessageCLS.cs" />
     <Compile Include="Models\Estados.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -355,6 +358,7 @@
     <Content Include="Views\Docente\ErrorMessage_Docente.cshtml" />
     <Content Include="Views\Shared\_ListActiveIADs.cshtml" />
     <Content Include="Views\Subdirector\ErrorMessage_Subdirector.cshtml" />
+    <Content Include="Views\Utilities\ViewPDF_IAD.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

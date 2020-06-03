@@ -40,6 +40,14 @@
     <Property Name="categoria" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="visible" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="Docente_Rol">
+    <Key>
+      <PropertyRef Name="id_docente_rol" />
+    </Key>
+    <Property Name="id_docente_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="docente" Type="int" Nullable="false" />
+    <Property Name="rol" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="Docentes">
     <Key>
       <PropertyRef Name="id_docente" />
@@ -50,7 +58,6 @@
     <Property Name="numero_empleado" Type="int" Nullable="false" />
     <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="isdirector" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Estados">
     <Key>
@@ -175,6 +182,30 @@
       </Principal>
       <Dependent Role="Actividades">
         <PropertyRef Name="id_paad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Docente_Rol_Docentes">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="1" />
+    <End Role="Docente_Rol" Type="Self.Docente_Rol" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Docente_Rol">
+        <PropertyRef Name="docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Docente_Rol_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="Docente_Rol" Type="Self.Docente_Rol" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="id_rol" />
+      </Principal>
+      <Dependent Role="Docente_Rol">
+        <PropertyRef Name="rol" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -387,6 +418,7 @@
     <EntitySet Name="Cargos" EntityType="Self.Cargos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Carreras" EntityType="Self.Carreras" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categorias" EntityType="Self.Categorias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Docente_Rol" EntityType="Self.Docente_Rol" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Docentes" EntityType="Self.Docentes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Estados" EntityType="Self.Estados" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IADs" EntityType="Self.IADs" Schema="dbo" store:Type="Tables" />
@@ -404,6 +436,14 @@
     <AssociationSet Name="FK_Actividades_PAADs" Association="Self.FK_Actividades_PAADs">
       <End Role="PAADs" EntitySet="PAADs" />
       <End Role="Actividades" EntitySet="Actividades" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Docente_Rol_Docentes" Association="Self.FK_Docente_Rol_Docentes">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Docente_Rol" EntitySet="Docente_Rol" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Docente_Rol_Roles" Association="Self.FK_Docente_Rol_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Docente_Rol" EntitySet="Docente_Rol" />
     </AssociationSet>
     <AssociationSet Name="FK_Docentes_Carreras" Association="Self.FK_Docentes_Carreras">
       <End Role="Carreras" EntitySet="Carreras" />

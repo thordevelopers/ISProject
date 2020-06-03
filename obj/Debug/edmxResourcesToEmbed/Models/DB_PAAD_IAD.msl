@@ -45,19 +45,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Docentes">
-      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
-        <MappingFragment StoreEntitySet="Docentes">
-          <ScalarProperty Name="id_docente" ColumnName="id_docente" />
-          <ScalarProperty Name="carrera" ColumnName="carrera" />
-          <ScalarProperty Name="rol" ColumnName="rol" />
-          <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
-          <ScalarProperty Name="nombre" ColumnName="nombre" />
-          <ScalarProperty Name="correo" ColumnName="correo" />
-          <ScalarProperty Name="isdirector" ColumnName="isdirector" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Estados">
       <EntityTypeMapping TypeName="DB_PAAD_IADModel.Estados">
         <MappingFragment StoreEntitySet="Estados">
@@ -166,6 +153,27 @@
           <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
           <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
           <ScalarProperty Name="ROL_ID" ColumnName="ROL_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Docente_Rol">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docente_Rol">
+        <MappingFragment StoreEntitySet="Docente_Rol">
+          <ScalarProperty Name="rol" ColumnName="rol" />
+          <ScalarProperty Name="docente" ColumnName="docente" />
+          <ScalarProperty Name="id_docente_rol" ColumnName="id_docente_rol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Docentes">
+      <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docentes">
+        <MappingFragment StoreEntitySet="Docentes">
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
+          <ScalarProperty Name="rol" ColumnName="rol" />
+          <ScalarProperty Name="carrera" ColumnName="carrera" />
+          <ScalarProperty Name="id_docente" ColumnName="id_docente" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
