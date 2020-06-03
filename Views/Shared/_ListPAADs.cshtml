@@ -24,7 +24,7 @@
                     @if (item.estado_valor != 1)
                     {
                         @Html.ActionLink("Ver detalles", "ViewPAAD", new { id = item.id_paad }, new { @class = "btn btn-verde-light" })
-                        @Html.ActionLink("PDF", "ViewPDF", "Utilities", new { id = item.id_paad }, new { @class = "btn btn-amarillo", @style = "margin-left:10%", @target = "_blank" })
+                        @Html.ActionLink("PDF", "ViewPDF_PAAD", "Utilities", new { id = item.id_paad }, new { @class = "btn btn-amarillo", @style = "margin-left:10%", @target = "_blank" })
                     }
                     else
                     {

@@ -8,7 +8,7 @@
     MessageCLS msg = (MessageCLS)ViewBag.msg;
 }
 
-@if (msg != null)
+@if (msg != null && info.isdirector)
 {
     <div style="background: #DDAD23; padding: 8px 60px; ">
         <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>

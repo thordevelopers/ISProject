@@ -26,9 +26,11 @@ namespace ISProject.Models
         }
     
         public virtual DbSet<Actividades> Actividades { get; set; }
+        public virtual DbSet<Administrativos> Administrativos { get; set; }
         public virtual DbSet<Cargos> Cargos { get; set; }
         public virtual DbSet<Carreras> Carreras { get; set; }
         public virtual DbSet<Categorias> Categorias { get; set; }
+        public virtual DbSet<Docentes> Docentes { get; set; }
         public virtual DbSet<Estados> Estados { get; set; }
         public virtual DbSet<IADs> IADs { get; set; }
         public virtual DbSet<Mensajes> Mensajes { get; set; }
@@ -37,8 +39,7 @@ namespace ISProject.Models
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TiposDeMensaje> TiposDeMensaje { get; set; }
-        public virtual DbSet<USERS> USERS { get; set; }
-        public virtual DbSet<Docente_Rol> Docente_Rol { get; set; }
-        public virtual DbSet<Docentes> Docentes { get; set; }
+        public virtual DbSet<TiposDeUsuarios> TiposDeUsuarios { get; set; }
+        public virtual DbSet<Usuarios> Usuarios { get; set; }
     }
 }

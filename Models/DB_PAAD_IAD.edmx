@@ -21,6 +21,17 @@
           <Property Name="id_paad" Type="int" />
           <Property Name="id_iad" Type="int" />
         </EntityType>
+        <EntityType Name="Administrativos">
+          <Key>
+            <PropertyRef Name="id_administrativo" />
+          </Key>
+          <Property Name="id_administrativo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="carrera" Type="int" Nullable="false" />
+          <Property Name="rol" Type="int" Nullable="false" />
+          <Property Name="docente" Type="int" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="Cargos">
           <Key>
             <PropertyRef Name="id_cargo" />
@@ -45,21 +56,12 @@
           <Property Name="categoria" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="visible" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="Docente_Rol">
-          <Key>
-            <PropertyRef Name="id_docente_rol" />
-          </Key>
-          <Property Name="id_docente_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="docente" Type="int" Nullable="false" />
-          <Property Name="rol" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Docentes">
           <Key>
             <PropertyRef Name="id_docente" />
           </Key>
           <Property Name="id_docente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="carrera" Type="int" Nullable="false" />
-          <Property Name="rol" Type="int" Nullable="false" />
           <Property Name="numero_empleado" Type="int" Nullable="false" />
           <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
@@ -157,14 +159,21 @@
           <Property Name="id_tipo_mensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="tipo" Type="nvarchar" MaxLength="150" Nullable="false" />
         </EntityType>
-        <EntityType Name="USERS">
+        <EntityType Name="TiposDeUsuarios">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="id_tipo_usuario" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EMAIL" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="ROL_ID" Type="int" Nullable="false" />
+          <Property Name="id_tipo_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_de_usuario" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="tipo_usuario" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Actividades_IADs">
           <End Role="IADs" Type="Self.IADs" Multiplicity="0..1" />
@@ -190,26 +199,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Docente_Rol_Docentes">
-          <End Role="Docentes" Type="Self.Docentes" Multiplicity="1" />
-          <End Role="Docente_Rol" Type="Self.Docente_Rol" Multiplicity="*" />
+        <Association Name="FK_Administrativos_Carreras">
+          <End Role="Carreras" Type="Self.Carreras" Multiplicity="1" />
+          <End Role="Administrativos" Type="Self.Administrativos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carreras">
+              <PropertyRef Name="id_carrera" />
+            </Principal>
+            <Dependent Role="Administrativos">
+              <PropertyRef Name="carrera" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Administrativos_Docentes">
+          <End Role="Docentes" Type="Self.Docentes" Multiplicity="0..1" />
+          <End Role="Administrativos" Type="Self.Administrativos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Docentes">
               <PropertyRef Name="id_docente" />
             </Principal>
-            <Dependent Role="Docente_Rol">
+            <Dependent Role="Administrativos">
               <PropertyRef Name="docente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Docente_Rol_Roles">
+        <Association Name="FK_Administrativos_Roles">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
-          <End Role="Docente_Rol" Type="Self.Docente_Rol" Multiplicity="*" />
+          <End Role="Administrativos" Type="Self.Administrativos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Roles">
               <PropertyRef Name="id_rol" />
             </Principal>
-            <Dependent Role="Docente_Rol">
+            <Dependent Role="Administrativos">
               <PropertyRef Name="rol" />
             </Dependent>
           </ReferentialConstraint>
@@ -223,18 +244,6 @@
             </Principal>
             <Dependent Role="Docentes">
               <PropertyRef Name="carrera" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Docentes_Roles">
-          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
-          <End Role="Docentes" Type="Self.Docentes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="id_rol" />
-            </Principal>
-            <Dependent Role="Docentes">
-              <PropertyRef Name="rol" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -418,12 +427,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Usuarios_TiposDeUsuarios">
+          <End Role="TiposDeUsuarios" Type="Self.TiposDeUsuarios" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposDeUsuarios">
+              <PropertyRef Name="id_tipo_usuario" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="tipo_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DB_PAAD_IADModelStoreContainer">
           <EntitySet Name="Actividades" EntityType="Self.Actividades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Administrativos" EntityType="Self.Administrativos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cargos" EntityType="Self.Cargos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carreras" EntityType="Self.Carreras" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categorias" EntityType="Self.Categorias" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Docente_Rol" EntityType="Self.Docente_Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Docentes" EntityType="Self.Docentes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Estados" EntityType="Self.Estados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IADs" EntityType="Self.IADs" Schema="dbo" store:Type="Tables" />
@@ -433,7 +454,8 @@
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TiposDeMensaje" EntityType="Self.TiposDeMensaje" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TiposDeUsuarios" EntityType="Self.TiposDeUsuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Actividades_IADs" Association="Self.FK_Actividades_IADs">
             <End Role="IADs" EntitySet="IADs" />
             <End Role="Actividades" EntitySet="Actividades" />
@@ -442,20 +464,20 @@
             <End Role="PAADs" EntitySet="PAADs" />
             <End Role="Actividades" EntitySet="Actividades" />
           </AssociationSet>
-          <AssociationSet Name="FK_Docente_Rol_Docentes" Association="Self.FK_Docente_Rol_Docentes">
-            <End Role="Docentes" EntitySet="Docentes" />
-            <End Role="Docente_Rol" EntitySet="Docente_Rol" />
+          <AssociationSet Name="FK_Administrativos_Carreras" Association="Self.FK_Administrativos_Carreras">
+            <End Role="Carreras" EntitySet="Carreras" />
+            <End Role="Administrativos" EntitySet="Administrativos" />
           </AssociationSet>
-          <AssociationSet Name="FK_Docente_Rol_Roles" Association="Self.FK_Docente_Rol_Roles">
+          <AssociationSet Name="FK_Administrativos_Docentes" Association="Self.FK_Administrativos_Docentes">
+            <End Role="Docentes" EntitySet="Docentes" />
+            <End Role="Administrativos" EntitySet="Administrativos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Administrativos_Roles" Association="Self.FK_Administrativos_Roles">
             <End Role="Roles" EntitySet="Roles" />
-            <End Role="Docente_Rol" EntitySet="Docente_Rol" />
+            <End Role="Administrativos" EntitySet="Administrativos" />
           </AssociationSet>
           <AssociationSet Name="FK_Docentes_Carreras" Association="Self.FK_Docentes_Carreras">
             <End Role="Carreras" EntitySet="Carreras" />
-            <End Role="Docentes" EntitySet="Docentes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Docentes_Roles" Association="Self.FK_Docentes_Roles">
-            <End Role="Roles" EntitySet="Roles" />
             <End Role="Docentes" EntitySet="Docentes" />
           </AssociationSet>
           <AssociationSet Name="FK_IADs_Cargos" Association="Self.FK_IADs_Cargos">
@@ -518,19 +540,129 @@
             <End Role="Periodos" EntitySet="Periodos" />
             <End Role="PAADs" EntitySet="PAADs" />
           </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_TiposDeUsuarios" Association="Self.FK_Usuarios_TiposDeUsuarios">
+            <End Role="TiposDeUsuarios" EntitySet="TiposDeUsuarios" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_PAAD_IADModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DB_PAAD_IADEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Actividades" EntityType="DB_PAAD_IADModel.Actividades" />
+          <EntitySet Name="Administrativos" EntityType="DB_PAAD_IADModel.Administrativos" />
+          <EntitySet Name="Cargos" EntityType="DB_PAAD_IADModel.Cargos" />
+          <EntitySet Name="Carreras" EntityType="DB_PAAD_IADModel.Carreras" />
+          <EntitySet Name="Categorias" EntityType="DB_PAAD_IADModel.Categorias" />
+          <EntitySet Name="Docentes" EntityType="DB_PAAD_IADModel.Docentes" />
+          <EntitySet Name="Estados" EntityType="DB_PAAD_IADModel.Estados" />
+          <EntitySet Name="IADs" EntityType="DB_PAAD_IADModel.IADs" />
+          <EntitySet Name="Mensajes" EntityType="DB_PAAD_IADModel.Mensajes" />
+          <EntitySet Name="PAADs" EntityType="DB_PAAD_IADModel.PAADs" />
+          <EntitySet Name="Periodos" EntityType="DB_PAAD_IADModel.Periodos" />
+          <EntitySet Name="Roles" EntityType="DB_PAAD_IADModel.Roles" />
+          <EntitySet Name="sysdiagrams" EntityType="DB_PAAD_IADModel.sysdiagrams" />
+          <EntitySet Name="TiposDeMensaje" EntityType="DB_PAAD_IADModel.TiposDeMensaje" />
+          <EntitySet Name="TiposDeUsuarios" EntityType="DB_PAAD_IADModel.TiposDeUsuarios" />
+          <EntitySet Name="Usuarios" EntityType="DB_PAAD_IADModel.Usuarios" />
+          <AssociationSet Name="FK_Actividades_IADs" Association="DB_PAAD_IADModel.FK_Actividades_IADs">
+            <End Role="IADs" EntitySet="IADs" />
+            <End Role="Actividades" EntitySet="Actividades" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Actividades_PAADs" Association="DB_PAAD_IADModel.FK_Actividades_PAADs">
+            <End Role="PAADs" EntitySet="PAADs" />
+            <End Role="Actividades" EntitySet="Actividades" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Administrativos_Carreras" Association="DB_PAAD_IADModel.FK_Administrativos_Carreras">
+            <End Role="Carreras" EntitySet="Carreras" />
+            <End Role="Administrativos" EntitySet="Administrativos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Administrativos_Docentes" Association="DB_PAAD_IADModel.FK_Administrativos_Docentes">
+            <End Role="Docentes" EntitySet="Docentes" />
+            <End Role="Administrativos" EntitySet="Administrativos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Administrativos_Roles" Association="DB_PAAD_IADModel.FK_Administrativos_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Administrativos" EntitySet="Administrativos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IADs_Cargos" Association="DB_PAAD_IADModel.FK_IADs_Cargos">
+            <End Role="Cargos" EntitySet="Cargos" />
+            <End Role="IADs" EntitySet="IADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAADs_Cargos" Association="DB_PAAD_IADModel.FK_PAADs_Cargos">
+            <End Role="Cargos" EntitySet="Cargos" />
+            <End Role="PAADs" EntitySet="PAADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Docentes_Carreras" Association="DB_PAAD_IADModel.FK_Docentes_Carreras">
+            <End Role="Carreras" EntitySet="Carreras" />
+            <End Role="Docentes" EntitySet="Docentes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IADs_Carreras" Association="DB_PAAD_IADModel.FK_IADs_Carreras">
+            <End Role="Carreras" EntitySet="Carreras" />
+            <End Role="IADs" EntitySet="IADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAADs_Carreras" Association="DB_PAAD_IADModel.FK_PAADs_Carreras">
+            <End Role="Carreras" EntitySet="Carreras" />
+            <End Role="PAADs" EntitySet="PAADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IADs_Categorias" Association="DB_PAAD_IADModel.FK_IADs_Categorias">
+            <End Role="Categorias" EntitySet="Categorias" />
+            <End Role="IADs" EntitySet="IADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAADs_Categorias" Association="DB_PAAD_IADModel.FK_PAADs_Categorias">
+            <End Role="Categorias" EntitySet="Categorias" />
+            <End Role="PAADs" EntitySet="PAADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IADs_Docentes" Association="DB_PAAD_IADModel.FK_IADs_Docentes">
+            <End Role="Docentes" EntitySet="Docentes" />
+            <End Role="IADs" EntitySet="IADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAADs_Docentes" Association="DB_PAAD_IADModel.FK_PAADs_Docentes">
+            <End Role="Docentes" EntitySet="Docentes" />
+            <End Role="PAADs" EntitySet="PAADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IADs_Estados" Association="DB_PAAD_IADModel.FK_IADs_Estados">
+            <End Role="Estados" EntitySet="Estados" />
+            <End Role="IADs" EntitySet="IADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAADs_Estados" Association="DB_PAAD_IADModel.FK_PAADs_Estados">
+            <End Role="Estados" EntitySet="Estados" />
+            <End Role="PAADs" EntitySet="PAADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IADs_Periodos" Association="DB_PAAD_IADModel.FK_IADs_Periodos">
+            <End Role="Periodos" EntitySet="Periodos" />
+            <End Role="IADs" EntitySet="IADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mensajes_IADs" Association="DB_PAAD_IADModel.FK_Mensajes_IADs">
+            <End Role="IADs" EntitySet="IADs" />
+            <End Role="Mensajes" EntitySet="Mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mensajes_PAADs" Association="DB_PAAD_IADModel.FK_Mensajes_PAADs">
+            <End Role="PAADs" EntitySet="PAADs" />
+            <End Role="Mensajes" EntitySet="Mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mensajes_TiposDeMensaje" Association="DB_PAAD_IADModel.FK_Mensajes_TiposDeMensaje">
+            <End Role="TiposDeMensaje" EntitySet="TiposDeMensaje" />
+            <End Role="Mensajes" EntitySet="Mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PAADs_Periodos" Association="DB_PAAD_IADModel.FK_PAADs_Periodos">
+            <End Role="Periodos" EntitySet="Periodos" />
+            <End Role="PAADs" EntitySet="PAADs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_TiposDeUsuarios" Association="DB_PAAD_IADModel.FK_Usuarios_TiposDeUsuarios">
+            <End Role="TiposDeUsuarios" EntitySet="TiposDeUsuarios" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Actividades">
           <Key>
             <PropertyRef Name="id_actividad" />
           </Key>
           <Property Name="id_actividad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="actividad" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="produccion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="lugar" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="actividad" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="produccion" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="lugar" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="porcentaje_inicial" Type="Int32" Nullable="false" />
           <Property Name="porcentaje_final" Type="Int32" Nullable="false" />
           <Property Name="cacei" Type="Boolean" Nullable="false" />
@@ -538,48 +670,77 @@
           <Property Name="iso" Type="Boolean" Nullable="false" />
           <Property Name="id_paad" Type="Int32" />
           <Property Name="id_iad" Type="Int32" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_Actividades_IADs" FromRole="Actividades" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_Actividades_PAADs" FromRole="Actividades" ToRole="PAADs" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_Actividades_IADs" FromRole="Actividades" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_Actividades_PAADs" FromRole="Actividades" ToRole="PAADs" />
+        </EntityType>
+        <EntityType Name="Administrativos">
+          <Key>
+            <PropertyRef Name="id_administrativo" />
+          </Key>
+          <Property Name="id_administrativo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="carrera" Type="Int32" Nullable="false" />
+          <Property Name="rol" Type="Int32" Nullable="false" />
+          <Property Name="docente" Type="Int32" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="correo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Carreras" Relationship="DB_PAAD_IADModel.FK_Administrativos_Carreras" FromRole="Administrativos" ToRole="Carreras" />
+          <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_Administrativos_Docentes" FromRole="Administrativos" ToRole="Docentes" />
+          <NavigationProperty Name="Roles" Relationship="DB_PAAD_IADModel.FK_Administrativos_Roles" FromRole="Administrativos" ToRole="Roles" />
         </EntityType>
         <EntityType Name="Cargos">
           <Key>
             <PropertyRef Name="id_cargo" />
           </Key>
           <Property Name="id_cargo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="cargo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cargo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="visible" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Cargos" FromRole="Cargos" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Cargos" FromRole="Cargos" ToRole="PAADs" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Cargos" FromRole="Cargos" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Cargos" FromRole="Cargos" ToRole="PAADs" />
         </EntityType>
         <EntityType Name="Carreras">
           <Key>
             <PropertyRef Name="id_carrera" />
           </Key>
           <Property Name="id_carrera" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="carrera" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="carrera" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="visible" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Carreras" FromRole="Carreras" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Carreras" FromRole="Carreras" ToRole="PAADs" />
+          <NavigationProperty Name="Administrativos" Relationship="DB_PAAD_IADModel.FK_Administrativos_Carreras" FromRole="Carreras" ToRole="Administrativos" />
           <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_Docentes_Carreras" FromRole="Carreras" ToRole="Docentes" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Carreras" FromRole="Carreras" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Carreras" FromRole="Carreras" ToRole="PAADs" />
         </EntityType>
         <EntityType Name="Categorias">
           <Key>
             <PropertyRef Name="id_categoria" />
           </Key>
           <Property Name="id_categoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="categoria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="visible" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Categorias" FromRole="Categorias" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Categorias" FromRole="Categorias" ToRole="PAADs" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Categorias" FromRole="Categorias" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Categorias" FromRole="Categorias" ToRole="PAADs" />
+        </EntityType>
+        <EntityType Name="Docentes">
+          <Key>
+            <PropertyRef Name="id_docente" />
+          </Key>
+          <Property Name="id_docente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="carrera" Type="Int32" Nullable="false" />
+          <Property Name="numero_empleado" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="correo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Administrativos" Relationship="DB_PAAD_IADModel.FK_Administrativos_Docentes" FromRole="Docentes" ToRole="Administrativos" />
+          <NavigationProperty Name="Carreras" Relationship="DB_PAAD_IADModel.FK_Docentes_Carreras" FromRole="Docentes" ToRole="Carreras" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Docentes" FromRole="Docentes" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Docentes" FromRole="Docentes" ToRole="PAADs" />
         </EntityType>
         <EntityType Name="Estados">
           <Key>
             <PropertyRef Name="id_estado" />
           </Key>
           <Property Name="id_estado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Estados" FromRole="Estados" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Estados" FromRole="Estados" ToRole="PAADs" />
+          <Property Name="estado" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Estados" FromRole="Estados" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Estados" FromRole="Estados" ToRole="PAADs" />
         </EntityType>
         <EntityType Name="IADs">
           <Key>
@@ -600,14 +761,14 @@
           <Property Name="firma_director" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="comentarios" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="extemporaneo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Actividades" Relationship="Self.FK_Actividades_IADs" FromRole="IADs" ToRole="Actividades" />
-          <NavigationProperty Name="Cargos" Relationship="Self.FK_IADs_Cargos" FromRole="IADs" ToRole="Cargos" />
-          <NavigationProperty Name="Carreras" Relationship="Self.FK_IADs_Carreras" FromRole="IADs" ToRole="Carreras" />
-          <NavigationProperty Name="Categorias" Relationship="Self.FK_IADs_Categorias" FromRole="IADs" ToRole="Categorias" />
-          <NavigationProperty Name="Estados" Relationship="Self.FK_IADs_Estados" FromRole="IADs" ToRole="Estados" />
-          <NavigationProperty Name="Periodos" Relationship="Self.FK_IADs_Periodos" FromRole="IADs" ToRole="Periodos" />
-          <NavigationProperty Name="Mensajes" Relationship="Self.FK_Mensajes_IADs" FromRole="IADs" ToRole="Mensajes" />
+          <NavigationProperty Name="Actividades" Relationship="DB_PAAD_IADModel.FK_Actividades_IADs" FromRole="IADs" ToRole="Actividades" />
+          <NavigationProperty Name="Cargos" Relationship="DB_PAAD_IADModel.FK_IADs_Cargos" FromRole="IADs" ToRole="Cargos" />
+          <NavigationProperty Name="Carreras" Relationship="DB_PAAD_IADModel.FK_IADs_Carreras" FromRole="IADs" ToRole="Carreras" />
+          <NavigationProperty Name="Categorias" Relationship="DB_PAAD_IADModel.FK_IADs_Categorias" FromRole="IADs" ToRole="Categorias" />
           <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_IADs_Docentes" FromRole="IADs" ToRole="Docentes" />
+          <NavigationProperty Name="Estados" Relationship="DB_PAAD_IADModel.FK_IADs_Estados" FromRole="IADs" ToRole="Estados" />
+          <NavigationProperty Name="Periodos" Relationship="DB_PAAD_IADModel.FK_IADs_Periodos" FromRole="IADs" ToRole="Periodos" />
+          <NavigationProperty Name="Mensajes" Relationship="DB_PAAD_IADModel.FK_Mensajes_IADs" FromRole="IADs" ToRole="Mensajes" />
         </EntityType>
         <EntityType Name="Mensajes">
           <Key>
@@ -617,10 +778,10 @@
           <Property Name="paad" Type="Int32" />
           <Property Name="iad" Type="Int32" />
           <Property Name="tipo" Type="Int32" Nullable="false" />
-          <Property Name="mensaje" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_Mensajes_IADs" FromRole="Mensajes" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_Mensajes_PAADs" FromRole="Mensajes" ToRole="PAADs" />
-          <NavigationProperty Name="TiposDeMensaje" Relationship="Self.FK_Mensajes_TiposDeMensaje" FromRole="Mensajes" ToRole="TiposDeMensaje" />
+          <Property Name="mensaje" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_Mensajes_IADs" FromRole="Mensajes" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_Mensajes_PAADs" FromRole="Mensajes" ToRole="PAADs" />
+          <NavigationProperty Name="TiposDeMensaje" Relationship="DB_PAAD_IADModel.FK_Mensajes_TiposDeMensaje" FromRole="Mensajes" ToRole="TiposDeMensaje" />
         </EntityType>
         <EntityType Name="PAADs">
           <Key>
@@ -640,44 +801,43 @@
           <Property Name="firma_docente" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="firma_director" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="extemporaneo" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Actividades" Relationship="Self.FK_Actividades_PAADs" FromRole="PAADs" ToRole="Actividades" />
-          <NavigationProperty Name="Cargos" Relationship="Self.FK_PAADs_Cargos" FromRole="PAADs" ToRole="Cargos" />
-          <NavigationProperty Name="Carreras" Relationship="Self.FK_PAADs_Carreras" FromRole="PAADs" ToRole="Carreras" />
-          <NavigationProperty Name="Categorias" Relationship="Self.FK_PAADs_Categorias" FromRole="PAADs" ToRole="Categorias" />
-          <NavigationProperty Name="Estados" Relationship="Self.FK_PAADs_Estados" FromRole="PAADs" ToRole="Estados" />
-          <NavigationProperty Name="Mensajes" Relationship="Self.FK_Mensajes_PAADs" FromRole="PAADs" ToRole="Mensajes" />
-          <NavigationProperty Name="Periodos" Relationship="Self.FK_PAADs_Periodos" FromRole="PAADs" ToRole="Periodos" />
+          <NavigationProperty Name="Actividades" Relationship="DB_PAAD_IADModel.FK_Actividades_PAADs" FromRole="PAADs" ToRole="Actividades" />
+          <NavigationProperty Name="Cargos" Relationship="DB_PAAD_IADModel.FK_PAADs_Cargos" FromRole="PAADs" ToRole="Cargos" />
+          <NavigationProperty Name="Carreras" Relationship="DB_PAAD_IADModel.FK_PAADs_Carreras" FromRole="PAADs" ToRole="Carreras" />
+          <NavigationProperty Name="Categorias" Relationship="DB_PAAD_IADModel.FK_PAADs_Categorias" FromRole="PAADs" ToRole="Categorias" />
           <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_PAADs_Docentes" FromRole="PAADs" ToRole="Docentes" />
+          <NavigationProperty Name="Estados" Relationship="DB_PAAD_IADModel.FK_PAADs_Estados" FromRole="PAADs" ToRole="Estados" />
+          <NavigationProperty Name="Mensajes" Relationship="DB_PAAD_IADModel.FK_Mensajes_PAADs" FromRole="PAADs" ToRole="Mensajes" />
+          <NavigationProperty Name="Periodos" Relationship="DB_PAAD_IADModel.FK_PAADs_Periodos" FromRole="PAADs" ToRole="Periodos" />
         </EntityType>
         <EntityType Name="Periodos">
           <Key>
             <PropertyRef Name="id_periodo" />
           </Key>
           <Property Name="id_periodo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="periodo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="periodo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="activo" Type="Boolean" Nullable="false" />
           <Property Name="paad_inicio" Type="DateTime" Precision="0" />
           <Property Name="paad_fin" Type="DateTime" Precision="0" />
           <Property Name="iad_inicio" Type="DateTime" Precision="0" />
           <Property Name="iad_fin" Type="DateTime" Precision="0" />
           <Property Name="fecha_cierre" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="IADs" Relationship="Self.FK_IADs_Periodos" FromRole="Periodos" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="Self.FK_PAADs_Periodos" FromRole="Periodos" ToRole="PAADs" />
+          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Periodos" FromRole="Periodos" ToRole="IADs" />
+          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Periodos" FromRole="Periodos" ToRole="PAADs" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="id_rol" />
           </Key>
           <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Docente_Rol" Relationship="DB_PAAD_IADModel.FK_Docente_Rol_Roles" FromRole="Roles" ToRole="Docente_Rol" />
-          <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_Docentes_Roles" FromRole="Roles" ToRole="Docentes" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Administrativos" Relationship="DB_PAAD_IADModel.FK_Administrativos_Roles" FromRole="Roles" ToRole="Administrativos" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
@@ -688,21 +848,30 @@
             <PropertyRef Name="id_tipo_mensaje" />
           </Key>
           <Property Name="id_tipo_mensaje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="tipo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Mensajes" Relationship="Self.FK_Mensajes_TiposDeMensaje" FromRole="TiposDeMensaje" ToRole="Mensajes" />
+          <Property Name="tipo" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Mensajes" Relationship="DB_PAAD_IADModel.FK_Mensajes_TiposDeMensaje" FromRole="TiposDeMensaje" ToRole="Mensajes" />
         </EntityType>
-        <EntityType Name="USERS">
+        <EntityType Name="TiposDeUsuarios">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="id_tipo_usuario" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EMAIL" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ROL_ID" Type="Int32" Nullable="false" />
+          <Property Name="id_tipo_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_de_usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuarios" Relationship="DB_PAAD_IADModel.FK_Usuarios_TiposDeUsuarios" FromRole="TiposDeUsuarios" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tipo_usuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TiposDeUsuarios" Relationship="DB_PAAD_IADModel.FK_Usuarios_TiposDeUsuarios" FromRole="Usuarios" ToRole="TiposDeUsuarios" />
         </EntityType>
         <Association Name="FK_Actividades_IADs">
-          <End Role="IADs" Type="Self.IADs" Multiplicity="0..1" />
-          <End Role="Actividades" Type="Self.Actividades" Multiplicity="*" />
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="0..1" />
+          <End Type="DB_PAAD_IADModel.Actividades" Role="Actividades" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="IADs">
               <PropertyRef Name="id_iad" />
@@ -713,8 +882,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Actividades_PAADs">
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
-          <End Role="Actividades" Type="Self.Actividades" Multiplicity="*" />
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="0..1" />
+          <End Type="DB_PAAD_IADModel.Actividades" Role="Actividades" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PAADs">
               <PropertyRef Name="id_paad" />
@@ -724,9 +893,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Administrativos_Carreras">
+          <End Type="DB_PAAD_IADModel.Carreras" Role="Carreras" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.Administrativos" Role="Administrativos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carreras">
+              <PropertyRef Name="id_carrera" />
+            </Principal>
+            <Dependent Role="Administrativos">
+              <PropertyRef Name="carrera" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Administrativos_Docentes">
+          <End Type="DB_PAAD_IADModel.Docentes" Role="Docentes" Multiplicity="0..1" />
+          <End Type="DB_PAAD_IADModel.Administrativos" Role="Administrativos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Docentes">
+              <PropertyRef Name="id_docente" />
+            </Principal>
+            <Dependent Role="Administrativos">
+              <PropertyRef Name="docente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Administrativos_Roles">
+          <End Type="DB_PAAD_IADModel.Roles" Role="Roles" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.Administrativos" Role="Administrativos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Administrativos">
+              <PropertyRef Name="rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_IADs_Cargos">
-          <End Role="Cargos" Type="Self.Cargos" Multiplicity="1" />
-          <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
+          <End Type="DB_PAAD_IADModel.Cargos" Role="Cargos" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Cargos">
               <PropertyRef Name="id_cargo" />
@@ -737,8 +942,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PAADs_Cargos">
-          <End Role="Cargos" Type="Self.Cargos" Multiplicity="1" />
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
+          <End Type="DB_PAAD_IADModel.Cargos" Role="Cargos" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Cargos">
               <PropertyRef Name="id_cargo" />
@@ -748,265 +953,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_IADs_Carreras">
-          <End Role="Carreras" Type="Self.Carreras" Multiplicity="1" />
-          <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Carreras">
-              <PropertyRef Name="id_carrera" />
-            </Principal>
-            <Dependent Role="IADs">
-              <PropertyRef Name="carrera" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PAADs_Carreras">
-          <End Role="Carreras" Type="Self.Carreras" Multiplicity="1" />
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Carreras">
-              <PropertyRef Name="id_carrera" />
-            </Principal>
-            <Dependent Role="PAADs">
-              <PropertyRef Name="carrera" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IADs_Categorias">
-          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
-          <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categorias">
-              <PropertyRef Name="id_categoria" />
-            </Principal>
-            <Dependent Role="IADs">
-              <PropertyRef Name="categoria_docente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PAADs_Categorias">
-          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categorias">
-              <PropertyRef Name="id_categoria" />
-            </Principal>
-            <Dependent Role="PAADs">
-              <PropertyRef Name="categoria_docente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IADs_Estados">
-          <End Role="Estados" Type="Self.Estados" Multiplicity="1" />
-          <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Estados">
-              <PropertyRef Name="id_estado" />
-            </Principal>
-            <Dependent Role="IADs">
-              <PropertyRef Name="estado" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PAADs_Estados">
-          <End Role="Estados" Type="Self.Estados" Multiplicity="1" />
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Estados">
-              <PropertyRef Name="id_estado" />
-            </Principal>
-            <Dependent Role="PAADs">
-              <PropertyRef Name="estado" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IADs_Periodos">
-          <End Role="Periodos" Type="Self.Periodos" Multiplicity="1" />
-          <End Role="IADs" Type="Self.IADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Periodos">
-              <PropertyRef Name="id_periodo" />
-            </Principal>
-            <Dependent Role="IADs">
-              <PropertyRef Name="periodo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Mensajes_IADs">
-          <End Role="IADs" Type="Self.IADs" Multiplicity="0..1" />
-          <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="IADs">
-              <PropertyRef Name="id_iad" />
-            </Principal>
-            <Dependent Role="Mensajes">
-              <PropertyRef Name="iad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Mensajes_PAADs">
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="0..1" />
-          <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PAADs">
-              <PropertyRef Name="id_paad" />
-            </Principal>
-            <Dependent Role="Mensajes">
-              <PropertyRef Name="paad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Mensajes_TiposDeMensaje">
-          <End Role="TiposDeMensaje" Type="Self.TiposDeMensaje" Multiplicity="1" />
-          <End Role="Mensajes" Type="Self.Mensajes" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TiposDeMensaje">
-              <PropertyRef Name="id_tipo_mensaje" />
-            </Principal>
-            <Dependent Role="Mensajes">
-              <PropertyRef Name="tipo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PAADs_Periodos">
-          <End Role="Periodos" Type="Self.Periodos" Multiplicity="1" />
-          <End Role="PAADs" Type="Self.PAADs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Periodos">
-              <PropertyRef Name="id_periodo" />
-            </Principal>
-            <Dependent Role="PAADs">
-              <PropertyRef Name="periodo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="DB_PAAD_IADEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Actividades" EntityType="Self.Actividades" />
-          <EntitySet Name="Cargos" EntityType="Self.Cargos" />
-          <EntitySet Name="Carreras" EntityType="Self.Carreras" />
-          <EntitySet Name="Categorias" EntityType="Self.Categorias" />
-          <EntitySet Name="Estados" EntityType="Self.Estados" />
-          <EntitySet Name="IADs" EntityType="Self.IADs" />
-          <EntitySet Name="Mensajes" EntityType="Self.Mensajes" />
-          <EntitySet Name="PAADs" EntityType="Self.PAADs" />
-          <EntitySet Name="Periodos" EntityType="Self.Periodos" />
-          <EntitySet Name="Roles" EntityType="Self.Roles" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="TiposDeMensaje" EntityType="Self.TiposDeMensaje" />
-          <EntitySet Name="USERS" EntityType="Self.USERS" />
-          <AssociationSet Name="FK_Actividades_IADs" Association="Self.FK_Actividades_IADs">
-            <End Role="IADs" EntitySet="IADs" />
-            <End Role="Actividades" EntitySet="Actividades" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Actividades_PAADs" Association="Self.FK_Actividades_PAADs">
-            <End Role="PAADs" EntitySet="PAADs" />
-            <End Role="Actividades" EntitySet="Actividades" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IADs_Cargos" Association="Self.FK_IADs_Cargos">
-            <End Role="Cargos" EntitySet="Cargos" />
-            <End Role="IADs" EntitySet="IADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PAADs_Cargos" Association="Self.FK_PAADs_Cargos">
-            <End Role="Cargos" EntitySet="Cargos" />
-            <End Role="PAADs" EntitySet="PAADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IADs_Carreras" Association="Self.FK_IADs_Carreras">
-            <End Role="Carreras" EntitySet="Carreras" />
-            <End Role="IADs" EntitySet="IADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PAADs_Carreras" Association="Self.FK_PAADs_Carreras">
-            <End Role="Carreras" EntitySet="Carreras" />
-            <End Role="PAADs" EntitySet="PAADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IADs_Categorias" Association="Self.FK_IADs_Categorias">
-            <End Role="Categorias" EntitySet="Categorias" />
-            <End Role="IADs" EntitySet="IADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PAADs_Categorias" Association="Self.FK_PAADs_Categorias">
-            <End Role="Categorias" EntitySet="Categorias" />
-            <End Role="PAADs" EntitySet="PAADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IADs_Estados" Association="Self.FK_IADs_Estados">
-            <End Role="Estados" EntitySet="Estados" />
-            <End Role="IADs" EntitySet="IADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PAADs_Estados" Association="Self.FK_PAADs_Estados">
-            <End Role="Estados" EntitySet="Estados" />
-            <End Role="PAADs" EntitySet="PAADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IADs_Periodos" Association="Self.FK_IADs_Periodos">
-            <End Role="Periodos" EntitySet="Periodos" />
-            <End Role="IADs" EntitySet="IADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Mensajes_IADs" Association="Self.FK_Mensajes_IADs">
-            <End Role="IADs" EntitySet="IADs" />
-            <End Role="Mensajes" EntitySet="Mensajes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Mensajes_PAADs" Association="Self.FK_Mensajes_PAADs">
-            <End Role="PAADs" EntitySet="PAADs" />
-            <End Role="Mensajes" EntitySet="Mensajes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Mensajes_TiposDeMensaje" Association="Self.FK_Mensajes_TiposDeMensaje">
-            <End Role="TiposDeMensaje" EntitySet="TiposDeMensaje" />
-            <End Role="Mensajes" EntitySet="Mensajes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PAADs_Periodos" Association="Self.FK_PAADs_Periodos">
-            <End Role="Periodos" EntitySet="Periodos" />
-            <End Role="PAADs" EntitySet="PAADs" />
-          </AssociationSet>
-          <EntitySet Name="Docente_Rol" EntityType="DB_PAAD_IADModel.Docente_Rol" />
-          <EntitySet Name="Docentes" EntityType="DB_PAAD_IADModel.Docentes" />
-          <AssociationSet Name="FK_Docentes_Carreras" Association="DB_PAAD_IADModel.FK_Docentes_Carreras">
-            <End Role="Carreras" EntitySet="Carreras" />
-            <End Role="Docentes" EntitySet="Docentes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Docente_Rol_Docentes" Association="DB_PAAD_IADModel.FK_Docente_Rol_Docentes">
-            <End Role="Docentes" EntitySet="Docentes" />
-            <End Role="Docente_Rol" EntitySet="Docente_Rol" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Docente_Rol_Roles" Association="DB_PAAD_IADModel.FK_Docente_Rol_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Docente_Rol" EntitySet="Docente_Rol" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Docentes_Roles" Association="DB_PAAD_IADModel.FK_Docentes_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Docentes" EntitySet="Docentes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IADs_Docentes" Association="DB_PAAD_IADModel.FK_IADs_Docentes">
-            <End Role="Docentes" EntitySet="Docentes" />
-            <End Role="IADs" EntitySet="IADs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PAADs_Docentes" Association="DB_PAAD_IADModel.FK_PAADs_Docentes">
-            <End Role="Docentes" EntitySet="Docentes" />
-            <End Role="PAADs" EntitySet="PAADs" />
-          </AssociationSet>
-        </EntityContainer>
-        <EntityType Name="Docente_Rol">
-          <Key>
-            <PropertyRef Name="id_docente_rol" />
-          </Key>
-          <Property Name="id_docente_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="docente" Type="Int32" Nullable="false" />
-          <Property Name="rol" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Docentes" Relationship="DB_PAAD_IADModel.FK_Docente_Rol_Docentes" FromRole="Docente_Rol" ToRole="Docentes" />
-          <NavigationProperty Name="Roles" Relationship="DB_PAAD_IADModel.FK_Docente_Rol_Roles" FromRole="Docente_Rol" ToRole="Roles" />
-        </EntityType>
-        <EntityType Name="Docentes">
-          <Key>
-            <PropertyRef Name="id_docente" />
-          </Key>
-          <Property Name="id_docente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="carrera" Type="Int32" Nullable="false" />
-          <Property Name="rol" Type="Int32" Nullable="false" />
-          <Property Name="numero_empleado" Type="Int32" Nullable="false" />
-          <Property Name="nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="correo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Carreras" Relationship="DB_PAAD_IADModel.FK_Docentes_Carreras" FromRole="Docentes" ToRole="Carreras" />
-          <NavigationProperty Name="Docente_Rol" Relationship="DB_PAAD_IADModel.FK_Docente_Rol_Docentes" FromRole="Docentes" ToRole="Docente_Rol" />
-          <NavigationProperty Name="Roles" Relationship="DB_PAAD_IADModel.FK_Docentes_Roles" FromRole="Docentes" ToRole="Roles" />
-          <NavigationProperty Name="IADs" Relationship="DB_PAAD_IADModel.FK_IADs_Docentes" FromRole="Docentes" ToRole="IADs" />
-          <NavigationProperty Name="PAADs" Relationship="DB_PAAD_IADModel.FK_PAADs_Docentes" FromRole="Docentes" ToRole="PAADs" />
-        </EntityType>
         <Association Name="FK_Docentes_Carreras">
           <End Type="DB_PAAD_IADModel.Carreras" Role="Carreras" Multiplicity="1" />
           <End Type="DB_PAAD_IADModel.Docentes" Role="Docentes" Multiplicity="*" />
@@ -1019,39 +965,51 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Docente_Rol_Docentes">
-          <End Type="DB_PAAD_IADModel.Docentes" Role="Docentes" Multiplicity="1" />
-          <End Type="DB_PAAD_IADModel.Docente_Rol" Role="Docente_Rol" Multiplicity="*" />
+        <Association Name="FK_IADs_Carreras">
+          <End Type="DB_PAAD_IADModel.Carreras" Role="Carreras" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Docentes">
-              <PropertyRef Name="id_docente" />
+            <Principal Role="Carreras">
+              <PropertyRef Name="id_carrera" />
             </Principal>
-            <Dependent Role="Docente_Rol">
-              <PropertyRef Name="docente" />
+            <Dependent Role="IADs">
+              <PropertyRef Name="carrera" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Docente_Rol_Roles">
-          <End Type="DB_PAAD_IADModel.Roles" Role="Roles" Multiplicity="1" />
-          <End Type="DB_PAAD_IADModel.Docente_Rol" Role="Docente_Rol" Multiplicity="*" />
+        <Association Name="FK_PAADs_Carreras">
+          <End Type="DB_PAAD_IADModel.Carreras" Role="Carreras" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="id_rol" />
+            <Principal Role="Carreras">
+              <PropertyRef Name="id_carrera" />
             </Principal>
-            <Dependent Role="Docente_Rol">
-              <PropertyRef Name="rol" />
+            <Dependent Role="PAADs">
+              <PropertyRef Name="carrera" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Docentes_Roles">
-          <End Type="DB_PAAD_IADModel.Roles" Role="Roles" Multiplicity="1" />
-          <End Type="DB_PAAD_IADModel.Docentes" Role="Docentes" Multiplicity="*" />
+        <Association Name="FK_IADs_Categorias">
+          <End Type="DB_PAAD_IADModel.Categorias" Role="Categorias" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="id_rol" />
+            <Principal Role="Categorias">
+              <PropertyRef Name="id_categoria" />
             </Principal>
-            <Dependent Role="Docentes">
-              <PropertyRef Name="rol" />
+            <Dependent Role="IADs">
+              <PropertyRef Name="categoria_docente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAADs_Categorias">
+          <End Type="DB_PAAD_IADModel.Categorias" Role="Categorias" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categorias">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="PAADs">
+              <PropertyRef Name="categoria_docente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1079,7 +1037,103 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_IADs_Estados">
+          <End Type="DB_PAAD_IADModel.Estados" Role="Estados" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estados">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="IADs">
+              <PropertyRef Name="estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAADs_Estados">
+          <End Type="DB_PAAD_IADModel.Estados" Role="Estados" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estados">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="PAADs">
+              <PropertyRef Name="estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IADs_Periodos">
+          <End Type="DB_PAAD_IADModel.Periodos" Role="Periodos" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periodos">
+              <PropertyRef Name="id_periodo" />
+            </Principal>
+            <Dependent Role="IADs">
+              <PropertyRef Name="periodo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mensajes_IADs">
+          <End Type="DB_PAAD_IADModel.IADs" Role="IADs" Multiplicity="0..1" />
+          <End Type="DB_PAAD_IADModel.Mensajes" Role="Mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IADs">
+              <PropertyRef Name="id_iad" />
+            </Principal>
+            <Dependent Role="Mensajes">
+              <PropertyRef Name="iad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mensajes_PAADs">
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="0..1" />
+          <End Type="DB_PAAD_IADModel.Mensajes" Role="Mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAADs">
+              <PropertyRef Name="id_paad" />
+            </Principal>
+            <Dependent Role="Mensajes">
+              <PropertyRef Name="paad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mensajes_TiposDeMensaje">
+          <End Type="DB_PAAD_IADModel.TiposDeMensaje" Role="TiposDeMensaje" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.Mensajes" Role="Mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposDeMensaje">
+              <PropertyRef Name="id_tipo_mensaje" />
+            </Principal>
+            <Dependent Role="Mensajes">
+              <PropertyRef Name="tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PAADs_Periodos">
+          <End Type="DB_PAAD_IADModel.Periodos" Role="Periodos" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.PAADs" Role="PAADs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Periodos">
+              <PropertyRef Name="id_periodo" />
+            </Principal>
+            <Dependent Role="PAADs">
+              <PropertyRef Name="periodo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuarios_TiposDeUsuarios">
+          <End Type="DB_PAAD_IADModel.TiposDeUsuarios" Role="TiposDeUsuarios" Multiplicity="1" />
+          <End Type="DB_PAAD_IADModel.Usuarios" Role="Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposDeUsuarios">
+              <PropertyRef Name="id_tipo_usuario" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="tipo_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1088,164 +1142,56 @@
           <EntitySetMapping Name="Actividades">
             <EntityTypeMapping TypeName="DB_PAAD_IADModel.Actividades">
               <MappingFragment StoreEntitySet="Actividades">
-                <ScalarProperty Name="id_actividad" ColumnName="id_actividad" />
-                <ScalarProperty Name="actividad" ColumnName="actividad" />
-                <ScalarProperty Name="produccion" ColumnName="produccion" />
-                <ScalarProperty Name="lugar" ColumnName="lugar" />
-                <ScalarProperty Name="porcentaje_inicial" ColumnName="porcentaje_inicial" />
-                <ScalarProperty Name="porcentaje_final" ColumnName="porcentaje_final" />
-                <ScalarProperty Name="cacei" ColumnName="cacei" />
-                <ScalarProperty Name="cuerpo_academico" ColumnName="cuerpo_academico" />
-                <ScalarProperty Name="iso" ColumnName="iso" />
-                <ScalarProperty Name="id_paad" ColumnName="id_paad" />
                 <ScalarProperty Name="id_iad" ColumnName="id_iad" />
+                <ScalarProperty Name="id_paad" ColumnName="id_paad" />
+                <ScalarProperty Name="iso" ColumnName="iso" />
+                <ScalarProperty Name="cuerpo_academico" ColumnName="cuerpo_academico" />
+                <ScalarProperty Name="cacei" ColumnName="cacei" />
+                <ScalarProperty Name="porcentaje_final" ColumnName="porcentaje_final" />
+                <ScalarProperty Name="porcentaje_inicial" ColumnName="porcentaje_inicial" />
+                <ScalarProperty Name="lugar" ColumnName="lugar" />
+                <ScalarProperty Name="produccion" ColumnName="produccion" />
+                <ScalarProperty Name="actividad" ColumnName="actividad" />
+                <ScalarProperty Name="id_actividad" ColumnName="id_actividad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Administrativos">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Administrativos">
+              <MappingFragment StoreEntitySet="Administrativos">
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="docente" ColumnName="docente" />
+                <ScalarProperty Name="rol" ColumnName="rol" />
+                <ScalarProperty Name="carrera" ColumnName="carrera" />
+                <ScalarProperty Name="id_administrativo" ColumnName="id_administrativo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Cargos">
             <EntityTypeMapping TypeName="DB_PAAD_IADModel.Cargos">
               <MappingFragment StoreEntitySet="Cargos">
-                <ScalarProperty Name="id_cargo" ColumnName="id_cargo" />
-                <ScalarProperty Name="cargo" ColumnName="cargo" />
                 <ScalarProperty Name="visible" ColumnName="visible" />
+                <ScalarProperty Name="cargo" ColumnName="cargo" />
+                <ScalarProperty Name="id_cargo" ColumnName="id_cargo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Carreras">
             <EntityTypeMapping TypeName="DB_PAAD_IADModel.Carreras">
               <MappingFragment StoreEntitySet="Carreras">
-                <ScalarProperty Name="id_carrera" ColumnName="id_carrera" />
-                <ScalarProperty Name="carrera" ColumnName="carrera" />
                 <ScalarProperty Name="visible" ColumnName="visible" />
+                <ScalarProperty Name="carrera" ColumnName="carrera" />
+                <ScalarProperty Name="id_carrera" ColumnName="id_carrera" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categorias">
             <EntityTypeMapping TypeName="DB_PAAD_IADModel.Categorias">
               <MappingFragment StoreEntitySet="Categorias">
-                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
-                <ScalarProperty Name="categoria" ColumnName="categoria" />
                 <ScalarProperty Name="visible" ColumnName="visible" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Estados">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Estados">
-              <MappingFragment StoreEntitySet="Estados">
-                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IADs">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.IADs">
-              <MappingFragment StoreEntitySet="IADs">
-                <ScalarProperty Name="id_iad" ColumnName="id_iad" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="periodo" ColumnName="periodo" />
-                <ScalarProperty Name="carrera" ColumnName="carrera" />
-                <ScalarProperty Name="docente" ColumnName="docente" />
-                <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
-                <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
-                <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
-                <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
-                <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
-                <ScalarProperty Name="cargo" ColumnName="cargo" />
-                <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
-                <ScalarProperty Name="firma_director" ColumnName="firma_director" />
-                <ScalarProperty Name="comentarios" ColumnName="comentarios" />
-                <ScalarProperty Name="extemporaneo" ColumnName="extemporaneo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Mensajes">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Mensajes">
-              <MappingFragment StoreEntitySet="Mensajes">
-                <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
-                <ScalarProperty Name="paad" ColumnName="paad" />
-                <ScalarProperty Name="iad" ColumnName="iad" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
-                <ScalarProperty Name="mensaje" ColumnName="mensaje" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PAADs">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
-              <MappingFragment StoreEntitySet="PAADs">
-                <ScalarProperty Name="id_paad" ColumnName="id_paad" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="periodo" ColumnName="periodo" />
-                <ScalarProperty Name="carrera" ColumnName="carrera" />
-                <ScalarProperty Name="docente" ColumnName="docente" />
-                <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
-                <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
-                <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
-                <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
-                <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
-                <ScalarProperty Name="cargo" ColumnName="cargo" />
-                <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
-                <ScalarProperty Name="firma_director" ColumnName="firma_director" />
-                <ScalarProperty Name="extemporaneo" ColumnName="extemporaneo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Periodos">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Periodos">
-              <MappingFragment StoreEntitySet="Periodos">
-                <ScalarProperty Name="id_periodo" ColumnName="id_periodo" />
-                <ScalarProperty Name="periodo" ColumnName="periodo" />
-                <ScalarProperty Name="activo" ColumnName="activo" />
-                <ScalarProperty Name="paad_inicio" ColumnName="paad_inicio" />
-                <ScalarProperty Name="paad_fin" ColumnName="paad_fin" />
-                <ScalarProperty Name="iad_inicio" ColumnName="iad_inicio" />
-                <ScalarProperty Name="iad_fin" ColumnName="iad_fin" />
-                <ScalarProperty Name="fecha_cierre" ColumnName="fecha_cierre" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Roles">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TiposDeMensaje">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.TiposDeMensaje">
-              <MappingFragment StoreEntitySet="TiposDeMensaje">
-                <ScalarProperty Name="id_tipo_mensaje" ColumnName="id_tipo_mensaje" />
-                <ScalarProperty Name="tipo" ColumnName="tipo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="USERS">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.USERS">
-              <MappingFragment StoreEntitySet="USERS">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
-                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
-                <ScalarProperty Name="ROL_ID" ColumnName="ROL_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Docente_Rol">
-            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Docente_Rol">
-              <MappingFragment StoreEntitySet="Docente_Rol">
-                <ScalarProperty Name="rol" ColumnName="rol" />
-                <ScalarProperty Name="docente" ColumnName="docente" />
-                <ScalarProperty Name="id_docente_rol" ColumnName="id_docente_rol" />
+                <ScalarProperty Name="categoria" ColumnName="categoria" />
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1255,9 +1201,127 @@
                 <ScalarProperty Name="correo" ColumnName="correo" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="numero_empleado" ColumnName="numero_empleado" />
-                <ScalarProperty Name="rol" ColumnName="rol" />
                 <ScalarProperty Name="carrera" ColumnName="carrera" />
                 <ScalarProperty Name="id_docente" ColumnName="id_docente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estados">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Estados">
+              <MappingFragment StoreEntitySet="Estados">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IADs">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.IADs">
+              <MappingFragment StoreEntitySet="IADs">
+                <ScalarProperty Name="extemporaneo" ColumnName="extemporaneo" />
+                <ScalarProperty Name="comentarios" ColumnName="comentarios" />
+                <ScalarProperty Name="firma_director" ColumnName="firma_director" />
+                <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
+                <ScalarProperty Name="cargo" ColumnName="cargo" />
+                <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
+                <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
+                <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
+                <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
+                <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
+                <ScalarProperty Name="docente" ColumnName="docente" />
+                <ScalarProperty Name="carrera" ColumnName="carrera" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="id_iad" ColumnName="id_iad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mensajes">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Mensajes">
+              <MappingFragment StoreEntitySet="Mensajes">
+                <ScalarProperty Name="mensaje" ColumnName="mensaje" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="iad" ColumnName="iad" />
+                <ScalarProperty Name="paad" ColumnName="paad" />
+                <ScalarProperty Name="id_mensaje" ColumnName="id_mensaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PAADs">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.PAADs">
+              <MappingFragment StoreEntitySet="PAADs">
+                <ScalarProperty Name="extemporaneo" ColumnName="extemporaneo" />
+                <ScalarProperty Name="firma_director" ColumnName="firma_director" />
+                <ScalarProperty Name="firma_docente" ColumnName="firma_docente" />
+                <ScalarProperty Name="cargo" ColumnName="cargo" />
+                <ScalarProperty Name="horas_tutorias" ColumnName="horas_tutorias" />
+                <ScalarProperty Name="horas_gestion" ColumnName="horas_gestion" />
+                <ScalarProperty Name="horas_investigacion" ColumnName="horas_investigacion" />
+                <ScalarProperty Name="horas_clase" ColumnName="horas_clase" />
+                <ScalarProperty Name="categoria_docente" ColumnName="categoria_docente" />
+                <ScalarProperty Name="docente" ColumnName="docente" />
+                <ScalarProperty Name="carrera" ColumnName="carrera" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="id_paad" ColumnName="id_paad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Periodos">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Periodos">
+              <MappingFragment StoreEntitySet="Periodos">
+                <ScalarProperty Name="fecha_cierre" ColumnName="fecha_cierre" />
+                <ScalarProperty Name="iad_fin" ColumnName="iad_fin" />
+                <ScalarProperty Name="iad_inicio" ColumnName="iad_inicio" />
+                <ScalarProperty Name="paad_fin" ColumnName="paad_fin" />
+                <ScalarProperty Name="paad_inicio" ColumnName="paad_inicio" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="periodo" ColumnName="periodo" />
+                <ScalarProperty Name="id_periodo" ColumnName="id_periodo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposDeMensaje">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.TiposDeMensaje">
+              <MappingFragment StoreEntitySet="TiposDeMensaje">
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="id_tipo_mensaje" ColumnName="id_tipo_mensaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposDeUsuarios">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.TiposDeUsuarios">
+              <MappingFragment StoreEntitySet="TiposDeUsuarios">
+                <ScalarProperty Name="tipo_de_usuario" ColumnName="tipo_de_usuario" />
+                <ScalarProperty Name="id_tipo_usuario" ColumnName="id_tipo_usuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="DB_PAAD_IADModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="tipo_usuario" ColumnName="tipo_usuario" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

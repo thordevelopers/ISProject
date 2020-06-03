@@ -17,16 +17,13 @@ namespace ISProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Roles()
         {
-            this.Docente_Rol = new HashSet<Docente_Rol>();
-            this.Docentes = new HashSet<Docentes>();
+            this.Administrativos = new HashSet<Administrativos>();
         }
     
         public int id_rol { get; set; }
         public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Docente_Rol> Docente_Rol { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Docentes> Docentes { get; set; }
+        public virtual ICollection<Administrativos> Administrativos { get; set; }
     }
 }

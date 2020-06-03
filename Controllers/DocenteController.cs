@@ -46,7 +46,7 @@ namespace ISProject.Controllers
                 string date;
                 using (var db = new DB_PAAD_IADEntities())
                 {
-                    Docentes docente = (Docentes)Session["user"];
+                    Docentes docente = (Docentes)Session["docente"];
                     doc_paad = (from paad in db.PAADs
                                 where paad.docente == docente.id_docente
                                 join periodo in db.Periodos
@@ -93,7 +93,7 @@ namespace ISProject.Controllers
                         }
                     }
                 }
-                else if ( doc_paad.estado ==1)
+                else if (doc_paad == null || doc_paad.estado ==1)
                 {
                     status.statusMessage = "El periodo de entrega del PAAD ya ha cerrado, el sistema ya no te permitira entrgarlo, comunicate con direccion para mas informacion";
                     status.colorBackground = "#ff5757";
@@ -139,19 +139,19 @@ namespace ISProject.Controllers
             //Se obtiene la info basica del paad
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("NotActivePeriod_Docente"); //No hay periodo activo
+                return View("HomeDocente"); //No hay periodo activo
             InfoPAADCLS info = GetInfoPAAD();
             if (info_period.is_close_paad)
             {
                 if(info==null || info.status_value<3)
-                    return View("NotActivePeriod_Docente"); //No se lleno el formato paad o no se aprobo y ya no se puede hacer nada
+                    return View("HomeDocente"); //No se lleno el formato paad o no se aprobo y ya no se puede hacer nada
                 else
                     return RedirectToAction("ViewPAAD", new { id = info.id_paad }); //Se lleno el paad correctamente y esta aprobado
             }
             if (!info_period.on_time_paad)
             {
                 if (info==null)
-                    return View("NotActivePeriod_Docente"); //Ya no es periodo de entrega y no creo ningun paad
+                    return View("HomeDocente"); //Ya no es periodo de entrega y no creo ningun paad
                 else if (!info.is_extemporaneous)
                     return RedirectToAction("ViewPAAD", new { id = info.id_paad }); //Se creo un paad pero ya no es periodo de entrega y no es extemporaneo
             }
@@ -322,7 +322,7 @@ namespace ISProject.Controllers
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             InfoPAADCLS info = GetInfoPAAD(id);
             if (info == null)
-                return View("NotFoundError_Docente");
+                return View("HomeDocente");
             if (info_period.on_time_paad || (!info_period.is_close_paad && info.is_extemporaneous)) 
             {
                 if (info.status_value == 1 && info.active)
@@ -351,7 +351,7 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Docentes doc = ((Docentes)Session["docente"]);
             //Valida que la autenticacion sea correcta y que el correo de la autenticacion se el mismo que el de la sesion
             if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
             {
@@ -468,7 +468,7 @@ namespace ISProject.Controllers
         public InfoPAADCLS GetInfoPAAD(int id=0)
         {
             InfoPAADCLS info = new InfoPAADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Docentes doc = (Docentes)Session["docente"];
             using (var db = new DB_PAAD_IADEntities())
             {
                 info = (from paad in db.PAADs
@@ -492,7 +492,7 @@ namespace ISProject.Controllers
                     {
                         estado = 1,
                         periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
-                        carrera = 1,
+                        carrera = doc.carrera,
                         docente = doc.id_docente,
                         categoria_docente = 1,
                         horas_clase = 10,
@@ -609,7 +609,7 @@ namespace ISProject.Controllers
             List<RegistroPAAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
-                Docentes doc = ((Docentes)Session["user"]);
+                Docentes doc = ((Docentes)Session["docente"]);
                 list = (from paad in db.PAADs
                         where paad.docente == doc.id_docente && paad.estado==3
                         join estado in db.Estados
@@ -748,14 +748,14 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("NotActivePeriod_Docente"); //No hay periodo activo
+                return View("HomeDocente"); //No hay periodo activo
             if (!info_period.is_close_paad)
-                return View("NotActivePeriod_Docente"); //No hay periodo activo
+                return View("HomeDocente"); //No hay periodo activo
             InfoIADCLS info_iad = GetInfoIAD();
             if (!info_period.on_time_iad)
             {
                 if (info_iad == null)
-                    return View("NotActivePeriod_Docente"); //Ya no es periodo de entrega y no creo ningun paad
+                    return View("HomeDocente"); //Ya no es periodo de entrega y no creo ningun paad
                 else if (!info_iad.is_extemporaneous)
                     return RedirectToAction("ViewIAD", new { id = info_iad.id_iad }); //Se creo un paad pero ya no es periodo de entrega y no es extemporaneo
             }
@@ -848,7 +848,7 @@ namespace ISProject.Controllers
                             actividad = model.actividad,
                             produccion = model.produccion,
                             lugar = model.lugar,
-                            porcentaje_inicial = model.porcentaje,
+                            porcentaje_final = model.porcentaje,
                             cacei = model.cacei,
                             cuerpo_academico = model.cuerpo_academico,
                             iso = model.iso,
@@ -923,7 +923,7 @@ namespace ISProject.Controllers
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             InfoIADCLS info = GetInfoIAD(id);
             if (info == null)
-                return View("NotFoundError_Docente");
+                return View("HomeDocente");
             if (info_period.on_time_iad || (!info_period.is_close && info.is_extemporaneous))
             {
                 if (info.status_value == 1 && info.active)
@@ -946,7 +946,7 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Docentes doc = ((Docentes)Session["docente"]);
             //Valida que la autenticacion sea correcta y que el correo de la autenticacion se el mismo que el de la sesion
             if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.correo != credentials.email)
             {
@@ -1061,7 +1061,7 @@ namespace ISProject.Controllers
             List<RegistroIAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
-                Docentes doc = ((Docentes)Session["user"]);
+                Docentes doc = ((Docentes)Session["docente"]);
                 list = (from iad in db.IADs
                         where iad.docente == doc.id_docente && iad.estado == 3
                         join estado in db.Estados
@@ -1113,7 +1113,7 @@ namespace ISProject.Controllers
         public InfoIADCLS GetInfoIAD(int id = 0)
         {
             InfoIADCLS info = new InfoIADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Docentes doc = (Docentes)Session["docente"];
             using (var db = new DB_PAAD_IADEntities())
             {
                 info = (from iad in db.IADs
@@ -1137,7 +1137,7 @@ namespace ISProject.Controllers
                     {
                         estado = 1,
                         periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
-                        carrera = 1,
+                        carrera = doc.carrera,
                         docente = doc.id_docente,
                         categoria_docente = 1,
                         horas_clase = 10,

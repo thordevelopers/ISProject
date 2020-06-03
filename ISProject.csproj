@@ -144,7 +144,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\CoordinadorController.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\DocenteController.cs" />
@@ -162,6 +161,9 @@
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityCLS.cs" />
+    <Compile Include="Models\Administrativos.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AuthenticationCLS.cs" />
     <Compile Include="Models\Cargos.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
@@ -188,9 +190,6 @@
       <DependentUpon>DB_PAAD_IAD.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Docentes.cs">
-      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Docente_Rol.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ErrorMessageCLS.cs" />
@@ -228,8 +227,11 @@
     <Compile Include="Models\TiposDeMensaje.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TiposDeUsuarios.cs">
+      <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserCLS.cs" />
-    <Compile Include="Models\USERS.cs">
+    <Compile Include="Models\Usuarios.cs">
       <DependentUpon>DB_PAAD_IAD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewPDFCLS.cs" />
@@ -359,6 +361,7 @@
     <Content Include="Views\Shared\_ListActiveIADs.cshtml" />
     <Content Include="Views\Subdirector\ErrorMessage_Subdirector.cshtml" />
     <Content Include="Views\Utilities\ViewPDF_IAD.cshtml" />
+    <Content Include="Views\Subdirector\ChangeSubdirectorAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

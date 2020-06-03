@@ -11,8 +11,8 @@ namespace ISProject.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            Docentes doc = (Docentes)HttpContext.Current.Session["user"];
-            if (doc == null || doc.rol != 3)
+            Administrativos admin = (Administrativos)HttpContext.Current.Session["administ"];
+            if (admin == null || admin.rol != 2)
                 filterContext.Result = new RedirectResult("~/Login/RedirectToHome");
             base.OnActionExecuting(filterContext);
         }

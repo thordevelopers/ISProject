@@ -29,6 +29,8 @@ namespace ISProject.Controllers
         public ActionResult ViewPAAD(int id)
         {
             InfoPAADCLS info = GetInfoPAAD(id);
+            if (info == null)
+                return RedirectToAction("Home");
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
@@ -38,6 +40,9 @@ namespace ISProject.Controllers
         /* Esta accion muestra la vista de ListActivePAADs*/
         public ActionResult ListActivePAADs()
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
+            if (info_period.is_close || info_period.is_close_paad)
+                return View("HomeCoordinador");
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
             return View("ListActivePAADs_Coordinador");
@@ -87,6 +92,9 @@ namespace ISProject.Controllers
         /* Esta accion muestra la vista de ListActiveIADs*/
         public ActionResult ListActiveIADs()
         {
+            InfoPeriodCLS info_period = util.GetInfoPeriod();
+            if (info_period.is_close)
+                return View("HomeCoordinador");
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();
             return View("ListActiveIADs_Coordinador");
@@ -126,11 +134,11 @@ namespace ISProject.Controllers
         public InfoPAADCLS GetInfoPAAD(int id )
         {
             InfoPAADCLS info = new InfoPAADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             using (var db = new DB_PAAD_IADEntities())
             {
                 info = (from paad in db.PAADs
-                        where paad.id_paad == id
+                        where paad.id_paad == id && paad.estado!=1
                         join estado in db.Estados
                         on paad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -151,11 +159,11 @@ namespace ISProject.Controllers
         public InfoIADCLS GetInfoIAD(int id)
         {
             InfoIADCLS info = new InfoIADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             using (var db = new DB_PAAD_IADEntities())
             {
                 info = (from iad in db.IADs
-                        where iad.id_iad == id
+                        where iad.id_iad == id && iad.estado!=1
                         join estado in db.Estados
                         on iad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -300,12 +308,11 @@ namespace ISProject.Controllers
          * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetActivePAADs(int state = 0)
         {
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             List<RegistroPAAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
                 list = (from docente in db.Docentes
-                        where docente.rol == 1
                         join paad in db.PAADs
                         on docente.id_docente equals paad.docente into gpaad
                         from paad in gpaad.DefaultIfEmpty()
@@ -336,12 +343,11 @@ namespace ISProject.Controllers
          * Regresa una lista con los modelos de los paad*/
         public List<RegistroIAD> GetActiveIADs(int state = 0)
         {
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             List<RegistroIAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
                 list = (from docente in db.Docentes
-                        where docente.rol==1
                         join iad in db.IADs
                         on docente.id_docente equals iad.docente into gpaad
                         from paad in gpaad.DefaultIfEmpty()
@@ -372,7 +378,7 @@ namespace ISProject.Controllers
          * Regresa una lista con los modelos de los paad*/
         public List<RegistroPAAD> GetRecordPAADs(int period = 0)
         {
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             List<RegistroPAAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
@@ -405,7 +411,7 @@ namespace ISProject.Controllers
          * Regresa una lista con los modelos de los paad*/
         public List<RegistroIAD> GetRecordIADs(int period = 0)
         {
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             List<RegistroIAD> list = null;
             using (var db = new DB_PAAD_IADEntities())
             {
@@ -442,6 +448,7 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 periods = (from estado in db.Estados
+                           where estado.id_estado != 3
                            select new SelectListItem
                            {
                                Text = estado.estado,

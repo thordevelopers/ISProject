@@ -11,7 +11,7 @@ namespace ISProject.Controllers
     public class LoginController : Controller
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
-        AuthenticationController auth = new AuthenticationController();
+        UtilitiesController util = new UtilitiesController();
         //Acciones de la vista ------------------------------------------------ HomeSubdirector ------------------------------------------------
         //Esta vista muestra la vista de Login
         public ActionResult Login()
@@ -34,7 +34,7 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Valida que la autenticacion sea correcta
-            if (!auth.AuthenticateCredentials(credentials.email, credentials.password))
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password))
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -44,20 +44,32 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             }
-            USERS user_db;
-            Docentes doc;
+            Usuarios user_db;
             //obtiene el usario segun la contrasena y el correo
             using (var db= new DB_PAAD_IADEntities())
             {
-                user_db =  db.USERS.Where(p => p.EMAIL== credentials.email && p.PASSWORD==credentials.password).FirstOrDefault();
+                user_db =  db.Usuarios.Where(p => p.email== credentials.email && p.password==credentials.password).FirstOrDefault();
             }
-            //Obtiene al docente segun el correo
-            using (var db = new DB_PAAD_IADEntities())
+            if (user_db.tipo_usuario == 1)
             {
-                doc = db.Docentes.Where(p => p.correo == user_db.EMAIL).FirstOrDefault();
+                //Obtiene al docente segun el correo
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Docentes docente = db.Docentes.Where(p => p.correo == user_db.email).FirstOrDefault();
+                    //Crea una session de usuario
+                    Session["docente"] = docente;
+                }
             }
-            //Crea una session de usuario
-            Session["user"] = doc;
+            else if(user_db.tipo_usuario == 2)
+            {
+                //Obtiene al administrativo segun el correo
+                using (var db = new DB_PAAD_IADEntities())
+                {
+                    Administrativos admin = db.Administrativos.Where(p => p.correo == user_db.email).FirstOrDefault();
+                    //Crea una session de usuario
+                    Session["administ"] = admin;
+                }
+            }
             return Json(new
             {
                 Status = 1,
@@ -70,17 +82,19 @@ namespace ISProject.Controllers
          * Regresa una redireccion hacia una accion*/
         public ActionResult RedirectToHome()
         {
-            Docentes doc = (Docentes)Session["user"];
-            if (doc==null)
-                return RedirectToAction("Login");
-            if (doc.rol == 1)
+            Docentes doc = (Docentes)Session["docente"];
+            Administrativos admin = (Administrativos)Session["administ"];
+            if (doc != null)
                 return RedirectToAction("Home", "Docente");
-            else if (doc.rol == 2)
-                return RedirectToAction("Home", "Coordinador");
-            else if (doc.rol == 3)
-                return RedirectToAction("Home", "Subdirector");
-            else if (doc.rol == 4)
-                return RedirectToAction("Home", "Director");
+            if (admin != null)
+            {
+                if (admin.rol == 1)
+                    return RedirectToAction("Home", "Coordinador");
+                if (admin.rol == 2)
+                    return RedirectToAction("Home", "Subdirector");
+                if (admin.rol == 3)
+                    return RedirectToAction("Home", "Director");
+            }
             return RedirectToAction("Login");
         }
         /* Esta accion se llama con el boton de cerrar session en el menu
