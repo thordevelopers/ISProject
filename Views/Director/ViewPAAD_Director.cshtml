@@ -28,7 +28,14 @@
 </div>
 <br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button class="btn btn-azul-claro" onclick="goBack()">Regresar</button>
+    @if (info.status_value != 3)
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListActivePAADs", "Director", Request.Url.Scheme)">Regresar</a>
+    }
+    else
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Director", Request.Url.Scheme)">Regresar</a>
+    }
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
@@ -43,7 +50,7 @@
         if (info.status_value == 2 || info.status_value == 5)
         {
             <button type="button" onclick="authCredentials(1)" class="btn btn-rojo btnAction">Rechazar formato</button>
-            <button type="button" onclick="authCredentials(2)" class="btn btn-verde-light btnAction">Aprobar formato</button>
+            <button type="button" onclick="authCredentials(2)" class="btn btn-verde btnAction">Aprobar formato</button>
         }
         else if (info.status_value == 4)
         {

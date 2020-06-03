@@ -34,6 +34,8 @@ namespace ISProject.Controllers
             if (id < 1)
                 return RedirectToAction("Home");
             InfoPAADCLS info = GetInfoPAAD(id);
+            if (info == null)
+                return RedirectToAction("Home");
             //~~~~~~~Poner redirecion a error not found
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
@@ -42,7 +44,7 @@ namespace ISProject.Controllers
             if (info.isdirector)
                 ViewBag.msg = GetMessages(info.id_paad);
             else
-                ViewBag.msg = new MessageCLS();
+                ViewBag.msg = null;
             return View("ViewPAAD_Subdirector");
         }
         /* Esta accion aplica las acciones sobre el paad como rechazar paad, aprobar paad, aprobar modificacion y rechazar modificacion
@@ -59,9 +61,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos doc = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol <3 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol < 2 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -75,9 +77,9 @@ namespace ISProject.Controllers
             {
                 Mensajes mssg = null;
                 PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad).FirstOrDefault();
-                bool isNullOrDirector = paad!=null? !(from docente in db.Docentes where docente.id_docente == paad.docente select docente.isdirector).FirstOrDefault() : true;
+                bool isNotDirectorOrNull = paad != null ? !util.IsDirector(paad.docente) : true;
                 //Valida que el paad sea del director
-                if (isNullOrDirector)
+                if (isNotDirectorOrNull)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
                     return Json(new
@@ -142,7 +144,7 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("ErrorMessage_Subdirector", new ErrorMessageCLS { message = "No hay periodo activo" });
+                return View("HomeSubdirector"); //"ErrorMessage_Subdirector", new ErrorMessageCLS { message = "No hay periodo activo" });
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
             ViewBag.careers = GetCareers();
@@ -212,9 +214,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos doc = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 3 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 2 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -229,9 +231,9 @@ namespace ISProject.Controllers
                 Mensajes mssg = null;
 
                 IADs iad = db.IADs.Where(p => p.id_iad == id_iad).FirstOrDefault();
-                bool isDirectorOrNull = iad != null ? !(from docente in db.Docentes where docente.id_docente == iad.docente select docente.isdirector).FirstOrDefault() : true;
+                bool isNotDirectorOrNull = iad != null ? !util.IsDirector(iad.docente) : true;
                 //Valida que el paad sea del director
-                if (isDirectorOrNull)
+                if (isNotDirectorOrNull)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
                     return Json(new
@@ -296,7 +298,7 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("ErrorMessage_Subdirector", new ErrorMessageCLS { message = "No hay periodo activo" });
+                return View("HomeSubdirector"); //"ErrorMessage_Subdirector", new ErrorMessageCLS { message = "No hay periodo activo" });
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();
             ViewBag.careers = GetCareers();
@@ -329,7 +331,68 @@ namespace ISProject.Controllers
             List<RegistroIAD> list = GetRecordIADs(Convert.ToInt32(filter_period), Convert.ToInt32(filter_career));
             return PartialView("_ListIADs", list);
         }
-        #endregion 
+        #endregion
+        //Acciones de la vista ------------------------------------------------ ChangeSubdirectorAccount ------------------------------------------------
+        /* Esta accion muestra la vista de ChangeDirectorAccount*/
+        public ActionResult ChangeSubdirectorAccount()
+        {
+            ViewBag.director = GetSubdirector();
+            ViewBag.accounts = GetAccounts();
+            return View("ChangeSubdirectorAccount");
+        }
+        /* Esta accion se llama cuando le da al boton de aceptar en el modal de credenciales
+         * Esta funcion sirve para cambiar el campo isdirector de la tabla de docentes de una cuenta a otra
+         * Recibe las credenciales y el id del docente que sera el nuevo director
+         * Regresa un json con el estado de la respuesta, el mensaje de respuesta, y una vista parcial en string */
+        public ActionResult ChangeSubdirector(AuthenticationCLS credentials, int id_docente)
+        {
+            //Valida los campos del modelo de las credenciales
+            if (!ModelState.IsValid)
+                return Json(new
+                {
+                    Status = 2,
+                    Message = "Invalid",
+                    AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                });
+            //Obtiene los datos de la sesion del usuario
+            Administrativos doc = ((Administrativos)Session["administ"]);
+            //Valida que la autenticacion sea correcto, que el correo de la autenticacion se el mismo que el de la sesion y que se tengan los permisos necesario para realizar esa accion
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 2 || doc.correo != credentials.email)
+            {
+                credentials.message = "Correo y/o contraseña incorrectos";
+                return Json(new
+                {
+                    Status = 3,
+                    Message = "Error",
+                    AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                });
+            }
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                Docentes docente = db.Docentes.Where(p => p.id_docente == id_docente).FirstOrDefault();
+                bool isDirectorOrNull = docente != null ? util.IsDirector(docente.id_docente) : true;
+                //Si el docente no se encutra o ya es director regresa un mensaje de error, si no lo vuelve director
+                if (isDirectorOrNull)
+                {
+                    credentials.message = "Cuenta no encontrada o esta cuenta ya es director";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                Administrativos director = db.Administrativos.Where(p => p.rol == 2).FirstOrDefault();
+                if (director != null)
+                    director.docente = docente.id_docente;
+                db.SaveChanges();
+            }
+            return Json(new
+            {
+                Status = 1,
+                Message = "Success"
+            });
+        }
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
          * Recibe el id del paad 
@@ -337,11 +400,13 @@ namespace ISProject.Controllers
         public InfoPAADCLS GetInfoPAAD(int id)
         {
             InfoPAADCLS info = new InfoPAADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             using (var db = new DB_PAAD_IADEntities())
             {
-                info = (from paad in db.PAADs
-                        where paad.id_paad == id
+                info = (from admin in db.Administrativos
+                        where admin.rol == 3
+                        from paad in db.PAADs
+                        where paad.id_paad == id && paad.estado != 1
                         join estado in db.Estados
                         on paad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -354,7 +419,7 @@ namespace ISProject.Controllers
                             status_value = paad.estado,
                             status_name = estado.estado,
                             active = periodo.activo,
-                            isdirector = docente.isdirector
+                            isdirector = paad.docente == admin.docente? true :false
                         }).FirstOrDefault();
             }
             return info;
@@ -365,11 +430,13 @@ namespace ISProject.Controllers
         public InfoIADCLS GetInfoIAD(int id)
         {
             InfoIADCLS info = new InfoIADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             using (var db = new DB_PAAD_IADEntities())
             {
-                info = (from iad in db.IADs
-                        where iad.id_iad == id
+                info = (from admin in db.Administrativos
+                        where admin.rol == 3
+                        from iad in db.IADs
+                        where iad.id_iad == id && iad.estado != 1
                         join estado in db.Estados
                         on iad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -382,7 +449,7 @@ namespace ISProject.Controllers
                             status_value = iad.estado,
                             status_name = estado.estado,
                             active = periodo.activo,
-                            isdirector = docente.isdirector
+                            isdirector = iad.docente == admin.docente ? true : false
                         }).FirstOrDefault();
             }
             return info;
@@ -525,7 +592,6 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 list = (from docente in db.Docentes
-                        where docente.rol==1
                         join paad in db.PAADs
                         on docente.id_docente equals paad.docente into gpaad
                         from paad in gpaad.DefaultIfEmpty()
@@ -562,7 +628,6 @@ namespace ISProject.Controllers
                 list = (from periodo in db.Periodos
                         where periodo.activo == true
                         from docente in db.Docentes
-                        where docente.rol == 1
                         join iad in db.IADs
                         on new { id = docente.id_docente, activo = periodo.id_periodo } equals new { id = iad.docente, activo = iad.periodo } into gpaad
                         from iad in gpaad.DefaultIfEmpty()
@@ -663,6 +728,7 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 periods = (from estado in db.Estados
+                           where estado.id_estado != 3
                            select new SelectListItem
                            {
                                Text = estado.estado,
@@ -755,6 +821,42 @@ namespace ISProject.Controllers
                        }).FirstOrDefault();
             }
             return msg;
+        }
+        /* Esta accion recupera los docentes
+         * No recibe argumentos
+         * Regresa una lista con los modelos de los docentes */
+        public List<SelectListItem> GetAccounts()
+        {
+            List<SelectListItem> accounts = null;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                accounts = (from docente in db.Docentes
+                            join admin in db.Administrativos
+                            on docente.id_docente equals admin.docente into gadmin
+                            from admin in gadmin.DefaultIfEmpty()
+                            where admin.rol!=2 && admin.rol!=3
+                            join carrera in db.Carreras
+                            on docente.carrera equals carrera.id_carrera
+                            select new SelectListItem
+                            {
+                                Text = "No " + docente.numero_empleado + " | " + docente.nombre + " | " + carrera.carrera + " | " + docente.correo,
+                                Value = docente.id_docente.ToString()
+                            }).ToList();
+                accounts.Insert(0, new SelectListItem { Text = "-- Seleccione --", Value = "0" });
+            }
+            return accounts;
+        }
+        /* Esta accion recupera al docente que tiene el campo isdirector en true
+         * No recibe argumentos
+         * Regresa un modelo con la informacion del docente*/
+        public Docentes GetSubdirector()
+        {
+            Docentes director;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                director = (from admin in db.Administrativos where admin.rol == 2 join docente in db.Docentes on admin.docente equals docente.id_docente select docente).FirstOrDefault();
+            }
+            return director;
         }
         /* Esta accion transforma una vista en string
          * Recibe el nombre de la vista y el modelo con el cual llenar la vista

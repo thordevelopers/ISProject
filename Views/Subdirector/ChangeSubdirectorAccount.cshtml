@@ -1,0 +1,69 @@
+﻿@using ISProject.Models
+@{
+    Layout = "~/Views/Subdirector/_LayoutSubdirector.cshtml";
+    List<SelectListItem> accounts = (List<SelectListItem>)ViewBag.accounts;
+    InfoPAADCLS info = (InfoPAADCLS)ViewBag.info;
+    Docentes subdirector = (Docentes)ViewBag.director;
+}
+
+<div>
+    @if (subdirector != null)
+    {
+        <label><h3 style="font-weight:bold;display:inline">Subdirector actual: </h3>No @subdirector.numero_empleado | @subdirector.nombre | @subdirector.correo </label>
+    }
+    else
+    {
+        <label>Actualmente no hay un subdirector asignado </label>
+    }
+</div>
+<br />
+<div>
+    <label> Escoga la cuenta a la que desea asignar como director</label>
+    @Html.DropDownList("new_account", accounts)
+    <button type="button" onclick="authCredentials()">Convertir en subdirector</button>
+</div>
+<div id="mdlAuthCredentials" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin-bottom:10px">
+                <label id="mdlAuthTitle" class="lbl-30" style="padding-top:20px">Verifique sus credenciales</label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("ChangeSubdirector", null, new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "authResponse"
+            }, new { id = "frmChangeSubdirector" }))
+            {
+                <div id="mdlAuthCredentialsContent">
+                    @Html.Partial("_AuthenticateCredentials", new AuthenticationCLS())
+                </div>
+                @Html.Hidden("id_docente")
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function authCredentials() {
+        let id = $("#new_account").val();
+        $("#id_docente").val(id)
+        $("#mdlAuthCredentials").modal("show");
+    }
+    function sendPAAD() {
+        $("#frmChangeSubdirector").submit();
+    }
+    function authResponse(response) {
+        if (response.Status != 1) {
+            $("#mdlAuthCredentialsContent").html(response.AjaxResponse);
+        }
+        else {
+            window.location ="@Url.Action("Home","Subdirector")";
+        }
+    }
+</script>

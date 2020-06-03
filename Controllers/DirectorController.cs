@@ -36,6 +36,8 @@ namespace ISProject.Controllers
                 return RedirectToAction("Home");
             InfoPAADCLS info = GetInfoPAAD(id);
             //~~~~~~~Poner redirecion a error not found
+            if (info == null)
+                return RedirectToAction("Home");
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
@@ -60,9 +62,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos admin = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo!=credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || admin.rol != 3 || admin.correo!=credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -77,11 +79,21 @@ namespace ISProject.Controllers
                 Mensajes mssg = null;
                 
                 PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad).FirstOrDefault();
-                bool isdirector = (from docente in db.Docentes where docente.id_docente == paad.docente select docente.isdirector).FirstOrDefault();
+                bool isDirectorOrNull = paad != null ? util.IsDirector(paad.docente) : true;
                 //Valida que el paad sea del director
-                if (paad == null || isdirector)
+                if (isDirectorOrNull)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                if ((action_paad == 1 || action_paad == 3) && reject_message == "")
+                {
+                    credentials.message = "Las razones del rechazo son obligatorias";
                     return Json(new
                     {
                         Status = 3,
@@ -144,7 +156,7 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close || info_period.is_close_paad)
-                return View("NotActivePeriod");
+                return View("HomeDirector");
             ViewBag.info_period = info_period;
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
@@ -171,9 +183,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos doc = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 3 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -188,9 +200,9 @@ namespace ISProject.Controllers
                 if (id_paad != 0)
                 {
                     PAADs paad = db.PAADs.Where(p => p.id_paad == id_paad).FirstOrDefault();
-                    bool isdirector = (from docente in db.Docentes where docente.id_docente == id_docente select docente.isdirector).FirstOrDefault();
+                    //bool isDirectorOrNull = paad != null ? util.IsDirector(paad.docente) : true;
                     //Valida que el paad sea del director
-                    if (paad != null || !isdirector)
+                    if (paad!=null)
                     {
                         paad.extemporaneo = true;
                     }
@@ -211,7 +223,7 @@ namespace ISProject.Controllers
                     {
                         estado = 1,
                         periodo = (from periodo in db.Periodos where periodo.activo == true select periodo.id_periodo).FirstOrDefault(),
-                        carrera = 1,
+                        carrera = (from docente in db.Docentes where docente.id_docente == id_docente select docente.carrera).FirstOrDefault(),
                         docente = id_docente,
                         categoria_docente = 1,
                         horas_clase = 10,
@@ -241,9 +253,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos doc = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 3 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -258,9 +270,9 @@ namespace ISProject.Controllers
                 if (id_iad != 0)
                 {
                     IADs iad = db.IADs.Where(p => p.id_iad == id_iad).FirstOrDefault();
-                    bool isdirector = (from docente in db.Docentes where docente.id_docente == id_docente select docente.isdirector).FirstOrDefault();
+                    bool isDirectorOrNull = iad != null ? util.IsDirector(iad.docente) : true;
                     //Valida que el paad sea del director
-                    if (iad != null || !isdirector)
+                    if (!isDirectorOrNull)
                     {
                         iad.extemporaneo = true;
                     }
@@ -340,7 +352,7 @@ namespace ISProject.Controllers
             if (!info.isdirector)
                 ViewBag.msg = GetMessagesIAD(info.id_iad);
             else
-                ViewBag.msg = new MessageCLS();
+                ViewBag.msg = null;
             return View("ViewIAD_Director");
         }
         /* Esta accion aplica las acciones sobre el paad como rechazar paad, aprobar paad, aprobar modificacion y rechazar modificacion
@@ -357,9 +369,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos doc = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcta, que el correo de la autenticacion se el mismo que el de la sesion y que la cuenta tenga el nivel de permisos necesarios
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 3 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -374,11 +386,21 @@ namespace ISProject.Controllers
                 Mensajes mssg = null;
 
                 IADs iad = db.IADs.Where(p => p.id_iad == id_iad).FirstOrDefault();
-                bool isDirectorOrNull = iad != null? (from docente in db.Docentes where docente.id_docente == iad.docente select docente.isdirector).FirstOrDefault() : true;
+                bool isDirectorOrNull = iad != null ? util.IsDirector(iad.docente) : true;
                 //Valida que el paad sea del director
                 if (isDirectorOrNull)
                 {
                     credentials.message = "Correo y/o contraseña incorrectos";
+                    return Json(new
+                    {
+                        Status = 3,
+                        Message = "Error",
+                        AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
+                    });
+                }
+                if ((action_iad == 1|| action_iad == 3) && reject_message == "")
+                {
+                    credentials.message = "Las razones del rechazo son obligatorias";
                     return Json(new
                     {
                         Status = 3,
@@ -441,9 +463,9 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("NotActivePeriod");
+                return View("HomeDirector");
             if (!info_period.is_close_paad)
-                return View("NotActivePeriod");
+                return View("HomeDirector");
             ViewBag.info_period = info_period;
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();
@@ -501,9 +523,9 @@ namespace ISProject.Controllers
                     AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                 });
             //Obtiene los datos de la sesion del usuario
-            Docentes doc = ((Docentes)Session["user"]);
+            Administrativos doc = ((Administrativos)Session["administ"]);
             //Valida que la autenticacion sea correcto, que el correo de la autenticacion se el mismo que el de la sesion y que se tengan los permisos necesario para realizar esa accion
-            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 4 || doc.correo != credentials.email)
+            if (!util.AuthenticateCredentials(credentials.email, credentials.password) || doc.rol != 3 || doc.correo != credentials.email)
             {
                 credentials.message = "Correo y/o contraseña incorrectos";
                 return Json(new
@@ -516,8 +538,9 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 Docentes docente = db.Docentes.Where(p => p.id_docente == id_docente).FirstOrDefault();
+                bool isDirectorOrNull = docente != null ? util.IsDirector(docente.id_docente) : true;
                 //Si el docente no se encutra o ya es director regresa un mensaje de error, si no lo vuelve director
-                if (docente == null || docente.isdirector)
+                if (isDirectorOrNull)
                 {
                     credentials.message = "Cuenta no encontrada o esta cuenta ya es director";
                     return Json(new
@@ -527,10 +550,9 @@ namespace ISProject.Controllers
                         AjaxResponse = RenderRazorViewToString("_AuthenticateCredentials", credentials)
                     });
                 }
-                Docentes director = db.Docentes.Where(p => p.isdirector == true).FirstOrDefault();
+                Administrativos director = db.Administrativos.Where(p => p.rol == 3).FirstOrDefault();
                 if (director != null)
-                    director.isdirector = false;
-                docente.isdirector = true;
+                    director.docente = docente.id_docente;
                 db.SaveChanges();
             }
             return Json(new
@@ -671,11 +693,13 @@ namespace ISProject.Controllers
         public InfoPAADCLS GetInfoPAAD(int id )
         {
             InfoPAADCLS info = new InfoPAADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             using (var db = new DB_PAAD_IADEntities())
             {
-                info = (from paad in db.PAADs
-                        where paad.id_paad == id
+                info = (from admin in db.Administrativos
+                        where admin.rol == 3
+                        from paad in db.PAADs
+                        where paad.id_paad == id && paad.estado != 1
                         join estado in db.Estados
                         on paad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -688,7 +712,7 @@ namespace ISProject.Controllers
                             status_value = paad.estado,
                             status_name = estado.estado,
                             active = periodo.activo,
-                            isdirector = docente.isdirector
+                            isdirector = paad.docente == admin.docente ? true : false
                         }).FirstOrDefault();
             }
             return info;
@@ -699,11 +723,13 @@ namespace ISProject.Controllers
         public InfoIADCLS GetInfoIAD(int id)
         {
             InfoIADCLS info = new InfoIADCLS();
-            Docentes doc = (Docentes)Session["user"];
+            Administrativos doc = (Administrativos)Session["administ"];
             using (var db = new DB_PAAD_IADEntities())
             {
-                info = (from iad in db.IADs
-                        where iad.id_iad == id
+                info = (from admin in db.Administrativos
+                        where admin.rol == 3
+                        from iad in db.IADs
+                        where iad.id_iad == id && iad.estado != 1
                         join estado in db.Estados
                         on iad.estado equals estado.id_estado
                         join periodo in db.Periodos
@@ -716,7 +742,7 @@ namespace ISProject.Controllers
                             status_value = iad.estado,
                             status_name = estado.estado,
                             active = periodo.activo,
-                            isdirector = docente.isdirector
+                            isdirector = iad.docente == admin.docente ? true : false
                         }).FirstOrDefault();
             }
             return info;
@@ -861,7 +887,6 @@ namespace ISProject.Controllers
                 list = (from periodo in db.Periodos
                         where periodo.activo == true
                         from docente in db.Docentes
-                        where docente.rol == 1
                         join paad in db.PAADs
                         on new { id = docente.id_docente, activo = periodo.id_periodo } equals new { id = paad.docente, activo = paad.periodo } into gpaad
                         from paad in gpaad.DefaultIfEmpty()
@@ -899,7 +924,6 @@ namespace ISProject.Controllers
                 list = (from periodo in db.Periodos
                         where periodo.activo == true
                         from docente in db.Docentes
-                        where docente.rol == 1
                         join iad in db.IADs
                         on new { id = docente.id_docente, activo = periodo.id_periodo } equals new { id = iad.docente, activo = iad.periodo } into gpaad
                         from iad in gpaad.DefaultIfEmpty()
@@ -1000,6 +1024,7 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 periods = (from estado in db.Estados
+                           where estado.id_estado != 3
                            select new SelectListItem
                            {
                                Text = estado.estado,
@@ -1054,7 +1079,10 @@ namespace ISProject.Controllers
             using (var db = new DB_PAAD_IADEntities())
             {
                 accounts = (from docente in db.Docentes
-                            where docente.rol == 1
+                            join admin in db.Administrativos
+                            on docente.id_docente equals admin.docente into gadmin
+                            from admin in gadmin.DefaultIfEmpty()
+                            where admin.rol != 2 && admin.rol != 3
                             join carrera in db.Carreras
                             on docente.carrera equals carrera.id_carrera
                             select new SelectListItem
@@ -1122,7 +1150,7 @@ namespace ISProject.Controllers
             Docentes director;
             using (var db = new DB_PAAD_IADEntities())
             {
-                director = (from docente in db.Docentes where docente.isdirector == true select docente).FirstOrDefault();
+                director = (from admin in db.Administrativos where admin.rol==3 join docente in db.Docentes on admin.docente equals docente.id_docente select docente).FirstOrDefault();
             }
             return director;
         }

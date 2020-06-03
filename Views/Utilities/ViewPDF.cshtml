@@ -1,7 +1,7 @@
 ﻿@using ISProject.Models
 @model ViewPDFCLS
 @{
-    ViewBag.Title = "ViewPDF";
+    ViewBag.Title = "PAAD PDF";
     Layout = null;
 }
 <html>
@@ -17,8 +17,8 @@
 </head>
 <body>
     <h1 class="right">PAAD-03</h1>
-    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1>
-    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
+    <h1 class="right">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA</h1><br/>
+    <h1 class="center">PROPUESTA ACADÉMICA DE ACTIVIDADES Y DOCENCIA SEMESTRE: @Model.periodo</h1>
     <br>
     <table>
         <tr>
@@ -92,9 +92,9 @@
                 @Model.firma_director
             </div><br />
             <div style="width:90%;border:groove;border-color:lightgray;border-width:thin;text-align:center;margin-left:5%">
-                <h2 style="font-size:18px">@Model.director</h2>
+                <h2 style="font-size:18px">@Model.aprobado_por</h2>
                 <hr style="margin:2px;color:gray;background-color:darkgray;height:2px" />
-                <h2 style="font-size:18px">Director</h2>
+                <h2 style="font-size:18px">@Model.cargo_aprobado_por</h2>
             </div>
         </div>
     </div>

@@ -11,6 +11,7 @@ namespace ISProject.Models
         public string estado { get; set; }
         public string periodo { get; set; }
         public string carrera { get; set; }
+        public int id_docente { get; set; }
         public int numero_empleado { get; set; }
         public string nombre_docente { get; set; }
         public string categoria_docente { get; set; }
@@ -22,10 +23,8 @@ namespace ISProject.Models
         public string firma_docente { get; set; }
         public string firma_director { get; set; }
         public List<ActivityCLS> activities { get; set; }
-        public UserCLS user { get; set; }
-        public int rol { get; set; }
-        public string action { get; set; }
         //extra information
-        public string director { get; set; }
+        public string aprobado_por { get; set; }
+        public string cargo_aprobado_por { get; set; }
     }
 }

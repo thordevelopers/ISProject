@@ -32,8 +32,9 @@
     @Html.Partial("_EditActivitiesTable", activities)
 </div>
 <div class="" style="width:100%;text-align:right">
+    <button type="button" onclick="loadActivities()" class="btn btn-amarillo">Cargar del PAAD</button>
     <button type="button" onclick="dropActivities()" class="btn btn-danger">Limpiar</button>
-    <button type="button" onclick="authCredentials()" class="btn btn-amarillo">Entregar IAD</button>
+    <button type="button" onclick="authCredentials()" class="btn btn-verde">Entregar IAD</button>
 </div>
 <div id="mdlActivity" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
     <div class="modal-dialog" role="document">
@@ -141,6 +142,15 @@
 {
     @Html.Hidden("drop_id_iad", info.id_iad)
 }
+@using (Ajax.BeginForm("LoadActivities_IAD", "Docente", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "tblActivities",
+    InsertionMode = InsertionMode.Replace
+}, new { id = "frmLoadActivities" }))
+{
+    @Html.Hidden("load_id_iad", info.id_iad)
+}
 <script type="text/javascript">
     function showActivity() {
         IsEditable();
@@ -163,6 +173,9 @@
             $("#del_id_activity").val(id);
             $("#frmDeleteActivity").submit()
         }
+    }
+    function loadActivities() {
+        $("#frmLoadActivities").submit()
     }
     function dropActivities() {
         if (confirm("¿Esta seguro que desea eliminar todas las actividades?")) {

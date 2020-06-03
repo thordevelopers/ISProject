@@ -17,20 +17,20 @@ namespace ISProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Docentes()
         {
+            this.Administrativos = new HashSet<Administrativos>();
             this.IADs = new HashSet<IADs>();
             this.PAADs = new HashSet<PAADs>();
         }
     
         public int id_docente { get; set; }
         public int carrera { get; set; }
-        public int rol { get; set; }
         public int numero_empleado { get; set; }
         public string nombre { get; set; }
         public string correo { get; set; }
-        public bool isdirector { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Administrativos> Administrativos { get; set; }
         public virtual Carreras Carreras { get; set; }
-        public virtual Roles Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IADs> IADs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

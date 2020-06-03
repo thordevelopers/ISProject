@@ -16,6 +16,17 @@
     <Property Name="id_paad" Type="int" />
     <Property Name="id_iad" Type="int" />
   </EntityType>
+  <EntityType Name="Administrativos">
+    <Key>
+      <PropertyRef Name="id_administrativo" />
+    </Key>
+    <Property Name="id_administrativo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="carrera" Type="int" Nullable="false" />
+    <Property Name="rol" Type="int" Nullable="false" />
+    <Property Name="docente" Type="int" />
+    <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
   <EntityType Name="Cargos">
     <Key>
       <PropertyRef Name="id_cargo" />
@@ -46,11 +57,9 @@
     </Key>
     <Property Name="id_docente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="carrera" Type="int" Nullable="false" />
-    <Property Name="rol" Type="int" Nullable="false" />
     <Property Name="numero_empleado" Type="int" Nullable="false" />
     <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="correo" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="isdirector" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Estados">
     <Key>
@@ -145,14 +154,21 @@
     <Property Name="id_tipo_mensaje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="tipo" Type="nvarchar" MaxLength="150" Nullable="false" />
   </EntityType>
-  <EntityType Name="USERS">
+  <EntityType Name="TiposDeUsuarios">
     <Key>
-      <PropertyRef Name="ID" />
+      <PropertyRef Name="id_tipo_usuario" />
     </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="EMAIL" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="ROL_ID" Type="int" Nullable="false" />
+    <Property Name="id_tipo_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tipo_de_usuario" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usuarios">
+    <Key>
+      <PropertyRef Name="id_usuario" />
+    </Key>
+    <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="tipo_usuario" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_Actividades_IADs">
     <End Role="IADs" Type="Self.IADs" Multiplicity="0..1" />
@@ -178,6 +194,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Administrativos_Carreras">
+    <End Role="Carreras" Type="Self.Carreras" Multiplicity="1" />
+    <End Role="Administrativos" Type="Self.Administrativos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Carreras">
+        <PropertyRef Name="id_carrera" />
+      </Principal>
+      <Dependent Role="Administrativos">
+        <PropertyRef Name="carrera" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Administrativos_Docentes">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="0..1" />
+    <End Role="Administrativos" Type="Self.Administrativos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Administrativos">
+        <PropertyRef Name="docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Administrativos_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="Administrativos" Type="Self.Administrativos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="id_rol" />
+      </Principal>
+      <Dependent Role="Administrativos">
+        <PropertyRef Name="rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Docentes_Carreras">
     <End Role="Carreras" Type="Self.Carreras" Multiplicity="1" />
     <End Role="Docentes" Type="Self.Docentes" Multiplicity="*" />
@@ -187,18 +239,6 @@
       </Principal>
       <Dependent Role="Docentes">
         <PropertyRef Name="carrera" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Docentes_Roles">
-    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
-    <End Role="Docentes" Type="Self.Docentes" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Roles">
-        <PropertyRef Name="id_rol" />
-      </Principal>
-      <Dependent Role="Docentes">
-        <PropertyRef Name="rol" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -382,8 +422,21 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Usuarios_TiposDeUsuarios">
+    <End Role="TiposDeUsuarios" Type="Self.TiposDeUsuarios" Multiplicity="1" />
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TiposDeUsuarios">
+        <PropertyRef Name="id_tipo_usuario" />
+      </Principal>
+      <Dependent Role="Usuarios">
+        <PropertyRef Name="tipo_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="DB_PAAD_IADModelStoreContainer">
     <EntitySet Name="Actividades" EntityType="Self.Actividades" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Administrativos" EntityType="Self.Administrativos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Cargos" EntityType="Self.Cargos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Carreras" EntityType="Self.Carreras" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Categorias" EntityType="Self.Categorias" Schema="dbo" store:Type="Tables" />
@@ -396,7 +449,8 @@
     <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TiposDeMensaje" EntityType="Self.TiposDeMensaje" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TiposDeUsuarios" EntityType="Self.TiposDeUsuarios" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Actividades_IADs" Association="Self.FK_Actividades_IADs">
       <End Role="IADs" EntitySet="IADs" />
       <End Role="Actividades" EntitySet="Actividades" />
@@ -405,12 +459,20 @@
       <End Role="PAADs" EntitySet="PAADs" />
       <End Role="Actividades" EntitySet="Actividades" />
     </AssociationSet>
+    <AssociationSet Name="FK_Administrativos_Carreras" Association="Self.FK_Administrativos_Carreras">
+      <End Role="Carreras" EntitySet="Carreras" />
+      <End Role="Administrativos" EntitySet="Administrativos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Administrativos_Docentes" Association="Self.FK_Administrativos_Docentes">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Administrativos" EntitySet="Administrativos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Administrativos_Roles" Association="Self.FK_Administrativos_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="Administrativos" EntitySet="Administrativos" />
+    </AssociationSet>
     <AssociationSet Name="FK_Docentes_Carreras" Association="Self.FK_Docentes_Carreras">
       <End Role="Carreras" EntitySet="Carreras" />
-      <End Role="Docentes" EntitySet="Docentes" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Docentes_Roles" Association="Self.FK_Docentes_Roles">
-      <End Role="Roles" EntitySet="Roles" />
       <End Role="Docentes" EntitySet="Docentes" />
     </AssociationSet>
     <AssociationSet Name="FK_IADs_Cargos" Association="Self.FK_IADs_Cargos">
@@ -472,6 +534,10 @@
     <AssociationSet Name="FK_PAADs_Periodos" Association="Self.FK_PAADs_Periodos">
       <End Role="Periodos" EntitySet="Periodos" />
       <End Role="PAADs" EntitySet="PAADs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usuarios_TiposDeUsuarios" Association="Self.FK_Usuarios_TiposDeUsuarios">
+      <End Role="TiposDeUsuarios" EntitySet="TiposDeUsuarios" />
+      <End Role="Usuarios" EntitySet="Usuarios" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

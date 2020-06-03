@@ -8,7 +8,7 @@
     MessageCLS msg = (MessageCLS)ViewBag.msg;
 }
 
-@if (msg != null)
+@if (msg != null && info.isdirector)
 {
     <div style="background: #DDAD23; padding: 8px 60px; ">
         <label style="font-size: 15px; font-family: Helvetica; text-align:center">Solicitud de Modificación del Formato PAAD</label>
@@ -21,7 +21,14 @@
 </div>
 <br />
 <div class="d-flex justify-content-between" style="width:100%;">
-    <button class="btn btn-azul-claro" onclick="goBack()">Regresar</button>
+    @if (info.status_value != 3)
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListActivePAADs", "Subdirector", Request.Url.Scheme)">Regresar</a>
+    }
+    else
+    {
+        <a class="btn btn-azul-claro" href="@Url.Action("ListRecordPAADs", "Subdirector", Request.Url.Scheme)">Regresar</a>
+    }
     @Html.Partial("_StatusPAAD", info)
 </div>
 <div>
@@ -36,7 +43,7 @@
         if (info.status_value == 2)
         {
             <button type="button" onclick="authCredentials(1)" class="btn btn-rojo btnAction">Rechazar formato</button>
-            <button type="button" onclick="authCredentials(2)" class="btn btn-verde-light btnAction">Aprobar formato</button>
+            <button type="button" onclick="authCredentials(2)" class="btn btn-verde btnAction">Aprobar formato</button>
         }
         else if (info.status_value == 4)
         {

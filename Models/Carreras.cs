@@ -17,6 +17,7 @@ namespace ISProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Carreras()
         {
+            this.Administrativos = new HashSet<Administrativos>();
             this.Docentes = new HashSet<Docentes>();
             this.IADs = new HashSet<IADs>();
             this.PAADs = new HashSet<PAADs>();
@@ -26,6 +27,8 @@ namespace ISProject.Models
         public string carrera { get; set; }
         public bool visible { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Administrativos> Administrativos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Docentes> Docentes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

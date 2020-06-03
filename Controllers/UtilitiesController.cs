@@ -34,11 +34,25 @@ namespace ISProject.Controllers
          * Esta accion genera un document pdf del paad
          * Recibe el id del paad
          * Regresa una vista como pdf*/
-        public ActionResult ViewPDF(int id)
+        public ActionResult ViewPDF_PAAD(int id)
         {
-            ViewPDFCLS paad = GetViewPDFInfo(id);
+            ViewPDFCLS paad = GetPDFInfo_PAAD(id);
             //El view as paad regresa la vista espeficada llenada con el modelo dado como un documento pdf segun los argumentos mandado entre las llaves
             return new ViewAsPdf("ViewPDF",paad)
+            {
+                PageOrientation = Rotativa.Options.Orientation.Landscape,
+                CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
+            };
+        }
+        /* Esta accion es llamada cuando se presiona la opcion de ver paad en cualquier listado paad
+         * Esta accion genera un document pdf del paad
+         * Recibe el id del paad
+         * Regresa una vista como pdf*/
+        public ActionResult ViewPDF_IAD(int id)
+        {
+            ViewPDFCLS paad = GetPDFInfo_PAAD(id);
+            //El view as paad regresa la vista espeficada llenada con el modelo dado como un documento pdf segun los argumentos mandado entre las llaves
+            return new ViewAsPdf("ViewPDF", paad)
             {
                 PageOrientation = Rotativa.Options.Orientation.Landscape,
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
@@ -47,7 +61,7 @@ namespace ISProject.Controllers
         /* Esta funcion devuelve el modelo para la vista de ViewPDF
          * Recibe el id del paad
          * Regresa el modelo llenado*/
-        public ViewPDFCLS GetViewPDFInfo(int id)
+        public ViewPDFCLS GetPDFInfo_PAAD(int id)
         {
             ViewPDFCLS info;
             using (var db = new DB_PAAD_IADEntities())
@@ -72,6 +86,7 @@ namespace ISProject.Controllers
                             estado = estado.estado,
                             periodo = periodo.periodo,
                             carrera = carrera.carrera,
+                            id_docente = paad.docente,
                             numero_empleado = docente.numero_empleado,
                             nombre_docente = docente.nombre,
                             categoria_docente = categoria.categoria,
@@ -98,10 +113,84 @@ namespace ISProject.Controllers
                                        cuerpo_academico = activity.cuerpo_academico,
                                        iso = activity.iso
                                    }).ToList();
-                info.director = (from docente in db.Docentes
-                                 where docente.isdirector == true
-                                 select docente.nombre).FirstOrDefault();
-
+                if (IsDirector(info.id_docente))
+                {
+                    info.aprobado_por = (from admin in db.Administrativos where admin.rol == 2 join docente in db.Docentes on admin.docente equals docente.id_docente select docente.nombre).FirstOrDefault();
+                    info.cargo_aprobado_por = "Subdirector";
+                }
+                else
+                {
+                    info.aprobado_por = (from admin in db.Administrativos where admin.rol == 3 join docente in db.Docentes on admin.docente equals docente.id_docente select docente.nombre).FirstOrDefault();
+                    info.cargo_aprobado_por = "Director";
+                }
+            }
+            return info;
+        }
+        /* Esta funcion devuelve el modelo para la vista de ViewPDF
+         * Recibe el id del paad
+         * Regresa el modelo llenado*/
+        public ViewPDFCLS GetPDFInfo_IAD(int id)
+        {
+            ViewPDFCLS info;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                info = (from iad in db.IADs
+                        where iad.id_iad == id
+                        join estado in db.Estados
+                        on iad.estado equals estado.id_estado
+                        join periodo in db.Periodos
+                        on iad.periodo equals periodo.id_periodo
+                        join carrera in db.Carreras
+                        on iad.carrera equals carrera.id_carrera
+                        join docente in db.Docentes
+                        on iad.docente equals docente.id_docente
+                        join categoria in db.Categorias
+                        on iad.categoria_docente equals categoria.id_categoria
+                        join cargo in db.Cargos
+                        on iad.cargo equals cargo.id_cargo
+                        select new ViewPDFCLS
+                        {
+                            id_paad = iad.id_iad,
+                            estado = estado.estado,
+                            periodo = periodo.periodo,
+                            carrera = carrera.carrera,
+                            id_docente = iad.docente,
+                            numero_empleado = docente.numero_empleado,
+                            nombre_docente = docente.nombre,
+                            categoria_docente = categoria.categoria,
+                            horas_clase = iad.horas_clase,
+                            horas_investigacion = iad.horas_investigacion,
+                            horas_gestion = iad.horas_gestion,
+                            horas_tutorias = iad.horas_tutorias,
+                            cargo = cargo.cargo,
+                            firma_docente = iad.firma_docente,
+                            firma_director = iad.firma_director
+                        }).FirstOrDefault();
+                if (info == null)
+                    return null;
+                info.activities = (from activity in db.Actividades
+                                   where activity.id_iad == id
+                                   select new ActivityCLS
+                                   {
+                                       id = activity.id_actividad,
+                                       actividad = activity.actividad,
+                                       produccion = activity.produccion,
+                                       lugar = activity.lugar,
+                                       porcentaje = activity.porcentaje_final,
+                                       cacei = activity.cacei,
+                                       cuerpo_academico = activity.cuerpo_academico,
+                                       iso = activity.iso
+                                   }).ToList();
+                if (IsDirector(info.id_docente))
+                {
+                    info.aprobado_por = (from admin in db.Administrativos where admin.rol == 2 join docente in db.Docentes on admin.docente equals docente.id_docente select docente.nombre).FirstOrDefault();
+                    info.cargo_aprobado_por = "Subdirector";
+                }
+                else
+                {
+                    info.aprobado_por = (from admin in db.Administrativos where admin.rol == 3 join docente in db.Docentes on admin.docente equals docente.id_docente select docente.nombre).FirstOrDefault();
+                    info.cargo_aprobado_por = "Director";
+                }
             }
             return info;
         }
@@ -232,6 +321,18 @@ namespace ISProject.Controllers
             }
             return isClose;
         }
+        /* Esta funcion revisa si el id especificado pertenece a la cuenta docente del director
+         * Recibe un int id
+         * Regresa un boleano, true si es el director false si no*/
+         public bool IsDirector(int id)
+        {
+            bool isDirector = false;
+            using (var db = new DB_PAAD_IADEntities())
+            {
+                isDirector = (from admin in db.Administrativos where admin.docente == id select true).FirstOrDefault();
+            }
+            return isDirector;
+        }
         /* Esta accion se manda llamar cuando se quiere validar las credenciales de una cuenta
          * Esta cuenta validad que la contrasena corresponda correctamente al correo
          * Recibe las credenciales
@@ -240,7 +341,7 @@ namespace ISProject.Controllers
         {
             using (var db = new DB_PAAD_IADEntities())
             {
-                if (db.USERS.Where(p => p.EMAIL == email && p.PASSWORD == password).Count() <= 0)
+                if (db.Usuarios.Where(p => p.email == email && p.password == password).Count() <= 0)
                     return false;
             }
             return true;
