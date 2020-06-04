@@ -143,7 +143,7 @@ namespace ISProject.Controllers
         public ActionResult ListActivePAADs()
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
-            if (info_period.is_close)
+            if (info_period.is_close || info_period.is_close_paad)
                 return View("HomeSubdirector"); //"ErrorMessage_Subdirector", new ErrorMessageCLS { message = "No hay periodo activo" });
             ViewBag.list = GetActivePAADs();
             ViewBag.states = GetStates();
@@ -297,7 +297,7 @@ namespace ISProject.Controllers
         public ActionResult ListActiveIADs()
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
-            if (info_period.is_close)
+            if (info_period.is_close || !info_period.is_close_paad)
                 return View("HomeSubdirector"); //"ErrorMessage_Subdirector", new ErrorMessageCLS { message = "No hay periodo activo" });
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();

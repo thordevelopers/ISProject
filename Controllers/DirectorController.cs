@@ -462,9 +462,7 @@ namespace ISProject.Controllers
         public ActionResult ListActiveIADs()
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
-            if (info_period.is_close)
-                return View("HomeDirector");
-            if (!info_period.is_close_paad)
+            if (info_period.is_close || !info_period.is_close_paad)
                 return View("HomeDirector");
             ViewBag.info_period = info_period;
             ViewBag.list = GetActiveIADs();

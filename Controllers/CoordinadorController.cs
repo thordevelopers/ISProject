@@ -28,7 +28,12 @@ namespace ISProject.Controllers
          * Devuelve la vista*/
         public ActionResult ViewPAAD(int id)
         {
+            util.IsClose();
+            //Valida que el id del paad se valido si no redirecciona a home
+            if (id < 1)
+                return RedirectToAction("Home");
             InfoPAADCLS info = GetInfoPAAD(id);
+            //~~~~~~~Poner redirecion a error not found
             if (info == null)
                 return RedirectToAction("Home");
             ViewBag.info = info;
@@ -93,7 +98,7 @@ namespace ISProject.Controllers
         public ActionResult ListActiveIADs()
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
-            if (info_period.is_close)
+            if (info_period.is_close || !info_period.is_close_paad)
                 return View("HomeCoordinador");
             ViewBag.list = GetActiveIADs();
             ViewBag.states = GetStates();

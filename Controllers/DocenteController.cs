@@ -632,7 +632,7 @@ namespace ISProject.Controllers
                             nombre_docente = docente.nombre
                         }).ToList();
                 RegistroPAAD active = (from paad in db.PAADs
-                                       where paad.docente == doc.id_docente
+                                       where paad.docente == doc.id_docente && paad.estado != 3
                                        join estado in db.Estados
                                        on paad.estado equals estado.id_estado
                                        join periodo in db.Periodos
@@ -748,14 +748,14 @@ namespace ISProject.Controllers
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("HomeDocente"); //No hay periodo activo
+                return RedirectToAction("Home"); //No hay periodo activo
             if (!info_period.is_close_paad)
-                return View("HomeDocente"); //No hay periodo activo
+                return RedirectToAction("Home"); //No hay periodo activo
             InfoIADCLS info_iad = GetInfoIAD();
             if (!info_period.on_time_iad)
             {
                 if (info_iad == null)
-                    return View("HomeDocente"); //Ya no es periodo de entrega y no creo ningun paad
+                    return RedirectToAction("Home"); //Ya no es periodo de entrega y no creo ningun paad
                 else if (!info_iad.is_extemporaneous)
                     return RedirectToAction("ViewIAD", new { id = info_iad.id_iad }); //Se creo un paad pero ya no es periodo de entrega y no es extemporaneo
             }
@@ -1084,7 +1084,7 @@ namespace ISProject.Controllers
                             nombre_docente = docente.nombre
                         }).ToList();
                 RegistroIAD active = (from iad in db.IADs
-                                     where iad.docente == doc.id_docente
+                                     where iad.docente == doc.id_docente && iad.estado != 3
                                      join estado in db.Estados
                                      on iad.estado equals estado.id_estado
                                      join periodo in db.Periodos
