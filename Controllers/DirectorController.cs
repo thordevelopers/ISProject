@@ -590,8 +590,8 @@ namespace ISProject.Controllers
                 return View(dateToSet);
             else if (periodo <= 0)
                 ViewBag.error = "Escoja un periodo valido";
-            else if (dateToSet.ending < dateToSet.begining)
-                ViewBag.error = "La fecha de final es menor que la de incio";
+            else if (dateToSet.ending <= dateToSet.begining)
+                ViewBag.error = "La fecha de final es menor o igual que la de incio";
             else
             {
                 using (var db = new DB_PAAD_IADEntities())
@@ -649,9 +649,9 @@ namespace ISProject.Controllers
                 return View(dateToSet);
             else if (periodo <= 0)
                 ViewBag.error = "Escoja un periodo valido";
-            else if (dateToSet.ending < dateToSet.begining)
-                ViewBag.error = "La fecha de final es menor que la de incio";
-            else if (dateToSet.close_date < dateToSet.ending)
+            else if (dateToSet.ending <= dateToSet.begining)
+                ViewBag.error = "La fecha de final es menor o igual que la de incio";
+            else if (dateToSet.close_date <=  dateToSet.ending)
                 ViewBag.error = "La fecha de cierre debe ser mayor que la fecha de entrega IAD";
             else
             {
@@ -661,7 +661,7 @@ namespace ISProject.Controllers
                     if (new_period != null && new_period.paad_fin !=null)
                     {
                         DateTime fin_paad = new_period.paad_fin.GetValueOrDefault();
-                        if (fin_paad.Date < dateToSet.begining)
+                        if (fin_paad.Date <= dateToSet.begining)
                         {
                             Periodos old_period = db.Periodos.Where(p => p.activo == true).FirstOrDefault();
                             if (old_period != null)

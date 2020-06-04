@@ -50,9 +50,9 @@ namespace ISProject.Controllers
          * Regresa una vista como pdf*/
         public ActionResult ViewPDF_IAD(int id)
         {
-            ViewPDFCLS paad = GetPDFInfo_PAAD(id);
+            ViewPDFCLS iad = GetPDFInfo_IAD(id);
             //El view as paad regresa la vista espeficada llenada con el modelo dado como un documento pdf segun los argumentos mandado entre las llaves
-            return new ViewAsPdf("ViewPDF_IAD", paad)
+            return new ViewAsPdf("ViewPDF_IAD", iad)
             {
                 PageOrientation = Rotativa.Options.Orientation.Landscape,
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"

@@ -139,19 +139,19 @@ namespace ISProject.Controllers
             //Se obtiene la info basica del paad
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             if (info_period.is_close)
-                return View("HomeDocente"); //No hay periodo activo
+                return RedirectToAction("Home"); //No hay periodo activo
             InfoPAADCLS info = GetInfoPAAD();
             if (info_period.is_close_paad)
             {
                 if(info==null || info.status_value<3)
-                    return View("HomeDocente"); //No se lleno el formato paad o no se aprobo y ya no se puede hacer nada
+                    return RedirectToAction("Home"); //No se lleno el formato paad o no se aprobo y ya no se puede hacer nada
                 else
                     return RedirectToAction("ViewPAAD", new { id = info.id_paad }); //Se lleno el paad correctamente y esta aprobado
             }
             if (!info_period.on_time_paad)
             {
                 if (info==null)
-                    return View("HomeDocente"); //Ya no es periodo de entrega y no creo ningun paad
+                    return RedirectToAction("Home"); //Ya no es periodo de entrega y no creo ningun paad
                 else if (!info.is_extemporaneous)
                     return RedirectToAction("ViewPAAD", new { id = info.id_paad }); //Se creo un paad pero ya no es periodo de entrega y no es extemporaneo
             }
@@ -322,7 +322,7 @@ namespace ISProject.Controllers
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             InfoPAADCLS info = GetInfoPAAD(id);
             if (info == null)
-                return View("HomeDocente");
+                return RedirectToAction("Home");
             if (info_period.on_time_paad || (!info_period.is_close_paad && info.is_extemporaneous)) 
             {
                 if (info.status_value == 1 && info.active)
@@ -763,7 +763,7 @@ namespace ISProject.Controllers
             InfoPAADCLS info_paad = GetInfoPAAD();
             if (info_paad != null && info_paad.status_value < 3)
             {
-                return View("ErrorIAD");
+                return RedirectToAction("Home");
             }
             // Se valida si el paad no esta en edicion que lo redirija vista de visualizacion.
             if (info_iad != null && info_iad.status_value != 1)
@@ -923,7 +923,7 @@ namespace ISProject.Controllers
             InfoPeriodCLS info_period = util.GetInfoPeriod();
             InfoIADCLS info = GetInfoIAD(id);
             if (info == null)
-                return View("HomeDocente");
+                return RedirectToAction("Home");
             if (info_period.on_time_iad || (!info_period.is_close && info.is_extemporaneous))
             {
                 if (info.status_value == 1 && info.active)
