@@ -38,7 +38,7 @@ namespace ISProject.Controllers
         {
             ViewPDFCLS paad = GetPDFInfo_PAAD(id);
             //El view as paad regresa la vista espeficada llenada con el modelo dado como un documento pdf segun los argumentos mandado entre las llaves
-            return new ViewAsPdf("ViewPDF",paad)
+            return new ViewAsPdf("ViewPDF_PAAD",paad)
             {
                 PageOrientation = Rotativa.Options.Orientation.Landscape,
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
@@ -52,7 +52,7 @@ namespace ISProject.Controllers
         {
             ViewPDFCLS paad = GetPDFInfo_PAAD(id);
             //El view as paad regresa la vista espeficada llenada con el modelo dado como un documento pdf segun los argumentos mandado entre las llaves
-            return new ViewAsPdf("ViewPDF", paad)
+            return new ViewAsPdf("ViewPDF_IAD", paad)
             {
                 PageOrientation = Rotativa.Options.Orientation.Landscape,
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
