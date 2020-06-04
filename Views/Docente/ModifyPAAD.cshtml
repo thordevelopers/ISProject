@@ -30,7 +30,7 @@
     @Html.Partial("_EditActivitiesTable", activities)
 </div>
 <div class="" style="width:100%;text-align:right">
-    <button type="button" onclick="dropActivities()" class="btn btn-danger">Limpiar</button>
+    <button type="button" onclick="dropActivities()" class="btn btn-rojo">Limpiar</button>
     <button type="button" onclick="authCredentials()" class="btn btn-amarillo">Entregar PAAD</button>
 </div>
 <div id="mdlActivity" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
@@ -81,7 +81,7 @@
                 @Html.Hidden("action_paad", 1)
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rojo btn-margin-left" data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="sendPAAD()" class="btn btn-verde-light">Aceptar</button>
+                    <button type="button" onclick="sendPAAD()" class="btn btn-verde">Aceptar</button>
                 </div>
             }
         </div>
