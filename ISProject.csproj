@@ -299,7 +299,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Shared\View.cshtml" />
-    <Content Include="Views\Utilities\ViewPDF.cshtml" />
+    <Content Include="Views\Utilities\ViewPDF_PAAD.cshtml" />
     <Content Include="Views\Docente\_LayoutDocente.cshtml" />
     <Content Include="Views\Shared\_HeaderPAAD.cshtml" />
     <Content Include="Views\Docente\_EditActivitiesTable.cshtml" />
