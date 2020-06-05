@@ -16,6 +16,7 @@ namespace ISProject.Controllers
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
         UtilitiesController util = new UtilitiesController();
+        #region Home Actions
         //Acciones de la vista ------------------------------------------------ HomeDirector ------------------------------------------------
         //Vista de inicio para el director
         public ActionResult Home()
@@ -23,6 +24,7 @@ namespace ISProject.Controllers
             util.IsClose();
             return View("HomeDirector");
         }
+        #endregion
         #region PAAD Actions
         //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
         /* Esta accion corresponde a la vista ViewPAAD
@@ -498,6 +500,7 @@ namespace ISProject.Controllers
             return PartialView("_ListIADs", list);
         }
         #endregion
+        #region ChangeDirector Actions
         //Acciones de la vista ------------------------------------------------ ChangeDirectorAccount ------------------------------------------------
         /* Esta accion muestra la vista de ChangeDirectorAccount*/
         public ActionResult ChangeDirectorAccount()
@@ -559,6 +562,8 @@ namespace ISProject.Controllers
                 Message = "Success"
             });
         }
+        #endregion
+        #region SetDates Actions
         //Acciones de la vista ------------------------------------------------ SetDatePAAD ------------------------------------------------
         /* Esta accion muestra la vista de SetDatePAAD*/
         public ActionResult SetDatePAAD()
@@ -684,6 +689,8 @@ namespace ISProject.Controllers
             }
             return View(dateToSet);
         }
+        #endregion
+        #region Utility Actions
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
          * Recibe el id del paad 
@@ -1170,5 +1177,6 @@ namespace ISProject.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+        #endregion
     }
 }

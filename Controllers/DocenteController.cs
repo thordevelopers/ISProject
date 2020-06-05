@@ -22,13 +22,20 @@ namespace ISProject.Controllers
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
         UtilitiesController util = new UtilitiesController();
-        //Vista de inicio para el docente
+        #region Home Actions
+        //Acciones de la vista ------------------------------------------------ HomeDocente ------------------------------------------------
+        /* Esta accion muestra el inicio del docente con un mensaje de bienvenida y el estado de los formatos activos
+         * No recibe parametros
+         * Regresa la vista de HomeDocente con su respectivo modelo lleno*/
         public ActionResult Home()
         {
             util.IsClose();
             FormatsStatusCLS model = GetFormatStatus();
             return View("HomeDocente", model);
         }
+        /* Es una funcion que obtiene el estado del formato del docente en el periodo activo
+         * No recibe paramentros
+         * Regresa un modelo con con un mensaje y el color del recuadro*/
         public FormatsStatusCLS GetFormatStatus()
         {
             FormatsStatusCLS status = new FormatsStatusCLS { statusMessage = "No tienes formatos por entregar", colorBackground = "#3bcc7c" };
@@ -130,10 +137,12 @@ namespace ISProject.Controllers
             }
             return status;
         }
-        #region Metodos del PAAD
-
-        //ModifyPAAD actions
+        #endregion
+        #region PAAD Actions
         //Acciones de la vista ------------------------------------------------ ModifyPAAD ------------------------------------------------
+        /* Esta accion muestra la vista para modificacion del paad
+         * No recibe parametros
+         * Regresa la vista junto a varios elementos en la viewbag*/
         public ActionResult ModifyPAAD()
         {
             //Se obtiene la info basica del paad
@@ -274,7 +283,6 @@ namespace ISProject.Controllers
         /*Esta funcion sirve para eliminar una actividad 
          Recibe el id del paad y el id de la actividad a borrar
          Regresa una vista parcial de la tabla de actividades*/
-
         public ActionResult DeleteActivity(int del_id_paad, int del_id_activity)
         {
             using (var db = new DB_PAAD_IADEntities())
@@ -522,7 +530,6 @@ namespace ISProject.Controllers
             }
             return info;
         }
-
         /* Obtiene la informacion del encabezado del PAAD de la base de datos
          * Recibe el id del paad
          * Regresa el modelo lleno */
@@ -573,7 +580,6 @@ namespace ISProject.Controllers
             }
             return header;
         }
-
         /* Esta accion recupera las actividades de un paad de la base de datos 
          * Recibe el id del paad 
          * Regresa una lista con los modelos de la actividades*/
@@ -599,7 +605,6 @@ namespace ISProject.Controllers
             }
             return activities;
         }
-
         /* Esta accion recupera todos los paads del docente de la base de datos 
          * Recibe de forma opcional el id del periodo por el cual filtrar si no es enviado regresa todos sin importar el periodo
          * Regresa una lista con los modelos de los paad*/
@@ -701,6 +706,9 @@ namespace ISProject.Controllers
             }
             return msg;
         }
+        /* Esta accion recupera los mensajes de un iad la base de datos 
+         * Recibe el id del iad 
+         * Regresa un modelo con la informacion del mensaje*/
         public MessageCLS GetMessagesIAD(int id, int tipo)
         {
             MessageCLS msg;
@@ -741,9 +749,11 @@ namespace ISProject.Controllers
             }
         }
         #endregion
-        #region Metodos del IAD
-
-        //ModifyIAD actions
+        #region IAD Actions
+        //Acciones de la vista ------------------------------------------------ ModifyIAD ------------------------------------------------
+        /* Esta accion muestra la vista para modificacion del iad
+         * No recibe parametros
+         * Regresa la vista junto a varios elementos en la viewbag*/
         public ActionResult ModifyIAD()
         {
             InfoPeriodCLS info_period = util.GetInfoPeriod();
@@ -1051,7 +1061,6 @@ namespace ISProject.Controllers
         }
         #endregion
         #region Utilities for IAD
-
         /* Esta accion recupera todos los iads del docente de la base de datos 
         * Recibe de forma opcional el id del periodo por el cual filtrar si no es enviado regresa todos sin importar el periodo
         * Regresa una lista con los modelos de los iad, si no encuentra iads valida si hay paads aprobados, si no
@@ -1109,7 +1118,6 @@ namespace ISProject.Controllers
             }
             return list;
         }
-
         public InfoIADCLS GetInfoIAD(int id = 0)
         {
             InfoIADCLS info = new InfoIADCLS();
@@ -1166,7 +1174,6 @@ namespace ISProject.Controllers
             }
             return info;
         }
-
         public HeaderIADCLS GetHeaderIAD(int id)
         {
             HeaderIADCLS header = null;
@@ -1214,7 +1221,6 @@ namespace ISProject.Controllers
             }
             return header;
         }
-
         public void JoinActivities (int id_iad, int id_paad)
         {
             using (var db = new DB_PAAD_IADEntities())
@@ -1227,7 +1233,6 @@ namespace ISProject.Controllers
                 db.SaveChanges();
             }
         }
-
         public List<ActivityCLS> GetActivitiesIAD(int id)
         {
             List<ActivityCLS> activities = null;
@@ -1251,7 +1256,6 @@ namespace ISProject.Controllers
             }
             return activities;
         }
-
         #endregion
     }
 }

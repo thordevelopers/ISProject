@@ -15,12 +15,14 @@ namespace ISProject.Controllers
     public class CoordinadorController : Controller
     {
         UtilitiesController util = new UtilitiesController();
+        #region Home
         //Acciones de la vista ------------------------------------------------ HomeCoordinador ------------------------------------------------
         //Vista de inicio para el coordinador
         public ActionResult Home()
         {
             return View("HomeCoordinador");
         }
+        #endregion
         #region PAAD Actions
         //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
         /* Esta accion corresponde a la vista ViewPAAD
@@ -29,23 +31,29 @@ namespace ISProject.Controllers
         public ActionResult ViewPAAD(int id)
         {
             util.IsClose();
-            //Valida que el id del paad se valido si no redirecciona a home
+            //Valida que el id del paad sea valido si no redirecciona a home
             if (id < 1)
                 return RedirectToAction("Home");
+            //Se obtiene la info del paad
             InfoPAADCLS info = GetInfoPAAD(id);
-            //~~~~~~~Poner redirecion a error not found
+            //Si la info es null redirecciona a home
             if (info == null)
                 return RedirectToAction("Home");
+            //Se colacan la info, el header y las actividades en el viewbag para ser leidas
             ViewBag.info = info;
             ViewBag.header = GetHeader(info.id_paad);
             ViewBag.activities = GetActivities(info.id_paad);
             return View("ViewPAAD_Coordinador");
         }
         //Acciones de la vista ------------------------------------------------ ListActivePAADs ------------------------------------------------
-        /* Esta accion muestra la vista de ListActivePAADs*/
+        /* Esta accion muestra la vista de ListActivePAADs 
+         * No recibe parametros
+         * Regresa una vista con una lista de los periodos activos de la carrera del coordinador*/
         public ActionResult ListActivePAADs()
         {
+            //Obtiene la informacion del periodo
             InfoPeriodCLS info_period = util.GetInfoPeriod();
+            // Verifica que hay un periodo activo y que el periodo del paad no haya cerrado
             if (info_period.is_close || info_period.is_close_paad)
                 return View("HomeCoordinador");
             ViewBag.list = GetActivePAADs();
@@ -62,7 +70,9 @@ namespace ISProject.Controllers
             return PartialView("_ListPAADs", list);
         }
         //Acciones de la vista ------------------------------------------------ ListRecordPAADs ------------------------------------------------
-        /* Esta accion muestra la vista de ListRecordPAADs*/
+        /* Esta accion muestra la vista de ListRecordPAADs
+         * No recibe parametros
+         * Regrsa una lista con el historial de paads aprobados de la carrera del coordinador*/
         public ActionResult ListRecordPAADs()
         {
             ViewBag.list = GetRecordPAADs();
@@ -81,23 +91,36 @@ namespace ISProject.Controllers
         }
         #endregion
         #region IAD Actions
-        //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
-        /* Esta accion corresponde a la vista ViewPAAD
-         * Recibe el id del paad 
-         * Devuelve la vista*/
+        //Acciones de la vista ------------------------------------------------ ViewIAD ------------------------------------------------
+        /* Esta accion corresponde a la vista ViewIAD
+         * Recibe el id del iad 
+         * Devuelve la vista de un iad individual*/
         public ActionResult ViewIAD(int id)
         {
+            util.IsClose();
+            //Valida que el id del iad sea valido si no redirecciona a home
+            if (id < 1)
+                return RedirectToAction("Home");
+            //Se obtiene la info del paad
             InfoIADCLS info = GetInfoIAD(id);
+            //Si la info es null redirecciona a home
+            if (info == null)
+                return RedirectToAction("Home");
+            //Se colacan la info, el header y las actividades en el viewbag para ser leidas
             ViewBag.info = info;
             ViewBag.header = GetHeaderIAD(info.id_iad);
             ViewBag.activities = GetActivitiesIAD(info.id_iad);
             return View("ViewIAD_Coordinador");
         }
         //Acciones de la vista ------------------------------------------------ ListActiveIADs ------------------------------------------------
-        /* Esta accion muestra la vista de ListActiveIADs*/
+        /* Esta accion muestra la vista de ListActiveIADs
+         * No recibe parametros
+         * Regresa una vista con los iads activos de la carrera del coordinador*/
         public ActionResult ListActiveIADs()
         {
+            //Obtiene la informacion del periodo
             InfoPeriodCLS info_period = util.GetInfoPeriod();
+            //Verifica que haya un periodo activo y que el period del paad no haya cerrado
             if (info_period.is_close || !info_period.is_close_paad)
                 return View("HomeCoordinador");
             ViewBag.list = GetActiveIADs();
@@ -132,6 +155,7 @@ namespace ISProject.Controllers
             return PartialView("_ListIADs", list);
         }
         #endregion
+        #region Utility functions
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
          * Recibe el id del paad 
@@ -222,6 +246,9 @@ namespace ISProject.Controllers
             }
             return header;
         }
+        /* Obtiene la informacion del encabezado del IAD de la base de datos
+         * Recibe el id del iad
+         * Regresa el modelo lleno */
         public HeaderIADCLS GetHeaderIAD(int id)
         {
             HeaderIADCLS header = null;
@@ -541,6 +568,6 @@ namespace ISProject.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
-        
+        #endregion
     }
 }

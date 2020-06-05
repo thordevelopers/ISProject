@@ -16,12 +16,14 @@ namespace ISProject.Controllers
     {
         /*Se inicializa un auxiliar para las funciones de aunteticacion, mas detalles sobre estas funciones las puedes encontrar en el controlador "AuthenticationController" */
         UtilitiesController util = new  UtilitiesController();
+        #region Home Actions
         //Acciones de la vista ------------------------------------------------ HomeSubdirector ------------------------------------------------
         //Vista de inicio para el subdirector
         public ActionResult Home()
         {
             return View("HomeSubdirector");
         }
+        #endregion
         #region PAAD Actions
         //Acciones de la vista ------------------------------------------------ ViewPAAD ------------------------------------------------
         /* Esta accion corresponde a la vista ViewPAAD
@@ -332,6 +334,7 @@ namespace ISProject.Controllers
             return PartialView("_ListIADs", list);
         }
         #endregion
+        #region ChangeSubdirector Actions
         //Acciones de la vista ------------------------------------------------ ChangeSubdirectorAccount ------------------------------------------------
         /* Esta accion muestra la vista de ChangeDirectorAccount*/
         public ActionResult ChangeSubdirectorAccount()
@@ -393,6 +396,8 @@ namespace ISProject.Controllers
                 Message = "Success"
             });
         }
+        #endregion
+        #region Utility Actions
         //Funciones de  ------------------------------------------------ Utilidades ------------------------------------------------
         /* Esta funcion llena el modelo de InfoPAADCLS con la informacion de la base de datos 
          * Recibe el id del paad 
@@ -876,5 +881,6 @@ namespace ISProject.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+        #endregion
     }
 }
